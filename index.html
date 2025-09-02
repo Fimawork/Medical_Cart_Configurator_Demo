@@ -88,10 +88,10 @@
 			.sub_title
 			{
 				position: absolute;
-				left: 10%;
-				top:66%;
+				left: 9%;
+				top:23%;
 				width: 20%;
-				text-align: center;
+				text-align: left;
 			  	font-family: "Roboto", sans-serif;
 			  	font-weight: 300;
               	font-size: 12px;
@@ -152,7 +152,7 @@
 			.grid-table 
 			{
 				position: absolute;	
-				top:25%;
+				top:36%;
 				left: 9%;
     		 	display: grid;
     		 	grid-template-columns: 0.1fr 1fr 2fr;
@@ -426,13 +426,31 @@
 					transform: translateX(-50%);
 				}
 
+				.sub_title
+				{
+					position: absolute;
+					left: 6%;
+					top:19%;
+					width: 25%;
+					text-align: left;
+				}
+
 				.grid-table 
 				{
 					position: absolute;	
-					top:20%;
+					top:36%;
 					left: 6%;
     			 	width: 25%;
     			}
+
+				#hud_btn_panel
+				{
+					position: absolute;
+					left: 68%;
+					top:18%;
+					width: 30px;
+					transform: scale(0.75);
+				}
 
 				.hud_btn
 				{
@@ -443,7 +461,7 @@
 				#item_container
 				{
 					right: 6%;
-					width: 27%;
+					width: 24%;
 				}
 
 				.item
@@ -491,6 +509,21 @@
 					transform: scale(1);
 				}
 
+				.main_title
+				{
+					top: 7.5%;
+				}
+
+				.sub_title
+				{
+					position: absolute;
+					left: 50%;
+					top:10.5%;
+					width: 70%;
+					text-align: center;
+					transform: translate(-50%);
+				}
+
 				.grid-table 
 				{
 					position: absolute;	
@@ -503,7 +536,7 @@
 				{
 					right: 6%;
 					width: 12%;
-					top:14%;
+					top:16%;
 				}
 
 				.item
@@ -539,8 +572,9 @@
 				
 				#backgroundImage
 				{
-					height: 130%;
+					height: 145%;
 					opacity: 1;
+					background-size: auto 100%;
 				}
 
 				#frozenGlassPanel
@@ -563,6 +597,12 @@
 					top: 6%;
 					font-size: 15px;
 					transform: translateX(-50%);
+				}
+
+				.sub_title
+				{
+					top:131%;
+					width: 75%;
 				}
 
 				.mainBottom_panel
@@ -612,7 +652,7 @@
 				.grid-table 
 				{
 					position: absolute;	
-					top:98%;
+					top:100%;
 					left: 5%;
     			 	width: 90%;
     			}
@@ -874,7 +914,8 @@
 		</div>
 
 		<div class="main_title">Medical Cart Configurator</div>
-		<div class="sub_title">With 3D UI Dashboard solution, define user interfaces according to different types of users and their specific needs. 3D visualization makes it easy-to-use and understand information intuitively.</div>
+		<div class="sub_title">Use currently available standard accessories to assemble the exact cart you need.
+This is an medical cart configurator demo. It aims to illustrate how WebGL offer a new way to showcase and customize products on the Web.</div>
 		<script type="module" src="main.js"></script>
 
     </body>
