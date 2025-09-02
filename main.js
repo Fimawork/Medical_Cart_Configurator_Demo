@@ -379,11 +379,6 @@ function EventListener()
 
 }
 
-function DefaultCamera()
-{
-  CameraManager(0);
-  EditMode(0);
-}
 
 function InstrumentMountManager(i)//儀器支撐板設定 
 {
@@ -843,13 +838,6 @@ function RaycastFunction()
         //往父層回推，將INTERSECTED重新指定為在scene底下第一層的type為Object3D的物件	
         {
           INTERSECTED=object;
-          
-          //if(current_INTERSECTED!=INTERSECTED)
-          //{
-          //  current_INTERSECTED=INTERSECTED;
-            //console.log(INTERSECTED.name);
-          //}
-          //console.log(INTERSECTED);
         }
 			
       } );
@@ -859,12 +847,6 @@ function RaycastFunction()
 	else 
 	{
 		INTERSECTED = null;
-
-    //if(current_INTERSECTED!=INTERSECTED)
-    //{
-    //  current_INTERSECTED=INTERSECTED;
-    //  //console.log(current_INTERSECTED);
-    //}
 	}
 }
 
@@ -970,14 +952,22 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
 ///Outline效果&重置尺寸
 function addSelectedObject( object ) 
 {
-	selectedObjects = [];
-	selectedObjects.push( object );
+  try 
+  {
+    selectedObjects = [];
+    selectedObjects.push( object );
 
-  setTimeout(() => {outlinePass.selectedObjects = selectedObjects;}, 100);//1000=1sec}//oultine效果開始
-  setTimeout(() => {outlinePass.selectedObjects = [];}, 1500);//1000=1sec}//oultine效果結束
+    setTimeout(() => {outlinePass.selectedObjects = selectedObjects;}, 100);//1000=1sec}//oultine效果開始
+    setTimeout(() => {outlinePass.selectedObjects = [];}, 1500);//1000=1sec}//oultine效果結束
 
-  //量測推車尺寸
-  setTimeout(() => {MeasureCartDimension();}, 1600);//1000=1sec}
+    //量測推車尺寸
+    setTimeout(() => {MeasureCartDimension();}, 1600);//1000=1sec}
+  }
+
+  catch (error) 
+  {
+    console.log(`發生錯誤.${error}`);
+  }
 }
 
 function SceneTag(target,lable,offset,targetCam)  
@@ -1000,7 +990,7 @@ function SceneTag(target,lable,offset,targetCam)
 
   catch (error) 
   {
-    console.log(`Error Setting Camera Default Property.${error}`);
+    console.log(`發生錯誤.${error}`);
   }
 }
 
@@ -1201,20 +1191,27 @@ function MoveModel(action)
       current_INTERSECTED.rotation.y-=Math.PI*0.5;
     }
 
-    UpdateMoveModelPanelPos(current_INTERSECTED);
+    UpdateMoveModelPanelPos(current_INTERSECTED);//更新控制面板位置 
   }
 
 }
 
 function MoveModelON(target)
-{
-  current_INTERSECTED=target;
-  UpdateMoveModelPanelPos(target)  
+{ try 
+	{
+    current_INTERSECTED=target;
+    UpdateMoveModelPanelPos(target) //更新控制面板位置 
 
-  if(isLabelOn)
-  {
-    ShowSceneLabelToggle();
+    if(isLabelOn)//移動零件時不顯示Label
+    {
+      ShowSceneLabelToggle();
+    }
   }
+
+  catch (error) 
+	{
+		console.log(`發生錯誤.${error}`);
+	}
 }
 
 function MoveModelOFF()
@@ -1254,8 +1251,6 @@ function UpdateMoveModelPanelPos(target)
    //var width = rect.width, height = rect.height;
   var widthHalf = width / 2, heightHalf = height / 2;
 
-    
-
   center.project(camera);
   center.x = ( center.x * widthHalf ) + widthHalf;
   center.y = - ( (center.y) * heightHalf ) + heightHalf;
@@ -1266,7 +1261,7 @@ function UpdateMoveModelPanelPos(target)
 
   catch (error) 
 	{
-		console.log(`Error Setting Camera Default Property.${error}`);
+		console.log(`發生錯誤.${error}`);
 	}
 }
 
@@ -1334,7 +1329,6 @@ function UpdateSpecContent(targetCSS,newContent)
 }
 
 ///將函數掛載到全域範圍
-window.DefaultCamera = DefaultCamera;
 window.InstrumentMountManager=InstrumentMountManager;
 window.ColumnManager=ColumnManager;
 window.BaseManager = BaseManager;
