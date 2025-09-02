@@ -162,13 +162,15 @@ function init()
   ///主要物件
 	const defaultScenes = 
   [
+    () => new Promise((resolve) => setTimeout(() => { _labelContainer.style.cssText = "opacity: 0;"; resolve(); }, 50)),//隱藏SceneLabel避免初始化完成前誤觸
 		() => new Promise((resolve) => setTimeout(() => { BaseManager(24); resolve(); }, 100)),//底座&移動輪
     () => new Promise((resolve) => setTimeout(() => { InstrumentMountManager(0); resolve(); }, 110)),//儀器支撐版
     () => new Promise((resolve) => setTimeout(() => { ColumnManager(1520); resolve(); }, 120)),//中柱
       
     () => new Promise((resolve) => setTimeout(() => { SetupBtnList(); resolve(); }, 400)),//設定Item案例群組
     () => new Promise((resolve) => setTimeout(() => { SetupLabelTarget(); resolve(); }, 450)),//LabelTarget
-    () => new Promise((resolve) => setTimeout(() => { isCameraManagerOn=true; resolve(); }, 500)),//啟用攝影機飛行功能      
+    () => new Promise((resolve) => setTimeout(() => { isCameraManagerOn=true; resolve(); }, 500)),//啟用攝影機飛行功能
+    () => new Promise((resolve) => setTimeout(() => { _labelContainer.style.cssText = "opacity: 1;"; resolve(); }, 1000)),//顯示SceneLabel      
 	];
 
 	async function SetupDefaultScene() 
@@ -187,15 +189,15 @@ function init()
   //依初始零件位置放置SceneLabelTarget 
   const LabelTargets = 
   [
-    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_instrumentMount,scene.getObjectByName    ("FixedAnglePanel"));SetupSenceTag("label label_fadeIn_anim","EditMode",1,_labelContainer);resolve(); }, 200)),
+    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_instrumentMount,scene.getObjectByName    ("FixedAnglePanel"));SetupSenceTag("label label_fadeIn_anim","EditMode",1,_labelContainer);resolve(); }, 100)),
 
-    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_column,scene.getObjectByName   ("15And20HeighAdjustableTube")); SetupSenceTag("label label_fadeIn_anim","EditMode",2,_labelContainer);resolve(); }, 400)),
+    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_column,scene.getObjectByName   ("15And20HeighAdjustableTube")); SetupSenceTag("label label_fadeIn_anim","EditMode",2,_labelContainer);resolve(); }, 200)),
 
-    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_base,scene.getObjectByName("24Base")); SetupSenceTag   ("label label_fadeIn_anim","EditMode",3,_labelContainer);resolve(); }, 600)),
+    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_base,scene.getObjectByName("24Base")); SetupSenceTag   ("label label_fadeIn_anim","EditMode",3,_labelContainer);resolve(); }, 300)),
 
-    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_caster,scene.getObjectByName   ("4inchCasterFor24BaseModule")); SetupSenceTag("label label_fadeIn_anim","EditMode",4,_labelContainer);resolve(); }, 800)),
+    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_caster,scene.getObjectByName   ("4inchCasterFor24BaseModule")); SetupSenceTag("label label_fadeIn_anim","EditMode",4,_labelContainer);resolve(); }, 400)),
 
-    () => new Promise((resolve) => setTimeout(() => { UpdateSceneLabel(); resolve(); }, 1000)),//Label追蹤3D物件
+    () => new Promise((resolve) => setTimeout(() => { UpdateSceneLabel(); resolve(); }, 500)),//Label追蹤3D物件
   ];
 
   function UpdateSceneLabel()
@@ -221,8 +223,6 @@ function init()
 
   labelTarget_accessory.position.set(1.7,3,0);
   scene.add(labelTarget_accessory);
-
-  
 
   const CameraDefaultPos=new THREE.Vector3(-4.848,5.501,-4.925);
   const ControlsTargetDefaultPos=new THREE.Vector3(-0.131,2.274,-0.023);
