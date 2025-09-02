@@ -762,6 +762,15 @@ function AccessoryManager(i)
     InstGLTFLoader('./models/accessory_03.glb',new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,item_name,null, scene);
 
     break;
+
+    case 4://變壓器架附整線器
+    accessory_04_num++;
+    
+    item_name="accessory_04_"+`${accessory_04_num}`;
+
+    InstGLTFLoader('./models/accessory_04.glb',new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,item_name,null, scene);
+
+    break;
   }
 
   //指定新outline指定物件
@@ -1312,6 +1321,11 @@ function SetAccessoryName(target)
   if(target.name.includes("accessory_03_"))
   {
     return "Work Surface";
+  }
+
+  if(target.name.includes("accessory_04_"))
+  {
+    return "Universal Adapter Holder with Cable Management";
   }
 
   else
