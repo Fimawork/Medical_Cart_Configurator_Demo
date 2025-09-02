@@ -412,7 +412,9 @@ function InstrumentMountManager(i)//儀器支撐板設定
     }
 
     //更新支架規格欄位
-    _instrument_mount_content.textContent = "Fixed Mounting Plate";
+    //_instrument_mount_content.textContent = "Fixed Mounting Plate";
+
+    UpdateSpecContent( _instrument_mount_content,"Fixed Mounting Plate");
 
     break;
 
@@ -429,7 +431,9 @@ function InstrumentMountManager(i)//儀器支撐板設定
     }
 
     //更新支架規格欄位
-    _instrument_mount_content.textContent = "Angle Adjustable With Slide Mounting Plate";
+    //_instrument_mount_content.textContent = "Angle Adjustable With Slide Mounting Plate";
+
+    UpdateSpecContent( _instrument_mount_content,"Angle Adjustable With Slide Mounting Plate");
 
     break;
   }
@@ -462,8 +466,9 @@ function ColumnManager(i)
     }
 
     //更新中柱規格欄位
-    _column_content.textContent="Ø1-1/2 inches stainless steel pole";
+    //_column_content.textContent="Ø1-1/2 inches stainless steel pole";
 
+    UpdateSpecContent( _column_content,"Ø1-1/2 inches stainless steel pole");
     break;
 
     case 1520:
@@ -479,7 +484,9 @@ function ColumnManager(i)
     }
 
     //更新中柱規格欄位
-    _column_content.textContent="Ø1-1/2 inches/Ø2 inches pole";
+    //_column_content.textContent="Ø1-1/2 inches/Ø2 inches pole";
+
+    UpdateSpecContent( _column_content,"Ø1-1/2 inches/Ø2 inches pole");
 
     break;
 
@@ -496,7 +503,9 @@ function ColumnManager(i)
     }
 
     //更新中柱規格欄位
-    _column_content.textContent="Ø1-1/4 inches/Ø1.5 inches pole";
+    //_column_content.textContent="Ø1-1/4 inches/Ø1.5 inches pole";
+
+    UpdateSpecContent( _column_content,"Ø1-1/4 inches/Ø1.5 inches pole");
 
     break;
   }
@@ -531,7 +540,9 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
     CasterManager(caster_index);//更新移動輪
 
     //更新底座規格欄位
-    _base_content.textContent="5-Leg Base (20”)";
+    //_base_content.textContent="5-Leg Base (20”)";
+
+    UpdateSpecContent(_base_content,"5-Leg Base (20”)");
 
     break;
 
@@ -550,7 +561,9 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
     CasterManager(caster_index);//更新移動輪
 
     //更新底座規格欄位
-    _base_content.textContent="5-Leg Base (24”)";
+    //_base_content.textContent="5-Leg Base (24”)";
+
+    UpdateSpecContent(_base_content,"5-Leg Base (24”)");
 
     break;
 
@@ -569,7 +582,9 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
     CasterManager(caster_index);//更新移動輪
 
     //更新底座規格欄位
-    _base_content.textContent="4-Leg Base";
+    //_base_content.textContent="4-Leg Base";
+
+    UpdateSpecContent(_base_content,"4-Leg Base");
 
     break;
   }
@@ -624,7 +639,10 @@ function CasterManager(i)//移動輪設定功能
     
 
     //更新移動輪規格欄位
-    _caster_content.textContent="3 Twin-wheel Caster ";
+    //_caster_content.textContent="3 Twin-wheel Caster ";
+
+
+    UpdateSpecContent(_caster_content,"3 Twin-wheel Caster ");
 
     break;
 
@@ -661,7 +679,9 @@ function CasterManager(i)//移動輪設定功能
     }
 
     //更新移動輪規格欄位
-    _caster_content.textContent="4 Twin-wheel Caster ";
+    //_caster_content.textContent="4 Twin-wheel Caster ";
+
+    UpdateSpecContent(_caster_content,"4 Twin-wheel Caster ");
 
     break;
 
@@ -701,7 +721,9 @@ function CasterManager(i)//移動輪設定功能
     
 
     //更新移動輪規格欄位
-    _caster_content.textContent="3 Medical Caster ";
+    //_caster_content.textContent="3 Medical Caster ";
+
+    UpdateSpecContent(_caster_content,"3 Medical Caster ");
 
     break;
   }
@@ -734,6 +756,15 @@ function AccessoryManager(i)
     item_name="accessory_02_"+`${accessory_02_num}`;
 
     InstGLTFLoader('./models/accessory_02.glb',new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,item_name,null, scene);
+
+    break;
+
+    case 3://層板架
+    accessory_03_num++;
+    
+    item_name="accessory_03_"+`${accessory_03_num}`;
+
+    InstGLTFLoader('./models/accessory_03.glb',new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,item_name,null, scene);
 
     break;
   }
@@ -1266,7 +1297,9 @@ function UpdateAccessorySpecification()
 
   const uniqueItem = [...new Set(current_accessory_list)];
 
-  _accessory_content.textContent=uniqueItem;
+  //_accessory_content.textContent=uniqueItem;
+
+  UpdateSpecContent(_accessory_content,uniqueItem);
 }
 
 function SetAccessoryName(target)
@@ -1281,10 +1314,23 @@ function SetAccessoryName(target)
     return "Universal Adapter Holder";
   }
 
+  if(target.name.includes("accessory_03_"))
+  {
+    return "Work Surface";
+  }
+
   else
   {
     return "";
   }
+}
+
+function UpdateSpecContent(targetCSS,newContent)
+{
+  targetCSS.textContent=newContent;
+  targetCSS.style.cssText = "color: #6bb4f7;";
+
+  setTimeout(() => { targetCSS.style.cssText= "color: rgba(0, 0, 0, 0.9);";}, 1000);//1000=1sec}
 }
 
 ///將函數掛載到全域範圍

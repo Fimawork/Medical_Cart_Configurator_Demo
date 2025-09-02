@@ -47,3 +47,8 @@
 {
 	background-image: url('./images/AdapterHolder.png');
 }
+
+.item:nth-child(15)
+{
+	background-image: url('./images/Shelf.png');
+}
