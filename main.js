@@ -776,8 +776,11 @@ function AccessoryManager(i)
   //指定新outline指定物件
   setTimeout(() => {current_accessories.push(scene.getObjectByName(item_name));}, 500);//1000=1sec}
    
-  //啟用模型移動面板，並hightlight該物件
-  setTimeout(() => {MoveModelON(scene.getObjectByName(item_name));addSelectedObject(scene.getObjectByName(item_name));}, 600);//1000=1sec} 
+  //啟用模型移動面板
+  setTimeout(() => {MoveModelON(scene.getObjectByName(item_name));}, 600);//1000=1sec} 
+
+  //hightlight該物件(易失效，停用)
+  //setTimeout(() => {addSelectedObject(scene.getObjectByName(item_name));}, 1000);//1000=1sec} 
 }
 
 function ResetInstrumentModule()//重置儀器支架
