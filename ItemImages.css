@@ -78,3 +78,8 @@
 {
 	background-image: url('./images/Handle.png');
 }
+
+.item:nth-child(20)
+{
+	background-image: url('./images/PrinterHolder.png');
+}

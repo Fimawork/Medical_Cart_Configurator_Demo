@@ -2,10 +2,12 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width", initial-scale="1.0"/>
+		<meta name="viewport" content="width=device-width", initial-scale="1.0", maximum-scale="1.0", user-scalable="no"/>
 		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
 		<title>Medical Cart Configurator</title>
 		<link rel="stylesheet" href="./ItemImages.css">
+		<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
 		<style type="text/css">
 			@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,500,700');  
 			@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" );
@@ -238,7 +240,7 @@
 				width: 20%;
 				aspect-ratio: 1 / 1;
 				border-radius: 6% 6%;
-				background-color: rgba(0, 0, 0, 0.05);
+				background-color: rgba(0, 0, 0, 0.1);
 				background-image: url('./images/Sample.jpg');
 				background-size: auto 100%; 
 				background-position: center;
@@ -576,7 +578,7 @@
 				
 				#backgroundImage
 				{
-					height: 145%;
+					height: 150%;
 					opacity: 1;
 					background-size: auto 100%;
 				}
@@ -605,7 +607,7 @@
 
 				.sub_title
 				{
-					top:131%;
+					top:140%;
 					width: 75%;
 				}
 
@@ -750,8 +752,8 @@
 				<div class="label label_fadeIn_anim" id="label_5" onclick="EditMode(5)">5</div>
 			</div>
 			<div id="hud_btn_panel">
-				<div class="hud_btn fa-solid fa-rotate-right fa-2x" onclick="EditMode(0)" title="RESET VIEW"></div>
-				<div class="hud_btn fa-solid fa-list fa-2x" style=" color:#6bb4f7" id="ShowLabelToggle"onclick="ShowSceneLabelToggle()" title="LABEL TOGGLE"></div>
+				<div class="hud_btn fa-solid fa-rotate-right fa-2x" onclick="EditMode(0)" title="RESET"></div>
+				<div class="hud_btn fa-solid fa-list fa-2x" style=" color:#6bb4f7" id="ShowLabelToggle"onclick="ShowSceneLabelToggle()" title="SHOW/HIDE LABEL"></div>
 				<div class="hud_btn fa-solid fa-download fa-2x" onclick="" title="DOWNLOAD"></div>
 			</div>
 			<div id="SelectedItemController"  draggable="true">
@@ -912,7 +914,7 @@
 				<div class="item_title">Drawer</div>
 			</div>
 
-			<div class="item" id="item_20_btn"onclick="">
+			<div class="item" id="item_20_btn"onclick="AccessoryManager(8)">
 				<div class="item_title">Printer Holder</div>
 			</div>
 		</div>

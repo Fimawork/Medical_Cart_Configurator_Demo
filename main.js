@@ -780,6 +780,15 @@ function AccessoryManager(i)
     InstGLTFLoader('./models/accessory_06.glb',new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,item_name,null, scene);
 
     break;
+
+    case 8://印表機架
+    accessory_08_num++;
+    
+    item_name="accessory_08_"+`${accessory_08_num}`;
+
+    InstGLTFLoader('./models/accessory_08.glb',new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,item_name,null, scene);
+
+    break;
   }
 
   //指定新outline指定物件
@@ -1241,6 +1250,11 @@ function MoveModelOFF()
   {
     scene.remove(current_INTERSECTED);
   }
+
+  if(current_INTERSECTED!=null&&current_INTERSECTED.position.y<=-3.5)
+  {
+    scene.remove(current_INTERSECTED);
+  }
   
   setTimeout(() => {current_INTERSECTED=null;}, 100);//1000=1sec}
   
@@ -1260,23 +1274,21 @@ function MoveModelOFF()
 
 function UpdateMoveModelPanelPos(target)  
 {
+  const center= new THREE.Vector3();
+
   try 
 	{
-  const box= new THREE.Box3().setFromObject(target);
-  const center= new THREE.Vector3();
-  box.getCenter(center);
+    const box= new THREE.Box3().setFromObject(target);
+    box.getCenter(center);
 
-  const rect = threeContainer.getBoundingClientRect();
+    var width = threeContainer.clientWidth, height = threeContainer.clientHeight;
+    var widthHalf = width / 2, heightHalf = height / 2;
 
-  var width = threeContainer.clientWidth, height = threeContainer.clientHeight;
-   //var width = rect.width, height = rect.height;
-  var widthHalf = width / 2, heightHalf = height / 2;
-
-  center.project(camera);
-  center.x = ( center.x * widthHalf ) + widthHalf;
-  center.y = - ( (center.y) * heightHalf ) + heightHalf;
-  
-  _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
+    center.project(camera);
+    center.x = ( center.x * widthHalf ) + widthHalf;
+    center.y = - ( (center.y) * heightHalf ) + heightHalf;
+    
+    _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
 
   }
 
@@ -1284,6 +1296,12 @@ function UpdateMoveModelPanelPos(target)
 	{
 		console.log(`發生錯誤.${error}`);
 	}
+
+  finally 
+  {
+    _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;//強制顯示面板
+  }
+
 }
 
 function DeleteAccessory()
@@ -1343,6 +1361,11 @@ function SetAccessoryName(target)
   if(target.name.includes("accessory_06_"))
   {
     return "Grip Handle";
+  }
+
+  if(target.name.includes("accessory_08_"))
+  {
+    return "Printer Holder";
   }
 
   else
