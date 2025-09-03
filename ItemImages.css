@@ -73,3 +73,8 @@
 {
 	background-image: url('./images/CableManagementHolder.png');
 }
+
+.item:nth-child(18)
+{
+	background-image: url('./images/Handle.png');
+}

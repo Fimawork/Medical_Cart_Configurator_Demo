@@ -771,6 +771,15 @@ function AccessoryManager(i)
     InstGLTFLoader('./models/accessory_04.glb',new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,item_name,null, scene);
 
     break;
+
+    case 6://把手
+    accessory_06_num++;
+    
+    item_name="accessory_06_"+`${accessory_06_num}`;
+
+    InstGLTFLoader('./models/accessory_06.glb',new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,item_name,null, scene);
+
+    break;
   }
 
   //指定新outline指定物件
@@ -1329,6 +1338,11 @@ function SetAccessoryName(target)
   if(target.name.includes("accessory_04_"))
   {
     return "Universal Adapter Holder with Cable Management";
+  }
+
+  if(target.name.includes("accessory_06_"))
+  {
+    return "Grip Handle";
   }
 
   else
