@@ -1274,22 +1274,25 @@ function MoveModelOFF()
 
 function UpdateMoveModelPanelPos(target)  
 {
-  const center= new THREE.Vector3();
-
   try 
 	{
+    const center= new THREE.Vector3();
     const box= new THREE.Box3().setFromObject(target);
     box.getCenter(center);
 
     var width = threeContainer.clientWidth, height = threeContainer.clientHeight;
     var widthHalf = width / 2, heightHalf = height / 2;
 
-    center.project(camera);
-    center.x = ( center.x * widthHalf ) + widthHalf;
-    center.y = - ( (center.y) * heightHalf ) + heightHalf;
-    
-    _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
+    setTimeout(() => {setPanelPos();}, 500);//1000=1sec}
 
+    function setPanelPos()
+    {
+      center.project(camera);
+      center.x = ( center.x * widthHalf ) + widthHalf;
+      center.y = - ( (center.y) * heightHalf ) + heightHalf;
+      
+      _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
+    }
   }
 
   catch (error) 
@@ -1299,9 +1302,8 @@ function UpdateMoveModelPanelPos(target)
 
   finally 
   {
-    _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;//強制顯示面板
+    _SelectedItemController.style.display="block";//強制顯示面板
   }
-
 }
 
 function DeleteAccessory()
