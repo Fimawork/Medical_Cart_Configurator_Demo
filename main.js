@@ -1270,13 +1270,16 @@ function MoveModelOFF()
 
   //量測推車尺寸
   MeasureCartDimension();
+
+  //刪除不合理物件
+  DeleteunreasonableItem();
 }
 
 function UpdateMoveModelPanelPos(target)  
 {
   try 
 	{
-    const center= new THREE.Vector3();
+    let center= new THREE.Vector3();
     const box= new THREE.Box3().setFromObject(target);
     box.getCenter(center);
 
@@ -1292,6 +1295,13 @@ function UpdateMoveModelPanelPos(target)
       center.y = - ( (center.y) * heightHalf ) + heightHalf;
       
       _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
+
+      //若無偵測到中心點重新執行一次
+      if(center==null)
+      {
+        UpdateMoveModelPanelPos(target);
+        console.log(center);
+      }
     }
   }
 
@@ -1331,7 +1341,7 @@ function UpdateAccessorySpecification()
     current_accessory_list.push(SetAccessoryName(scene.children[i]));
   }
 
-  const uniqueItem = [...new Set(current_accessory_list)];
+  const uniqueItem = [...new Set(current_accessory_list)];//不顯示重複字元
 
   //_accessory_content.textContent=uniqueItem;
 
@@ -1382,6 +1392,25 @@ function UpdateSpecContent(targetCSS,newContent)
   targetCSS.style.cssText = "color: #6bb4f7;";
 
   setTimeout(() => { targetCSS.style.cssText= "color: rgba(0, 0, 0, 0.9);";}, 1000);//1000=1sec}
+}
+
+function DeleteunreasonableItem()
+{
+  for(let i=0;i<scene.children.length;i++)
+  {
+    if(scene.children[i].name.includes("accessory_"))
+    {
+      if(scene.children[i].position.y>=1)
+      {
+        scene.remove(scene.children[i]);
+      }
+
+      if(scene.children[i].position.y<=-3.5)
+      {
+        scene.remove(scene.children[i]);
+      }
+    }
+  }
 }
 
 ///將函數掛載到全域範圍
