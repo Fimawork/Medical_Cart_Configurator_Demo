@@ -413,6 +413,25 @@ function InstrumentMountManager(i)//儀器支撐板設定
 
     break;
 
+    case 1: //固定滑板支架
+    
+    name="FixedAngleWithSlidePanel";
+    
+    if(scene.getObjectByName(name)==null)//
+    {
+      InstGLTFLoader('./models/FixedAngleWithSlidePanel.glb',modelPosition,modelRotation,modeScale,name,null, scene);
+      
+      //指定新outline指定物件，並hightlight該物件
+      setTimeout(() => {current_instrument_mount.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
+    }
+
+    //更新支架規格欄位
+    //_instrument_mount_content.textContent = "Angle Adjustable With Slide Mounting Plate";
+
+    UpdateSpecContent( _instrument_mount_content,"Fixed Angle Instrument Holder with Slide-in Mounting Plate");
+
+    break;
+
     case 2: //旋轉滑板支架
     
     name="AngleAdjustableWithSlidePanel";
@@ -428,7 +447,7 @@ function InstrumentMountManager(i)//儀器支撐板設定
     //更新支架規格欄位
     //_instrument_mount_content.textContent = "Angle Adjustable With Slide Mounting Plate";
 
-    UpdateSpecContent( _instrument_mount_content,"Angle Adjustable With Slide Mounting Plate");
+    UpdateSpecContent( _instrument_mount_content,"Angle Adjustable Instrument Holder With Slide-in Mounting Plate");
 
     break;
   }
@@ -804,6 +823,7 @@ function AccessoryManager(i)
 function ResetInstrumentModule()//重置儀器支架
 {
   DestroyObject(scene.getObjectByName("AngleAdjustableWithSlidePanel"));
+  DestroyObject(scene.getObjectByName("FixedAngleWithSlidePanel"));
   DestroyObject(scene.getObjectByName("FixedAnglePanel"));
 }
 
@@ -1273,6 +1293,9 @@ function MoveModelOFF()
 
   //刪除不合理物件
   DeleteunreasonableItem();
+
+  //回復預設視角
+  CameraManager(0);
 }
 
 function UpdateMoveModelPanelPos(target)  
