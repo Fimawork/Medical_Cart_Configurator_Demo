@@ -1452,6 +1452,14 @@ function FindLatestAccessory()
   }
 }
 
+function DownloadSpecification()
+{
+  for(let i=0;i<scene.children.length;i++)
+  {
+    console.log(scene.children[i].name);
+  }
+}
+
 ///將函數掛載到全域範圍
 window.InstrumentMountManager=InstrumentMountManager;
 window.ColumnManager=ColumnManager;
@@ -1463,3 +1471,4 @@ window.AccessoryManager=AccessoryManager;
 window.MoveModel=MoveModel;
 window.MoveModelOFF=MoveModelOFF;
 window.DeleteAccessory=DeleteAccessory;
+window.DownloadSpecification=DownloadSpecification;
