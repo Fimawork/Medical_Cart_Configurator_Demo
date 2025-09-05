@@ -118,7 +118,7 @@ const params = {
 				color:'#6bb4f7'
 			};
 
-//操作面板
+//配件編輯面板
 let _SelectedItemController= document.querySelector('#SelectedItemController'); 
 //let _SelectedItemWindow= document.querySelector('#SelectedItemWindow'); 
 
@@ -1250,7 +1250,7 @@ function MoveModelON(target)
 { try 
 	{
     current_INTERSECTED=target;
-    UpdateMoveModelPanelPos(current_INTERSECTED) //更新控制面板位置 
+    setTimeout(() => {UpdateMoveModelPanelPos(current_INTERSECTED);}, 100);//1000=1sec} //更新控制面板位置 
 
     if(isLabelOn)//移動零件時不顯示Label
     {
@@ -1320,7 +1320,7 @@ function UpdateMoveModelPanelPos(target)
       _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
 
       //若無偵測到中心點重新執行一次
-      if(center==null)
+      if(center==null&&FindLatestAccessory()!=null)
       {
         UpdateMoveModelPanelPos(FindLatestAccessory());
       }
@@ -1352,6 +1352,9 @@ function DeleteAccessory()
 
   //量測推車尺寸
   MeasureCartDimension();
+
+  //更新配件規格欄位
+  UpdateAccessorySpecification();
 }
 
 function UpdateAccessorySpecification()
