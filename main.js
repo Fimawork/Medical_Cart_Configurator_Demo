@@ -1250,7 +1250,7 @@ function MoveModelON(target)
 { try 
 	{
     current_INTERSECTED=target;
-    UpdateMoveModelPanelPos(target) //更新控制面板位置 
+    UpdateMoveModelPanelPos(current_INTERSECTED) //更新控制面板位置 
 
     if(isLabelOn)//移動零件時不顯示Label
     {
@@ -1309,7 +1309,7 @@ function UpdateMoveModelPanelPos(target)
     var width = threeContainer.clientWidth, height = threeContainer.clientHeight;
     var widthHalf = width / 2, heightHalf = height / 2;
 
-    setTimeout(() => {setPanelPos();}, 500);//1000=1sec}
+    setTimeout(() => {setPanelPos();}, 100);//1000=1sec}
 
     function setPanelPos()
     {
@@ -1322,8 +1322,7 @@ function UpdateMoveModelPanelPos(target)
       //若無偵測到中心點重新執行一次
       if(center==null)
       {
-        UpdateMoveModelPanelPos(target);
-        console.log(center);
+        UpdateMoveModelPanelPos(FindLatestAccessory());
       }
     }
   }
@@ -1431,6 +1430,20 @@ function DeleteunreasonableItem()
       if(scene.children[i].position.y<=-3.5)
       {
         scene.remove(scene.children[i]);
+      }
+    }
+  }
+}
+
+function FindLatestAccessory()
+{
+  for(let i=0;i<scene.children.length;i++)
+  {
+    if(scene.children[i].name.includes("accessory_"))
+    {
+      if(scene.children[i].position.y>=1)
+      {
+        return scene.children[i];
       }
     }
   }
