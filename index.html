@@ -221,6 +221,11 @@
 				margin-bottom: 18px;
 			}
 
+			#download_btn
+			{
+				display: block;
+			}
+
 			#item_container
 			{
 				position: absolute;	
@@ -540,6 +545,11 @@
 				{
 					opacity: 0.1;
 				}
+
+				#download_btn
+				{
+					display: none;
+				}
 			}
 
 			@media screen and (max-width:900px)/*平板(直向)*/
@@ -614,6 +624,11 @@
 				.ControllerBtn:active
 				{
 					opacity: 0.6;
+				}
+
+				#download_btn
+				{
+					display: none;
 				}
 			}
 
@@ -730,6 +745,11 @@
 					margin-bottom: 18px;
 				}
 
+				#download_btn
+				{
+					display: none;
+				}
+
 				#item_container
 				{
 					position: absolute;	
@@ -803,7 +823,7 @@
 			<div id="hud_btn_panel">
 				<div class="hud_btn fa-solid fa-rotate-right fa-2x" onclick="EditMode(0)" title="RESET"></div>
 				<div class="hud_btn fa-solid fa-list fa-2x" style=" color:#6bb4f7" id="ShowLabelToggle"onclick="ShowSceneLabelToggle()" title="SHOW/HIDE LABEL"></div>
-				<div class="hud_btn fa-solid fa-download fa-2x" onclick="TakeScreenshot()" title="DOWNLOAD"></div>
+				<div class="hud_btn fa-solid fa-download fa-2x" id="download_btn" onclick="TakeScreenshot()" title="DOWNLOAD"></div>
 			</div>
 			<div id="SelectedItemController" class="label_fadeIn_anim" draggable="true">
 				<div id="SelectedItemWindow" class="window_border window_blinking_anim">
