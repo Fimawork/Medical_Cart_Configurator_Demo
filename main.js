@@ -1120,7 +1120,7 @@ function FilterItems(type_index) //編輯模式 0:default , 1:儀器支架 2:中
 
     for(let i=0;i<item_btn_list.length;i++)
     {
-      item_btn_list[i].style.display="block";
+      item_btn_list[i].style.display="flex";
     }
 
     break;
@@ -1131,7 +1131,7 @@ function FilterItems(type_index) //編輯模式 0:default , 1:儀器支架 2:中
     {
       if(i<=2)
       {
-        item_btn_list[i].style.display="block";
+        item_btn_list[i].style.display="flex";
       }
 
       else
@@ -1153,7 +1153,7 @@ function FilterItems(type_index) //編輯模式 0:default , 1:儀器支架 2:中
 
       else if(i<=5)
       {
-        item_btn_list[i].style.display="block";
+        item_btn_list[i].style.display="flex";
       }
 
       else
@@ -1175,7 +1175,7 @@ function FilterItems(type_index) //編輯模式 0:default , 1:儀器支架 2:中
 
       else if(i<=8)
       {
-        item_btn_list[i].style.display="block";
+        item_btn_list[i].style.display="flex";
       }
 
       else
@@ -1197,7 +1197,7 @@ function FilterItems(type_index) //編輯模式 0:default , 1:儀器支架 2:中
 
       else if(i<=11)
       {
-        item_btn_list[i].style.display="block";
+        item_btn_list[i].style.display="flex";
       }
 
       else
@@ -1219,7 +1219,7 @@ function FilterItems(type_index) //編輯模式 0:default , 1:儀器支架 2:中
 
       else
       {
-        item_btn_list[i].style.display="block";
+        item_btn_list[i].style.display="flex";
       }
     }
 
