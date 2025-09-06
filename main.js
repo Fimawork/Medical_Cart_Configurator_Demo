@@ -1477,11 +1477,19 @@ function FindLatestAccessory()
 
 async function TakeScreenshot() 
 {
-  let threeImageData_01,threeImageData_02;
+  let threeImageData_01,threeImageData_02,worldTime;
 
   //載入背景圖
  const backgroundImage = document.getElementById('backgroundImage');
  const _backgroundImage = await html2canvas(backgroundImage, {
+   backgroundColor: null, // null保持透明,false不透明
+   useCORS: true,
+   scale: 2.5
+ });
+
+  //載入玻璃面板
+ const frozenGlassPanel = document.getElementById('frozenGlassPanel');
+ const _frozenGlassPanel = await html2canvas(frozenGlassPanel, {
    backgroundColor: false, // null保持透明,false不透明
    useCORS: true,
    scale: 2.5
@@ -1511,11 +1519,16 @@ async function TakeScreenshot()
    scale: 2.5
   });
 
+  const _loading_canvas=document.getElementById('loading_canvas');
+
+  setTimeout(() => {_loading_canvas.style.display="flex";}, 50);//1000=1sec}//開啟LoadingPage
   setTimeout(() => { firstShot();}, 100);//1000=1sec}
   setTimeout(() => {CameraManager(6);}, 1000);//1000=1sec}鏡頭轉向推車背面
   setTimeout(() => { SecondShot();}, 2000);//1000=1sec}
+  setTimeout(() => { SetupTimeData();}, 2500);//1000=1sec}
   setTimeout(() => { DrawTheImage();}, 3000);//1000=1sec}
-  setTimeout(() => { CameraManager(0);}, 5000);//1000=1sec}下載結束鏡頭歸位
+  setTimeout(() => { CameraManager(0);}, 4000);//1000=1sec}下載結束鏡頭歸位
+  setTimeout(() => { _loading_canvas.style.display="none";}, 5000);//1000=1sec}//隱藏LoadingPage
 
  function firstShot()//取得 Three.js 第一張畫面為圖片
  {
@@ -1527,6 +1540,14 @@ async function TakeScreenshot()
  {
     composer.render(); // 如果你有使用 postprocessing
     threeImageData_02 = renderer.domElement.toDataURL('image/png');
+ }
+
+ function SetupTimeData()
+ {
+  var today = new Date();
+	var dateNow = today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate();
+	var timeNow = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+	worldTime = dateNow+' '+timeNow;
  }
  
 
@@ -1544,6 +1565,8 @@ async function TakeScreenshot()
 
     threeImg_01.onload = () => {
       ctx.drawImage(_backgroundImage, 0, 0);
+      //ctx.drawImage(_frozenGlassPanel , 0, 0);
+      
       ctx.drawImage(threeImg_01, 0, 0);
       ctx.drawImage(threeImg_02, 1000, 0);
 
@@ -1557,7 +1580,7 @@ async function TakeScreenshot()
       // Step 7: 將合成後的圖像轉為下載
       const link = document.createElement('a');
       link.href = finalCanvas.toDataURL('image/png');
-      link.download = 'combined-screenshot.png';
+      link.download = `Specification_${worldTime}.png`;
       link.click();
     };
     
@@ -1565,9 +1588,6 @@ async function TakeScreenshot()
   threeImg_02.src = threeImageData_02;
  }
 
-  
-
-  
 }
 ///將函數掛載到全域範圍
 window.InstrumentMountManager=InstrumentMountManager;

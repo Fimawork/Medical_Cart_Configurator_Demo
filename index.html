@@ -353,6 +353,53 @@
 				color: #0070a3;
 			}
 
+			#loading_canvas{
+				position: absolute;
+				left: 0%;
+				top: 0%;
+				width: 100vw;
+   				height: 100vh;
+				display: none;
+				justify-content: center;
+				flex-direction: column;
+				pointer-events: fill;
+				background-color: rgba(255, 255, 255, 0.15);
+				backdrop-filter: blur(1.5px);
+    			-webkit-backdrop-filter: blur(1.5px);
+				z-index: 99;
+			}
+
+			.loadingUI{
+				align-self: center;
+				width: 180px;
+				height:180px;
+				background-image: url(./images/portfolio_2023_loading.png);
+			}
+
+			@keyframes UI_rotate
+			{
+				0% {transform: rotate(0);}
+  				8.33% {transform: rotate(30deg);}
+				16.66% {transform: rotate(60deg);}
+				24.99% {transform: rotate(90deg);}
+				33.32%	{transform: rotate(120deg);}
+				41.65%	{transform: rotate(150deg);}
+				49.98%	{transform: rotate(180deg);}
+				58.31%	{transform: rotate(210deg);}
+				66.64%	{transform: rotate(240deg);}
+				74.97%	{transform: rotate(270deg);}
+				83.3%	{transform: rotate(300deg);}
+				91.63%	{transform: rotate(330deg);}
+				100% {transform: rotate(360deg);}
+			}
+
+			.rotate_anim{
+				animation: UI_rotate;
+				animation-duration: 1.5s;
+				animation-timing-function: step-end;
+				animation-iteration-count: infinite;
+			}
+
 			
 			
 			@keyframes blinking_animation 
@@ -924,6 +971,10 @@
 		<div id="main_title">Medical Cart Configurator</div>
 		<div id="sub_title">Use currently available standard accessories to assemble the exact cart you need.
 This is an medical cart configurator demo. It aims to illustrate how WebGL offer a new way to showcase and customize products on the Web.</div>
+
+		<div id="loading_canvas">
+			<div class="loadingUI rotate_anim"></div>
+		</div>
 		<script type="module" src="main.js"></script>
 
     </body>
