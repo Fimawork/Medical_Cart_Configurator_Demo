@@ -1336,7 +1336,7 @@ function UpdateMoveModelPanelPos(target)
     var width = threeContainer.clientWidth, height = threeContainer.clientHeight;
     var widthHalf = width / 2, heightHalf = height / 2;
 
-    setTimeout(() => {setPanelPos();}, 100);//1000=1sec}
+    setTimeout(() => {setPanelPos();}, 200);//1000=1sec}
 
     function setPanelPos()
     {
@@ -1397,7 +1397,9 @@ function UpdateAccessorySpecification()
 
   //_accessory_content.textContent=uniqueItem;
 
-  UpdateSpecContent(_accessory_content,uniqueItem);
+  const revisiedUniqueItem=uniqueItem.slice(1);//移除多餘的第一個字元(,符號)
+
+  UpdateSpecContent(_accessory_content,revisiedUniqueItem);
 }
 
 function SetAccessoryName(target)
@@ -1558,10 +1560,10 @@ async function TakeScreenshot()
 
  function SetupTimeData()
  {
-  var today = new Date();
-	var dateNow = today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate();
-	var timeNow = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-	worldTime = dateNow+' '+timeNow;
+    var today = new Date();
+	  var dateNow = today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate();
+	  var timeNow = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+	  worldTime = dateNow+' '+timeNow;
  }
  
 
@@ -1585,7 +1587,7 @@ async function TakeScreenshot()
       ctx.drawImage(threeImg_02, 1100, 0);
 
       // Step 6: 再畫上 UI 圖像（透明背景）
-      ctx.drawImage(_specificationTable, 150, 810);
+      ctx.drawImage(_specificationTable, 150, 630);
 
       ctx.drawImage(_MainTitle, 150, 250);
       ctx.drawImage(_SubTitle, 150, 350);
