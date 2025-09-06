@@ -79,6 +79,10 @@
 	background-image: url('./images/CableManagementHolder.png');
 }
 
+.item:nth-child(17)
+{
+	background-image: url('./images/BarcodeScannerHolder.png');
+}
 
 .item:nth-child(18)
 {

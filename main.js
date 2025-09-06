@@ -800,6 +800,15 @@ function AccessoryManager(i)
 
     break;
 
+    case 5://掃描器架
+    accessory_05_num++;
+    
+    item_name="accessory_05_"+`${accessory_05_num}`;
+
+    InstGLTFLoader('./models/accessory_05.glb',new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,item_name,null, scene);
+
+    break;
+
     case 6://把手
     accessory_06_num++;
     
@@ -1411,6 +1420,11 @@ function SetAccessoryName(target)
   if(target.name.includes("accessory_04_"))
   {
     return "Universal Adapter Holder with Cable Management";
+  }
+
+  if(target.name.includes("accessory_05_"))
+  {
+    return "Barcode Scanner Holder";
   }
 
   if(target.name.includes("accessory_06_"))
