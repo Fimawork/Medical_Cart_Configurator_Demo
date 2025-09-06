@@ -1615,7 +1615,7 @@ async function TakeScreenshot()
 function ShowErrorDialog()
 {
   setTimeout(() => {_system_info.style.display="block";}, 500);//1000=1sec}
-  setTimeout(() => { _system_info.style.display="none";}, 2150);//1000=1sec}
+  setTimeout(() => { _system_info.style.display="none";}, 2220);//1000=1sec}
 }
 ///將函數掛載到全域範圍
 window.InstrumentMountManager=InstrumentMountManager;
