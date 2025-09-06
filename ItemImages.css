@@ -79,9 +79,15 @@
 	background-image: url('./images/CableManagementHolder.png');
 }
 
+
 .item:nth-child(18)
 {
 	background-image: url('./images/Handle.png');
+}
+
+.item:nth-child(19)
+{
+	background-image: url('./images/Rail.png');
 }
 
 .item:nth-child(20)

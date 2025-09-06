@@ -809,6 +809,15 @@ function AccessoryManager(i)
 
     break;
 
+    case 7://Rail
+    accessory_07_num++;
+    
+    item_name="accessory_07_"+`${accessory_07_num}`;
+
+    InstGLTFLoader('./models/accessory_07.glb',new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,item_name,null, scene);
+
+    break;
+
     case 8://印表機架
     accessory_08_num++;
     
@@ -1407,6 +1416,11 @@ function SetAccessoryName(target)
   if(target.name.includes("accessory_06_"))
   {
     return "Grip Handle";
+  }
+
+  if(target.name.includes("accessory_07_"))
+  {
+    return "Medical Rail";
   }
 
   if(target.name.includes("accessory_08_"))
