@@ -150,7 +150,11 @@
 				display: none;
 			}
 
-			
+			j
+			{
+				align-self: center;
+				color: #0070a3;
+			}
 
 			#grid-table 
 			{
@@ -352,11 +356,7 @@
 				right: -8%;
 			}
 
-			j
-			{
-				align-self: center;
-				color: #0070a3;
-			}
+			
 
 			#loading_canvas{
 				position: absolute;
@@ -440,6 +440,22 @@
 				animation-iteration-count:1;
 				animation-fill-mode:both;
 				animation-timing-function:linear;
+			}
+
+			#system_info
+			{
+				padding: 0.6% 1.2% 0.6% 1.2%;
+				text-align: center;
+				font-family: "Roboto", sans-serif;
+			  	font-weight: 300;
+              	font-size: 15px;
+				color: rgba(255, 255, 255, 1);
+				background-color: rgba(255, 0, 0, 0.3);
+				backdrop-filter: blur(1.5px);
+    			-webkit-backdrop-filter: blur(1.5px);
+				border-radius: 6px 6px;
+				z-index: 99;
+				display: none;
 			}
 
 			@media (hover: hover) 
@@ -845,9 +861,9 @@
 				<div class="ControllerBtn" onclick="DeleteAccessory()" title="Delete">
 					<j class="fa-solid fa-trash fa-2x"></i>
 				</div>
-				</div>
-				
+				</div>	
 			</div>
+			<div id="system_info">Exceeds installation limits</div>
 			
 		</div>
 

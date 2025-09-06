@@ -124,7 +124,7 @@ let _SelectedItemController= document.querySelector('#SelectedItemController');
 
 
 let _downloadBtn= document.querySelector('#downloadBtn'); 
-
+let _system_info= document.querySelector('#system_info'); 
 
 
 init();
@@ -665,7 +665,7 @@ function CasterManager(i)//移動輪設定功能
     //_caster_content.textContent="3 Twin-wheel Caster ";
 
 
-    UpdateSpecContent(_caster_content,"3 Twin-wheel Caster ");
+    UpdateSpecContent(_caster_content,"3 inch Twin-wheel Caster ");
 
     break;
 
@@ -704,7 +704,7 @@ function CasterManager(i)//移動輪設定功能
     //更新移動輪規格欄位
     //_caster_content.textContent="4 Twin-wheel Caster ";
 
-    UpdateSpecContent(_caster_content,"4 Twin-wheel Caster ");
+    UpdateSpecContent(_caster_content,"4 inch Twin-wheel Caster ");
 
     break;
 
@@ -746,7 +746,7 @@ function CasterManager(i)//移動輪設定功能
     //更新移動輪規格欄位
     //_caster_content.textContent="3 Medical Caster ";
 
-    UpdateSpecContent(_caster_content,"3 Medical Caster ");
+    UpdateSpecContent(_caster_content,"3 inch Medical Caster ");
 
     break;
   }
@@ -1296,11 +1296,17 @@ function MoveModelOFF()
   if(current_INTERSECTED!=null&&current_INTERSECTED.position.y>=1)
   {
     scene.remove(current_INTERSECTED);
+
+    //提示面板
+    ShowErrorDialog();
   }
 
   if(current_INTERSECTED!=null&&current_INTERSECTED.position.y<=-3.5)
   {
     scene.remove(current_INTERSECTED);
+
+    //提示面板
+    ShowErrorDialog();
   }
   
   setTimeout(() => {current_INTERSECTED=null;}, 100);//1000=1sec}
@@ -1604,6 +1610,12 @@ async function TakeScreenshot()
     threeImg_02.src = threeImageData_02;
  }
 
+}
+
+function ShowErrorDialog()
+{
+  setTimeout(() => {_system_info.style.display="block";}, 500);//1000=1sec}
+  setTimeout(() => { _system_info.style.display="none";}, 2150);//1000=1sec}
 }
 ///將函數掛載到全域範圍
 window.InstrumentMountManager=InstrumentMountManager;
