@@ -1467,18 +1467,34 @@ async function TakeScreenshot()
 
   //載入背景圖
  const backgroundImage = document.getElementById('backgroundImage');
- const bgiCanvas = await html2canvas(backgroundImage, {
+ const _backgroundImage = await html2canvas(backgroundImage, {
    backgroundColor: false, // null保持透明,false不透明
    useCORS: true,
    scale: 2.5
  });
 
  //使用 html2canvas 渲染 UI（不包含 WebGL canvas）
-  const uiContainer = document.getElementById('grid-table');
-  const specificationTable = await html2canvas(uiContainer, {
+  const specificationTable = document.getElementById('grid-table');
+  const _specificationTable = await html2canvas(specificationTable, {
     backgroundColor: null, // null保持透明,false不透明
     useCORS: true,
     scale: 3
+  });
+
+  //主標題
+  const MainTitle = document.getElementById('main_title');
+  const _MainTitle = await html2canvas(MainTitle, {
+   backgroundColor: null, // null保持透明,false不透明
+   useCORS: true,
+   scale: 2.5
+  });
+
+  //副標題
+  const SubTitle = document.getElementById('sub_title');
+  const _SubTitle = await html2canvas(SubTitle, {
+   backgroundColor: null, // null保持透明,false不透明
+   useCORS: true,
+   scale: 2.5
   });
 
   setTimeout(() => { firstShot();}, 100);//1000=1sec}
@@ -1513,12 +1529,16 @@ async function TakeScreenshot()
     const threeImg_02 = new Image();
 
     threeImg_01.onload = () => {
-      ctx.drawImage(bgiCanvas, 0, 0);
+      ctx.drawImage(_backgroundImage, 0, 0);
       ctx.drawImage(threeImg_01, 0, 0);
       ctx.drawImage(threeImg_02, 1000, 0);
 
       // Step 6: 再畫上 UI 圖像（透明背景）
-      ctx.drawImage(specificationTable, 100, 500);
+      ctx.drawImage(_specificationTable, 150, 810);
+
+      ctx.drawImage(_MainTitle, 150, 250);
+      ctx.drawImage(_SubTitle, 150, 350);
+      
 
       // Step 7: 將合成後的圖像轉為下載
       const link = document.createElement('a');
