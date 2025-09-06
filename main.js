@@ -1535,8 +1535,8 @@ async function TakeScreenshot()
 
   const _loading_canvas=document.getElementById('loading_canvas');
 
-  setTimeout(() => {_loading_canvas.style.display="flex";}, 50);//1000=1sec}//開啟LoadingPage
-  setTimeout(() => { firstShot();}, 100);//1000=1sec}
+  setTimeout(() => {_loading_canvas.style.display="flex";CameraManager(0);}, 100);//1000=1sec}//開啟LoadingPage，回預設鏡頭位置
+  setTimeout(() => { firstShot();}, 750);//1000=1sec}
   setTimeout(() => {CameraManager(6);}, 1000);//1000=1sec}鏡頭轉向推車背面
   setTimeout(() => { SecondShot();}, 2000);//1000=1sec}
   setTimeout(() => { SetupTimeData();}, 2500);//1000=1sec}
@@ -1594,12 +1594,12 @@ async function TakeScreenshot()
       // Step 7: 將合成後的圖像轉為下載
       const link = document.createElement('a');
       link.href = finalCanvas.toDataURL('image/png');
-      link.download = `Specification_${worldTime}.png`;
+      link.download = `MedicalCartSpec_${worldTime}.png`;
       link.click();
     };
     
-  threeImg_01.src = threeImageData_01;
-  threeImg_02.src = threeImageData_02;
+    threeImg_01.src = threeImageData_01;
+    threeImg_02.src = threeImageData_02;
  }
 
 }
