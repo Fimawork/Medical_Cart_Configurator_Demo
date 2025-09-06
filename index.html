@@ -8,6 +8,7 @@
 		<link rel="stylesheet" href="./ItemImages.css">
 		<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
 		<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 		<style type="text/css">
 			@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,500,700');  
 			@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" );
@@ -151,7 +152,7 @@
 
 			
 
-			.grid-table 
+			#grid-table 
 			{
 				position: absolute;	
 				top:36%;
@@ -437,7 +438,7 @@
 					text-align: left;
 				}
 
-				.grid-table 
+				#grid-table 
 				{
 					position: absolute;	
 					top:36%;
@@ -531,7 +532,7 @@
 					transform: translate(-50%);
 				}
 
-				.grid-table 
+				#grid-table 
 				{
 					position: absolute;	
 					top:78%;
@@ -656,7 +657,7 @@
 					display: block;
 				}
 
-				.grid-table 
+				#grid-table 
 				{
 					position: absolute;	
 					top:100%;
@@ -755,7 +756,7 @@
 			<div id="hud_btn_panel">
 				<div class="hud_btn fa-solid fa-rotate-right fa-2x" onclick="EditMode(0)" title="RESET"></div>
 				<div class="hud_btn fa-solid fa-list fa-2x" style=" color:#6bb4f7" id="ShowLabelToggle"onclick="ShowSceneLabelToggle()" title="SHOW/HIDE LABEL"></div>
-				<div class="hud_btn fa-solid fa-download fa-2x" onclick="DownloadSpecification()" title="DOWNLOAD"></div>
+				<div class="hud_btn fa-solid fa-download fa-2x" onclick="TakeScreenshot()" title="DOWNLOAD"></div>
 			</div>
 			<div id="SelectedItemController" class="label_fadeIn_anim" draggable="true">
 				<div id="SelectedItemWindow" class="window_border window_blinking_anim">
@@ -783,7 +784,7 @@
 			
 		</div>
 
-		<div class="grid-table">
+		<div id="grid-table">
 			<div class="cell alignCenter">1</div>
 			<div class="cell alignCenter">Instrument Mount</div>
 			<div class="cell" id="instrument_mount_content">Description</div>

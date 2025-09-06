@@ -122,6 +122,11 @@ const params = {
 let _SelectedItemController= document.querySelector('#SelectedItemController'); 
 //let _SelectedItemWindow= document.querySelector('#SelectedItemWindow'); 
 
+
+let _downloadBtn= document.querySelector('#downloadBtn'); 
+
+
+
 init();
 animate();
 EventListener();
@@ -241,6 +246,9 @@ function init()
   //配件(增加配件時觸發)
   posData[5]={ camera_pos:new THREE.Vector3(-8.263,6.645,-7.018), controlsTarget_pos:new THREE.Vector3(0.380,3.145,0.451)};
 
+  //推車背面(下載檔案時觸發)
+  posData[6]={ camera_pos:new THREE.Vector3(5.219,5.358,5.276), controlsTarget_pos:new THREE.Vector3(0.073,1.928,0.010)};
+
   ///利用座標設定旋轉中心及鏡頭焦點，camera不須另外設定初始角度
   controls = new OrbitControls( camera, renderer.domElement );
   controls.enablePan = true;//右鍵平移效果
@@ -273,7 +281,6 @@ function init()
   outlinePass.edgeGlow= params.edgeGlow;
 	outlinePass.edgeThickness= params.edgeThickness;
   outlinePass.visibleEdgeColor.set(params.color);
-  
 
   ///紀錄相機的初始位置
 	SetDefaultCameraStatus(CameraDefaultPos,ControlsTargetDefaultPos);
@@ -332,7 +339,9 @@ function EventListener()
       {
 
         case "Space":
-        MoveModelOFF();
+        //MoveModelOFF();
+
+        CameraManager(6);
 
         break;
 
@@ -1452,14 +1461,80 @@ function FindLatestAccessory()
   }
 }
 
-function DownloadSpecification()
+async function TakeScreenshot() 
 {
-  for(let i=0;i<scene.children.length;i++)
-  {
-    console.log(scene.children[i].name);
-  }
-}
+  let threeImageData_01,threeImageData_02;
 
+  //載入背景圖
+ const backgroundImage = document.getElementById('backgroundImage');
+ const bgiCanvas = await html2canvas(backgroundImage, {
+   backgroundColor: false, // null保持透明,false不透明
+   useCORS: true,
+   scale: 2.5
+ });
+
+ //使用 html2canvas 渲染 UI（不包含 WebGL canvas）
+  const uiContainer = document.getElementById('grid-table');
+  const specificationTable = await html2canvas(uiContainer, {
+    backgroundColor: null, // null保持透明,false不透明
+    useCORS: true,
+    scale: 3
+  });
+
+  setTimeout(() => { firstShot();}, 100);//1000=1sec}
+  setTimeout(() => {CameraManager(6);}, 1000);//1000=1sec}鏡頭轉向推車背面
+  setTimeout(() => { SecondShot();}, 2000);//1000=1sec}
+  setTimeout(() => { DrawTheImage();}, 3000);//1000=1sec}
+  setTimeout(() => { CameraManager(0);}, 5000);//1000=1sec}下載結束鏡頭歸位
+
+ function firstShot()//取得 Three.js 第一張畫面為圖片
+ {
+    composer.render(); // 如果你有使用 postprocessing  
+    threeImageData_01 = renderer.domElement.toDataURL('image/png');
+ }
+
+ function SecondShot()//取得 Three.js 第二張畫面為圖片
+ {
+    composer.render(); // 如果你有使用 postprocessing
+    threeImageData_02 = renderer.domElement.toDataURL('image/png');
+ }
+ 
+
+ function DrawTheImage()
+ {
+    // Step 4: 建立新 canvas 合成兩層圖像
+    const finalCanvas = document.createElement('canvas');
+    finalCanvas.width = renderer.domElement.width;
+    finalCanvas.height = renderer.domElement.height;
+    const ctx = finalCanvas.getContext('2d');
+
+    // Step 5: 先畫上 Three.js 圖像
+    const threeImg_01 = new Image();
+    const threeImg_02 = new Image();
+
+    threeImg_01.onload = () => {
+      ctx.drawImage(bgiCanvas, 0, 0);
+      ctx.drawImage(threeImg_01, 0, 0);
+      ctx.drawImage(threeImg_02, 1000, 0);
+
+      // Step 6: 再畫上 UI 圖像（透明背景）
+      ctx.drawImage(specificationTable, 100, 500);
+
+      // Step 7: 將合成後的圖像轉為下載
+      const link = document.createElement('a');
+      link.href = finalCanvas.toDataURL('image/png');
+      link.download = 'combined-screenshot.png';
+      link.click();
+    };
+    
+  threeImg_01.src = threeImageData_01;
+  threeImg_02.src = threeImageData_02;
+ }
+
+  
+
+  
+}
 ///將函數掛載到全域範圍
 window.InstrumentMountManager=InstrumentMountManager;
 window.ColumnManager=ColumnManager;
@@ -1471,4 +1546,4 @@ window.AccessoryManager=AccessoryManager;
 window.MoveModel=MoveModel;
 window.MoveModelOFF=MoveModelOFF;
 window.DeleteAccessory=DeleteAccessory;
-window.DownloadSpecification=DownloadSpecification;
+window.TakeScreenshot=TakeScreenshot;
