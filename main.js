@@ -55,13 +55,25 @@ let _system_info= document.querySelector('#system_info');
 //Loading頁面
 let _loading_canvas=document.getElementById('loading_canvas');
 
+//移動輪規格欄位類型資訊
+let caster_type="";
+
+
+//caster煞車選配按鈕功能
+let _casterToggleContainer=document.querySelector('#casterToggleContainer');
+let _brake_toggle_1=document.querySelector('#brake_toggle_1');
+let _brake_toggle_2=document.querySelector('#brake_toggle_2');
+let _brake_toggle_3=document.querySelector('#brake_toggle_3');
+let _brake_toggle_4=document.querySelector('#brake_toggle_4');
+let _brake_toggle_5=document.querySelector('#brake_toggle_5');
+//let _caster_toggle_06=document.getElementById('caster_toggle_06');
+
 let current_accessory_list=[];
-
-
 let isLabelOn=true;
-
 //是否啟用鏡頭飛行模式，避免初始零件生成同時觸發飛行功能
 let isCameraManagerOn=false;
+//是否在編輯移動輪模式
+let isCasterFocus=false;
 
 let _item_01_btn = document.querySelector('#item_01_btn');
 let _item_02_btn = document.querySelector('#item_02_btn');
@@ -96,11 +108,15 @@ let accessory_07_num=0;
 let accessory_08_num=0;
 let accessory_09_num=0;
 
+//煞車移動輪數量(預設為5個煞車)
+let current_brake_num=5;
+
 let current_instrument_mount=[];
 let current_column=[];
 let current_base=[];
 let current_caster=[];
 let current_accessories=[];
+
 
 let cartDimension;
 let cartBox;
@@ -336,14 +352,15 @@ function EventListener()
 
         case "Space":
         //MoveModelOFF();
-
-        SetupCasterBreak();
+        //_caster_toggle_01.checked=false;
 
         break;
 
         case "ArrowDown":
 
        //console.log(scene);
+
+       //_caster_toggle_01.checked=true;
 
         break;
 
@@ -379,7 +396,14 @@ function EventListener()
       }
     }
   });
-  
+
+
+  window.addEventListener( 'pointermove', function(e) {
+    if(isCasterFocus)//如果在編輯移動輪狀態，依據操作更新break_toggle位置
+    {
+      SetupCasterBrakePanelOn();
+    }
+  });
 }
 
 
@@ -536,6 +560,8 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
 
   ResetBaseModule();//重置底座
 
+  DefaultCasterToggle();//還原為預設移動輪煞車狀態(全部含煞車)
+
   let name="";
 
   if(isCameraManagerOn)CameraManager(3);
@@ -605,6 +631,8 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
 
     break;
   }
+
+  setTimeout(() => {CountBrakeNum();}, 1000);//1000=1sec}
 }
 
 
@@ -613,6 +641,8 @@ function CasterManager(i)//移動輪設定功能
   current_caster=[];//移除原outline指定物件
 
   ResetCasterModule();//刪除目前場景上的移動輪
+
+  DefaultCasterToggle();//還原為預設移動輪煞車狀態(全部含煞車)
 
   caster_index=i;
 
@@ -623,6 +653,8 @@ function CasterManager(i)//移動輪設定功能
     case 3:
 
     let name_301="3inchCasterFor20BaseModule";
+
+    caster_type="3 inch Twin-wheel Caster";
       
     if(base_index==20&&scene.getObjectByName(name_301)==null)//4吋輪for20吋底座
     {
@@ -653,19 +685,13 @@ function CasterManager(i)//移動輪設定功能
 
     }
 
-    
-
-    //更新移動輪規格欄位
-    //_caster_content.textContent="3 Twin-wheel Caster ";
-
-
-    UpdateSpecContent(_caster_content,"3 inch Twin-wheel Caster ");
-
     break;
 
     case 4:
 
     let name_401="4inchCasterFor20BaseModule";
+
+    caster_type="4 inch Twin-wheel Caster";
       
     if(base_index==20&&scene.getObjectByName(name_401)==null)//4吋輪for20吋底座
     {
@@ -695,16 +721,13 @@ function CasterManager(i)//移動輪設定功能
       setTimeout(() => {current_caster.push(scene.getObjectByName(name_403));addSelectedObject(scene.getObjectByName(name_403));}, 1000);//1000=1sec}
     }
 
-    //更新移動輪規格欄位
-    //_caster_content.textContent="4 Twin-wheel Caster ";
-
-    UpdateSpecContent(_caster_content,"4 inch Twin-wheel Caster ");
-
     break;
 
     case 5:
 
     let name_501="3incMedicalCasterFor20BaseModule";
+
+    caster_type="3 inch Medical Caster";
       
     if(base_index==20&&scene.getObjectByName(name_501)==null)//4吋輪for20吋底座
     {
@@ -735,15 +758,13 @@ function CasterManager(i)//移動輪設定功能
 
     }
 
-    
-
-    //更新移動輪規格欄位
-    //_caster_content.textContent="3 Medical Caster ";
-
-    UpdateSpecContent(_caster_content,"3 inch Medical Caster ");
-
     break;
   }
+
+  //更新移動輪規格欄位
+  //UpdateSpecContent(_caster_content,caster_type+`(${current_brake_num}pcs with brakes)`);
+
+  setTimeout(() => {CountBrakeNum();}, 1000);//1000=1sec}
 }
 
 function AccessoryManager(i)
@@ -956,6 +977,8 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
 
     MoveModelOFF();//關閉配件操作面板
 
+    SetupCasterBrakePanelOFF();//關閉移動輪編輯面板
+
     break;
 
     case 1:
@@ -968,6 +991,8 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
     }
 
     FilterItems(1);
+
+    SetupCasterBrakePanelOFF();//關閉移動輪編輯面板
     
     break;
 
@@ -981,6 +1006,8 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
     }
 
     FilterItems(2);
+
+    SetupCasterBrakePanelOFF();//關閉移動輪編輯面板
     
     break;
 
@@ -994,6 +1021,8 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
     }
 
     FilterItems(3);
+
+    SetupCasterBrakePanelOFF();//關閉移動輪編輯面板
     
     break;
 
@@ -1008,12 +1037,18 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
 
     FilterItems(4);
 
+    CountBrakeNum();
+
+    SetupCasterBrakePanelOn();//開啟移動輪編輯面板
+
     break;
 
     case 5:
 
 
     FilterItems(5);
+
+    SetupCasterBrakePanelOFF();//關閉移動輪編輯面板
 
     break;
   }
@@ -1624,21 +1659,101 @@ function ShowErrorDialog()
   setTimeout(() => { _system_info.style.display="none";}, 2220);//1000=1sec}
 }
 
-let isBreak;
 
-function SetupCasterBreak()
+
+function SetupCasterBrakePanelOn()
 {
-  let i=0;//console.log(current_caster[0].children[0]);
+  isCasterFocus=true;
+  _casterToggleContainer.style.display="block";
 
-  current_caster[0].children[0].traverse( function ( object ) {
+  let i=0;//console.log(current_caster[0].children[0]);
+  let label="";
+  let toggle="";
+
+  if(current_caster[0]!=null)
+  {
+    current_caster[0].children[0].traverse( function ( object ) {
 
 			if ( object.name.includes("Break"))
 			{
         i++;
-				console.log(i);
-        object.visible=false;
+        //object.visible=false;
+        label=document.querySelector(`#caster_toggle_label_${i}`);
+        toggle=document.querySelector(`#brake_toggle_${i}`);
+        ShowCasterLabel(label,object);  
+        label.style.display="block";
+
+        object.visible=toggle.checked;
 			}
-  });
+    });
+  }
+}
+
+function SetupCasterBrakePanelOFF()
+{
+  isCasterFocus=false;
+  _casterToggleContainer.style.display="none";
+
+  for(let i=0;i<_casterToggleContainer.children.length;i++)
+  {
+    _casterToggleContainer.children[i].style.display="none";
+  }
+
+  CountBrakeNum();
+}
+
+function CountBrakeNum()
+{
+    current_brake_num=0;//重置數量
+    //更新目前煞車移動輪的數量
+
+    if(current_caster[0]!=null)
+    {
+      current_caster[0].children[0].traverse( function ( object ) {
+
+	  		if ( object.name.includes("Break")&&object.visible)
+	  		{
+          current_brake_num++;
+	  		}
+      });
+    }
+
+    //更新移動輪規格欄位
+    UpdateSpecContent(_caster_content,caster_type+`(${current_brake_num}pcs with brakes)`);
+}
+
+function ShowCasterLabel(cssLabel,target)  
+{  
+  try 
+	{
+    let center= new THREE.Vector3();
+    const box= new THREE.Box3().setFromObject(target);
+    box.getCenter(center);
+
+    var width = threeContainer.clientWidth, height = threeContainer.clientHeight;
+    var widthHalf = width / 2, heightHalf = height / 2;
+
+    
+    center.project(camera);
+    center.x = ( center.x * widthHalf ) + widthHalf;
+    center.y = - ( (center.y) * heightHalf ) + heightHalf;
+      
+    cssLabel.style.cssText = `position:absolute;top:${center.y/height*100+1}%;left:${center.x/width*100+1.5}%;display:block;`;
+  }
+
+  catch (error) 
+	{
+		console.log(`發生錯誤.${error}`);
+	}
+}
+
+function DefaultCasterToggle()
+{
+  _brake_toggle_1.checked=true;
+  _brake_toggle_2.checked=true;
+  _brake_toggle_3.checked=true;
+  _brake_toggle_4.checked=true;
+  _brake_toggle_5.checked=true;
 }
 ///將函數掛載到全域範圍
 window.InstrumentMountManager=InstrumentMountManager;
