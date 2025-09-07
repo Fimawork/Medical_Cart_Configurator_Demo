@@ -1279,9 +1279,8 @@ function MoveModelON(target)
 { 
   try 
 	{
-    UpdateMoveModelPanelPos(target);
     current_INTERSECTED=target;
-    //setTimeout(() => {UpdateMoveModelPanelPos(current_INTERSECTED);}, 100);//1000=1sec} //更新控制面板位置 
+    setTimeout(() => {UpdateMoveModelPanelPos(current_INTERSECTED);}, 100);//1000=1sec} //更新控制面板位置 
 
     if(isLabelOn)//移動零件時不顯示Label
     {
@@ -1293,6 +1292,11 @@ function MoveModelON(target)
 	{
 		console.log(`發生錯誤.${error}`);
 	}
+
+  finally 
+  {
+    current_INTERSECTED=target;
+  }
 }
 
 function MoveModelOFF()
@@ -1620,6 +1624,8 @@ function ShowErrorDialog()
   setTimeout(() => { _system_info.style.display="none";}, 2220);//1000=1sec}
 }
 
+let isBreak;
+
 function SetupCasterBreak()
 {
   let i=0;//console.log(current_caster[0].children[0]);
@@ -1630,6 +1636,7 @@ function SetupCasterBreak()
 			{
         i++;
 				console.log(i);
+        object.visible=false;
 			}
   });
 }
