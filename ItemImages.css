@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,500,700');  
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" );
+
 .item:nth-child(1)
 {
 	background-image: url('./images/FixAnglePanel.png');
@@ -190,4 +193,15 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.toggle_title
+{
+  position: absolute;
+  left: -60px;
+  top: 8.5px;
+  font-size: 18px;
+  text-align: center;
+  color: #6bb4f7;
+	font-family: "Roboto", sans-serif;
 }

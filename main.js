@@ -407,7 +407,7 @@ function EventListener()
         EditMode(3);
       }
 
-      if(INTERSECTED.name.includes("Caster"))
+      if(INTERSECTED.name.includes("Caster")&& !isCasterFocus)//編輯移動輪狀態不觸發
       {
         EditMode(4);
       }
@@ -1090,7 +1090,7 @@ function addSelectedObject( object )
     selectedObjects = [];
     selectedObjects.push( object );
 
-    setTimeout(() => {outlinePass.selectedObjects = selectedObjects;}, 100);//1000=1sec}//oultine效果開始
+    setTimeout(() => {outlinePass.selectedObjects = selectedObjects;}, 200);//1000=1sec}//oultine效果開始
     setTimeout(() => {outlinePass.selectedObjects = [];}, 1500);//1000=1sec}//oultine效果結束
 
     //量測推車尺寸
