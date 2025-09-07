@@ -1661,7 +1661,7 @@ async function TakeScreenshot()
       ctx.drawImage(_backgroundImage, 0, 0);
       //ctx.drawImage(_frozenGlassPanel , 0, 0);
       
-      ctx.drawImage(threeImg_01, 0, 0);
+      ctx.drawImage(threeImg_01, 100, 0);
       ctx.drawImage(threeImg_02, 1100, 0);
 
       // Step 6: 再畫上 UI 圖像（透明背景）
