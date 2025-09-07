@@ -1279,8 +1279,9 @@ function MoveModelON(target)
 { 
   try 
 	{
+    UpdateMoveModelPanelPos(target);
     current_INTERSECTED=target;
-    setTimeout(() => {UpdateMoveModelPanelPos(current_INTERSECTED);}, 100);//1000=1sec} //更新控制面板位置 
+    //setTimeout(() => {UpdateMoveModelPanelPos(current_INTERSECTED);}, 100);//1000=1sec} //更新控制面板位置 
 
     if(isLabelOn)//移動零件時不顯示Label
     {
