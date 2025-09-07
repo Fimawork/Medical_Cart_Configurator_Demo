@@ -386,12 +386,33 @@ function EventListener()
   window.addEventListener("pointerdown", function(e) {
     if(INTERSECTED!=null)
     {
+      if(INTERSECTED.name.includes("Panel"))
+      {
+        EditMode(1);
+      }
+
+      if(INTERSECTED.name.includes("Tube"))
+      {
+        EditMode(2);
+      }
+
+      if(INTERSECTED.name==="20Base"||INTERSECTED.name==="24Base"||INTERSECTED.name==="24Base")
+      {
+        EditMode(3);
+      }
+
+      if(INTERSECTED.name.includes("Caster"))
+      {
+        EditMode(4);
+      }
+
       if(INTERSECTED.name.includes("accessory"))
       {
         if(current_INTERSECTED==null)//避免A物件編輯時，點選到B物件
         {
           MoveModelON(INTERSECTED);
           addSelectedObject(INTERSECTED);
+          SetupCasterBrakePanelOn();
         }     
       }
     }
@@ -1738,7 +1759,7 @@ function ShowCasterLabel(cssLabel,target)
     center.x = ( center.x * widthHalf ) + widthHalf;
     center.y = - ( (center.y) * heightHalf ) + heightHalf;
       
-    cssLabel.style.cssText = `position:absolute;top:${center.y/height*100+1}%;left:${center.x/width*100+1.5}%;display:block;`;
+    cssLabel.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
   }
 
   catch (error) 
