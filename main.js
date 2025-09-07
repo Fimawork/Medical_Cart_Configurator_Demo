@@ -32,6 +32,7 @@ let caster_index=4;//預設為4吋移動輪
 
 
 let mousePos = { x: undefined, y: undefined };
+let hoverPos = { x: undefined, y: undefined };
 let current_INTERSECTED,INTERSECTED;
 //////Raycaster工具//////
 const raycaster = new THREE.Raycaster();
@@ -46,6 +47,13 @@ let _dimension_content= document.querySelector('#dimension_content');
 
 let _labelContainer = document.querySelector('#labelContainer');
 let _ShowLabelToggle = document.querySelector('#ShowLabelToggle'); 
+
+//配件編輯面板
+let _SelectedItemController= document.querySelector('#SelectedItemController'); 
+//系統訊息
+let _system_info= document.querySelector('#system_info'); 
+//Loading頁面
+let _loading_canvas=document.getElementById('loading_canvas');
 
 let current_accessory_list=[];
 
@@ -118,13 +126,7 @@ const params = {
 				color:'#6bb4f7'
 			};
 
-//配件編輯面板
-let _SelectedItemController= document.querySelector('#SelectedItemController'); 
-//let _SelectedItemWindow= document.querySelector('#SelectedItemWindow'); 
 
-
-let _downloadBtn= document.querySelector('#downloadBtn'); 
-let _system_info= document.querySelector('#system_info'); 
 
 
 init();
@@ -167,6 +169,7 @@ function init()
   ///主要物件
 	const defaultScenes = 
   [
+    () => new Promise((resolve) => setTimeout(() => { _loading_canvas.style.display="flex"; resolve(); }, 10)),//Loading頁面
     () => new Promise((resolve) => setTimeout(() => { _labelContainer.style.cssText = "opacity: 0;"; resolve(); }, 50)),//隱藏SceneLabel避免初始化完成前誤觸
 		() => new Promise((resolve) => setTimeout(() => { BaseManager(24); resolve(); }, 100)),//底座&移動輪
     () => new Promise((resolve) => setTimeout(() => { InstrumentMountManager(0); resolve(); }, 110)),//儀器支撐版
@@ -175,6 +178,7 @@ function init()
     () => new Promise((resolve) => setTimeout(() => { SetupBtnList(); resolve(); }, 400)),//設定Item案例群組
     () => new Promise((resolve) => setTimeout(() => { SetupLabelTarget(); resolve(); }, 450)),//LabelTarget
     () => new Promise((resolve) => setTimeout(() => { isCameraManagerOn=true; resolve(); }, 500)),//啟用攝影機飛行功能
+    () => new Promise((resolve) => setTimeout(() => { _loading_canvas.style.display="none"; resolve(); }, 900)),//關閉Loading頁面
     () => new Promise((resolve) => setTimeout(() => { _labelContainer.style.cssText = "opacity: 1;"; resolve(); }, 1000)),//顯示SceneLabel      
 	];
 
@@ -293,14 +297,6 @@ function init()
 		onPointerMove(event);//改以點擊作為Raycast判斷的時間點，改善觸控螢幕誤判狀況
   });
   window.addEventListener("wheel", (event) => {InputEvent();});
-  
-//window.addEventListener('pointermove', (event) => {
-//  mousePos = { x: event.clientX, y: event.clientY };
-//	onPointerMove(event);
-//  //console.log(INTERSECTED);
-//});
-
-
 
 }
 
@@ -341,7 +337,7 @@ function EventListener()
         case "Space":
         //MoveModelOFF();
 
-        CameraManager(6);
+        SetupCasterBreak();
 
         break;
 
@@ -379,13 +375,11 @@ function EventListener()
         {
           MoveModelON(INTERSECTED);
           addSelectedObject(INTERSECTED);
-        }
-        
+        }     
       }
     }
   });
-
-
+  
 }
 
 
@@ -1246,35 +1240,44 @@ function MeasureCartDimension()
 
 function MoveModel(action)
 {
-  if(current_INTERSECTED!=null)
-  {
-    if(action==="UP")
+  try 
+	{
+    if(current_INTERSECTED!=null)
     {
-      current_INTERSECTED.position.y+=0.5;
-    }
+      if(action==="UP")
+      {
+        current_INTERSECTED.position.y+=0.5;
+      }
 
-    if(action==="DOWN")
-    {
-      current_INTERSECTED.position.y-=0.5;
-    }
+      if(action==="DOWN")
+      {
+        current_INTERSECTED.position.y-=0.5;
+      }
 
-    if(action==="RIGHT")
-    {
-      current_INTERSECTED.rotation.y+=Math.PI*0.5;
-    }
+      if(action==="RIGHT")
+      {
+        current_INTERSECTED.rotation.y+=Math.PI*0.5;
+      }
 
-    if(action==="LEFT")
-    {
-      current_INTERSECTED.rotation.y-=Math.PI*0.5;
-    }
+      if(action==="LEFT")
+      {
+        current_INTERSECTED.rotation.y-=Math.PI*0.5;
+      }
 
-    UpdateMoveModelPanelPos(current_INTERSECTED);//更新控制面板位置 
+      UpdateMoveModelPanelPos(current_INTERSECTED);//更新控制面板位置 
+    }
   }
+
+  catch (error) 
+	{
+		console.log(`發生錯誤.${error}`);
+	}
 
 }
 
 function MoveModelON(target)
-{ try 
+{ 
+  try 
 	{
     current_INTERSECTED=target;
     setTimeout(() => {UpdateMoveModelPanelPos(current_INTERSECTED);}, 100);//1000=1sec} //更新控制面板位置 
@@ -1353,7 +1356,7 @@ function UpdateMoveModelPanelPos(target)
       _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
 
       //若無偵測到中心點重新執行一次
-      if(center==null&&FindLatestAccessory()!=null)
+      if(center===null&&FindLatestAccessory()!=null)
       {
         UpdateMoveModelPanelPos(FindLatestAccessory());
       }
@@ -1541,8 +1544,6 @@ async function TakeScreenshot()
    scale: 2.5
   });
 
-  const _loading_canvas=document.getElementById('loading_canvas');
-
   setTimeout(() => {_loading_canvas.style.display="flex";CameraManager(0);}, 100);//1000=1sec}//開啟LoadingPage，回預設鏡頭位置
   setTimeout(() => { firstShot();}, 750);//1000=1sec}
   setTimeout(() => {CameraManager(6);}, 1000);//1000=1sec}鏡頭轉向推車背面
@@ -1616,6 +1617,20 @@ function ShowErrorDialog()
 {
   setTimeout(() => {_system_info.style.display="block";}, 500);//1000=1sec}
   setTimeout(() => { _system_info.style.display="none";}, 2220);//1000=1sec}
+}
+
+function SetupCasterBreak()
+{
+  let i=0;//console.log(current_caster[0].children[0]);
+
+  current_caster[0].children[0].traverse( function ( object ) {
+
+			if ( object.name.includes("Break"))
+			{
+        i++;
+				console.log(i);
+			}
+  });
 }
 ///將函數掛載到全域範圍
 window.InstrumentMountManager=InstrumentMountManager;
