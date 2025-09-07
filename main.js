@@ -171,9 +171,39 @@ function init()
   //document.body.appendChild( renderer.domElement );
   threeContainer.appendChild( renderer.domElement );
 
+  const CameraDefaultPos=new THREE.Vector3(-4.848,5.501,-4.925);
+  const ControlsTargetDefaultPos=new THREE.Vector3(-0.131,2.274,-0.023);
+  camera.position.copy(CameraDefaultPos);
+  posData[0]={ camera_pos:CameraDefaultPos, controlsTarget_pos:ControlsTargetDefaultPos};
+
+  //儀器支架
+  posData[1]={ camera_pos:new THREE.Vector3(-0.244,5.351,-0.791), controlsTarget_pos:new THREE.Vector3(0.301,3.856,1.063)};
+  //中柱
+  posData[2]={ camera_pos:new THREE.Vector3(-4.642,3.297,2.753), controlsTarget_pos:new THREE.Vector3(0.570,2.752,-0.238)};
+  //底座
+  posData[3]={ camera_pos:new THREE.Vector3(-3.681,3.052,-1.480), controlsTarget_pos:new THREE.Vector3(0.014,0.174,-0.001)};
+  //移動輪
+  posData[4]={ camera_pos:new THREE.Vector3(0.494,3.414,-3.141), controlsTarget_pos:new THREE.Vector3(-0.090,0.533,-0.423)};
+  
+  //配件(增加配件時觸發)
+  posData[5]={ camera_pos:new THREE.Vector3(-8.263,6.645,-7.018), controlsTarget_pos:new THREE.Vector3(0.380,3.145,0.451)};
+
+  //推車背面(下載檔案時觸發)
+  posData[6]={ camera_pos:new THREE.Vector3(5.219,5.358,5.276), controlsTarget_pos:new THREE.Vector3(0.073,1.928,0.010)};
+
+  ///利用座標設定旋轉中心及鏡頭焦點，camera不須另外設定初始角度
+  controls = new OrbitControls( camera, renderer.domElement );
+  controls.enablePan = true;//右鍵平移效果
+  controls.panSpeed = 0.4;
+  controls.enableDamping = true;
+  controls.dampingFactor =0.05;
+  controls.maxDistance = 500;
+  controls.target.copy( ControlsTargetDefaultPos );
+  controls.zoomSpeed=0.5;
+  controls.update();
 
   ///hdri 環境光源
-   new RGBELoader()
+  new RGBELoader()
 					.setPath( 'textures/hdri/' )
 					.load( 'studio_small_09_2k.hdr', function ( texture ) {
 
@@ -183,6 +213,34 @@ function init()
 						scene.environment = texture;
 
 	} );
+
+  ///postprocessing
+	composer = new EffectComposer( renderer );
+
+	const renderPass = new RenderPass( scene, camera );
+  renderPass.clearAlpha=0;
+	composer.addPass( renderPass );
+
+	outlinePass = new OutlinePass( new THREE.Vector2( threeContainer.clientWidth, threeContainer.clientHeight ), scene, camera );
+	composer.addPass( outlinePass );
+
+	const outputPass = new OutputPass();
+	composer.addPass( outputPass );
+
+	effectFXAA = new ShaderPass( FXAAShader );
+	effectFXAA.uniforms[ 'resolution' ].value.set( 1 / threeContainer.clientWidth, 1 / threeContainer.clientHeight );
+	composer.addPass( effectFXAA );
+
+  outlinePass.edgeStrength = params.edgeStrength;
+  outlinePass.edgeGlow= params.edgeGlow;
+	outlinePass.edgeThickness= params.edgeThickness;
+  outlinePass.visibleEdgeColor.set(params.color);
+
+  ///紀錄相機的初始位置
+	SetDefaultCameraStatus(CameraDefaultPos,ControlsTargetDefaultPos);
+
+
+
 
   ///主要物件
 	const defaultScenes = 
@@ -251,61 +309,9 @@ function init()
   labelTarget_accessory.position.set(1.7,3,0);
   scene.add(labelTarget_accessory);
 
-  const CameraDefaultPos=new THREE.Vector3(-4.848,5.501,-4.925);
-  const ControlsTargetDefaultPos=new THREE.Vector3(-0.131,2.274,-0.023);
-  camera.position.copy(CameraDefaultPos);
-  posData[0]={ camera_pos:CameraDefaultPos, controlsTarget_pos:ControlsTargetDefaultPos};
-
-  //儀器支架
-  posData[1]={ camera_pos:new THREE.Vector3(-0.244,5.351,-0.791), controlsTarget_pos:new THREE.Vector3(0.301,3.856,1.063)};
-  //中柱
-  posData[2]={ camera_pos:new THREE.Vector3(-4.642,3.297,2.753), controlsTarget_pos:new THREE.Vector3(0.570,2.752,-0.238)};
-  //底座
-  posData[3]={ camera_pos:new THREE.Vector3(-3.681,3.052,-1.480), controlsTarget_pos:new THREE.Vector3(0.014,0.174,-0.001)};
-  //移動輪
-  posData[4]={ camera_pos:new THREE.Vector3(0.494,3.414,-3.141), controlsTarget_pos:new THREE.Vector3(-0.090,0.533,-0.423)};
   
-  //配件(增加配件時觸發)
-  posData[5]={ camera_pos:new THREE.Vector3(-8.263,6.645,-7.018), controlsTarget_pos:new THREE.Vector3(0.380,3.145,0.451)};
 
-  //推車背面(下載檔案時觸發)
-  posData[6]={ camera_pos:new THREE.Vector3(5.219,5.358,5.276), controlsTarget_pos:new THREE.Vector3(0.073,1.928,0.010)};
-
-  ///利用座標設定旋轉中心及鏡頭焦點，camera不須另外設定初始角度
-  controls = new OrbitControls( camera, renderer.domElement );
-  controls.enablePan = true;//右鍵平移效果
-  controls.panSpeed = 0.4;
-  controls.enableDamping = true;
-  controls.dampingFactor =0.05;
-  controls.maxDistance = 500;
-  controls.target.copy( ControlsTargetDefaultPos );
-  controls.zoomSpeed=0.5;
-  controls.update();
-
-  ///postprocessing
-	composer = new EffectComposer( renderer );
-
-	const renderPass = new RenderPass( scene, camera );
-  renderPass.clearAlpha=0;
-	composer.addPass( renderPass );
-
-	outlinePass = new OutlinePass( new THREE.Vector2( threeContainer.clientWidth, threeContainer.clientHeight ), scene, camera );
-	composer.addPass( outlinePass );
-
-	const outputPass = new OutputPass();
-	composer.addPass( outputPass );
-
-	effectFXAA = new ShaderPass( FXAAShader );
-	effectFXAA.uniforms[ 'resolution' ].value.set( 1 / threeContainer.clientWidth, 1 / threeContainer.clientHeight );
-	composer.addPass( effectFXAA );
-
-  outlinePass.edgeStrength = params.edgeStrength;
-  outlinePass.edgeGlow= params.edgeGlow;
-	outlinePass.edgeThickness= params.edgeThickness;
-  outlinePass.visibleEdgeColor.set(params.color);
-
-  ///紀錄相機的初始位置
-	SetDefaultCameraStatus(CameraDefaultPos,ControlsTargetDefaultPos);
+  
 
   ///EventListener
   window.addEventListener( 'resize', onWindowResize );  
