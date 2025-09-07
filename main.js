@@ -72,6 +72,8 @@ let current_accessory_list=[];
 let isLabelOn=true;
 //是否啟用鏡頭飛行模式，避免初始零件生成同時觸發飛行功能
 let isCameraManagerOn=false;
+//是否在配件位置編輯模式
+let isSelectedItemControllerOn=false;
 //是否在編輯移動輪模式
 let isCasterFocus=false;
 
@@ -193,7 +195,7 @@ function init()
       
     () => new Promise((resolve) => setTimeout(() => { SetupBtnList(); resolve(); }, 400)),//設定Item案例群組
     () => new Promise((resolve) => setTimeout(() => { SetupLabelTarget(); resolve(); }, 450)),//LabelTarget
-    () => new Promise((resolve) => setTimeout(() => { isCameraManagerOn=true; resolve(); }, 500)),//啟用攝影機飛行功能
+    () => new Promise((resolve) => setTimeout(() => { isCameraManagerOn=true; pointer.set(1000,1000);resolve(); }, 500)),//啟用攝影機飛行功能//pointer設置在畫面外，避免初始時直接選到中柱
     () => new Promise((resolve) => setTimeout(() => { _loading_canvas.style.display="none"; resolve(); }, 900)),//關閉Loading頁面
     () => new Promise((resolve) => setTimeout(() => { _labelContainer.style.cssText = "opacity: 1;"; resolve(); }, 1000)),//顯示SceneLabel      
 	];
@@ -222,7 +224,7 @@ function init()
 
     () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_caster,scene.getObjectByName   ("4inchCasterFor24BaseModule")); SetupSenceTag("label label_fadeIn_anim","EditMode",4,_labelContainer);resolve(); }, 400)),
 
-    () => new Promise((resolve) => setTimeout(() => { UpdateSceneLabel(); resolve(); }, 500)),//Label追蹤3D物件
+    () => new Promise((resolve) => setTimeout(() => { UpdateSceneLabel();resolve(); }, 500)),//Label追蹤3D物件
   ];
 
   function UpdateSceneLabel()
@@ -337,9 +339,13 @@ function animate()
   //renderer.render( scene, camera );
   composer.render();//使用postprocessing替代
 
-  UpdateCameraPosition(camera,controls);
+  
 
-  RaycastFunction();
+  if(isCameraManagerOn)
+  {
+    UpdateCameraPosition(camera,controls);
+    RaycastFunction();
+  }
 
 }
 
@@ -384,7 +390,7 @@ function EventListener()
 
   ///滑鼠點擊accessory可啟用模型移動面板
   window.addEventListener("pointerdown", function(e) {
-    if(INTERSECTED!=null)
+    if(INTERSECTED!=null&&!isSelectedItemControllerOn)//在零件位置編輯狀態時禁用，必免誤觸
     {
       if(INTERSECTED.name.includes("Panel"))
       {
@@ -1393,12 +1399,16 @@ function MoveModelOFF()
 
   //回復預設視角
   CameraManager(0);
+
+  isSelectedItemControllerOn=false;
 }
 
 function UpdateMoveModelPanelPos(target)  
 {
   try 
 	{
+    isSelectedItemControllerOn=true;
+
     let center= new THREE.Vector3();
     const box= new THREE.Box3().setFromObject(target);
     box.getCenter(center);
