@@ -462,11 +462,6 @@ function EventListener()
     {
       SetupCasterBrakePanelOn();
     }
-
-    if (parseInt(_label_5.style.left)<1&&parseInt(_label_5.style.top)<1)//若鎖定到LabelTarget則重新生成物件
-    {
-      location.reload();
-    } 
   });
 }
 
