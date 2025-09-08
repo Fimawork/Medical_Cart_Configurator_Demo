@@ -46,7 +46,8 @@ let _accessory_content = document.querySelector('#accessory_content');
 let _dimension_content= document.querySelector('#dimension_content');
 
 let _labelContainer = document.querySelector('#labelContainer');
-let _ShowLabelToggle = document.querySelector('#ShowLabelToggle'); 
+let _ShowLabelToggle = document.querySelector('#ShowLabelToggle');
+let _label_5 = document.querySelector('#label_5');//配件用Label，同時用來檢查是否成功鎖定SceneTarget
 
 //配件編輯面板
 let _SelectedItemController= document.querySelector('#SelectedItemController'); 
@@ -255,7 +256,8 @@ function init()
     () => new Promise((resolve) => setTimeout(() => { SetupLabelTarget(); resolve(); }, 450)),//LabelTarget
     () => new Promise((resolve) => setTimeout(() => { isCameraManagerOn=true; DefaultRaycast();resolve(); }, 500)),//啟用攝影機飛行功能//重置Raycast狀態
     () => new Promise((resolve) => setTimeout(() => { _loading_canvas.style.display="none"; resolve(); }, 900)),//關閉Loading頁面
-    () => new Promise((resolve) => setTimeout(() => { _labelContainer.style.cssText = "opacity: 1;"; resolve(); }, 1000)),//顯示SceneLabel      
+    () => new Promise((resolve) => setTimeout(() => { _labelContainer.style.cssText = "opacity: 1;"; resolve(); }, 1000)),//顯示SceneLabel   
+    () => new Promise((resolve) => setTimeout(() => { CheckIfSceneLabelSetupCorrectly(); resolve(); }, 1500)),//確認SceneLabel是否成功鎖定到LabelTarget     
 	];
 
 	async function SetupDefaultScene() 
@@ -269,6 +271,19 @@ function init()
 	}
 
 	SetupDefaultScene();
+
+  function CheckIfSceneLabelSetupCorrectly()
+  {
+    if (parseInt(_label_5.style.left)<3&&parseInt(_label_5.style.top)<3)//若鎖定到LabelTarget則重新生成物件
+    {
+      SetupDefaultScene();
+    } 
+
+    else
+    {
+      console.log('SceneLabel Setup Correctly');
+    }
+  }
 
 
   //依初始零件位置放置SceneLabelTarget 
