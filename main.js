@@ -424,7 +424,6 @@ function EventListener()
         {
           MoveModelON(INTERSECTED);
           addSelectedObject(INTERSECTED);
-          SetupCasterBrakePanelOn();
         }     
       }
     }
@@ -1012,6 +1011,8 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
 
     SetupCasterBrakePanelOFF();//關閉移動輪編輯面板
 
+    pointer.set(1000,1000);//pointer設置在畫面外(避免行動裝置介面上停留下在上一個點選物件)
+
     break;
 
     case 1:
@@ -1026,6 +1027,8 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
     FilterItems(1);
 
     SetupCasterBrakePanelOFF();//關閉移動輪編輯面板
+
+    pointer.set(1000,1000);//pointer設置在畫面外(避免行動裝置介面上停留下在上一個點選物件)
     
     break;
 
@@ -1041,6 +1044,8 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
     FilterItems(2);
 
     SetupCasterBrakePanelOFF();//關閉移動輪編輯面板
+
+    pointer.set(1000,1000);//pointer設置在畫面外(避免行動裝置介面上停留下在上一個點選物件)
     
     break;
 
@@ -1056,6 +1061,8 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
     FilterItems(3);
 
     SetupCasterBrakePanelOFF();//關閉移動輪編輯面板
+
+    pointer.set(1000,1000);//pointer設置在畫面外(避免行動裝置介面上停留下在上一個點選物件)
     
     break;
 
@@ -1074,6 +1081,8 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
 
     SetupCasterBrakePanelOn();//開啟移動輪編輯面板
 
+    pointer.set(1000,1000);//pointer設置在畫面外(避免行動裝置介面上停留下在上一個點選物件)
+
     break;
 
     case 5:
@@ -1082,6 +1091,8 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
     FilterItems(5);
 
     SetupCasterBrakePanelOFF();//關閉移動輪編輯面板
+
+    pointer.set(1000,1000);//pointer設置在畫面外(避免行動裝置介面上停留下在上一個點選物件)
 
     break;
   }
