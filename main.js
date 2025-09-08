@@ -1477,10 +1477,10 @@ function UpdateMoveModelPanelPos(target)
     var width = threeContainer.clientWidth, height = threeContainer.clientHeight;
     var widthHalf = width / 2, heightHalf = height / 2;
 
-    setTimeout(() => {setPanelPos();}, 200);//1000=1sec}
-
-    function setPanelPos()
-    {
+    //setTimeout(() => {setPanelPos();}, 200);//1000=1sec}
+//
+    //function setPanelPos()
+    //{
       center.project(camera);
       center.x = ( center.x * widthHalf ) + widthHalf;
       center.y = - ( (center.y) * heightHalf ) + heightHalf;
@@ -1488,11 +1488,11 @@ function UpdateMoveModelPanelPos(target)
       _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
 
       //若無偵測到中心點重新執行一次
-      if(center===null&&FindLatestAccessory()!==null)
-      {
-        UpdateMoveModelPanelPos(FindLatestAccessory());
-      }
-    }
+    //  if(center===null&&FindLatestAccessory()!==null)
+    //  {
+    //    UpdateMoveModelPanelPos(FindLatestAccessory());
+    //  }
+    //}
   }
 
   catch (error) 
