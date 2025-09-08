@@ -923,7 +923,9 @@ function AccessoryManager(i)
   setTimeout(() => {current_accessories.push(scene.getObjectByName(item_name));}, 500);//1000=1sec}
    
   //啟用模型移動面板
-  setTimeout(() => {MoveModelON(scene.getObjectByName(item_name));}, 600);//1000=1sec} 
+  //setTimeout(() => {MoveModelON(scene.getObjectByName(item_name));}, 600);//1000=1sec} 
+  setTimeout(() => {MoveModelON(FindLatestAccessory());}, 600);//1000=1sec}
+
 
   //hightlight該物件(易失效，停用)
   //setTimeout(() => {addSelectedObject(scene.getObjectByName(item_name));}, 1000);//1000=1sec} 
