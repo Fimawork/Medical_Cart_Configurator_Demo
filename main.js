@@ -413,38 +413,41 @@ function EventListener()
   window.addEventListener("pointerdown", function(e) {
     if(INTERSECTED!=null&&!isSelectedItemControllerOn)//在零件位置編輯狀態時禁用，必免誤觸
     {
-      if(INTERSECTED.name.includes("Panel"))
+      if(!isMobile())//行動裝置上不支援
       {
-        if(current_INTERSECTED==null)//避免A物件編輯時，點選到B物件
+        if(INTERSECTED.name.includes("Panel"))
         {
-          EditMode(1);
+          if(current_INTERSECTED==null)//避免A物件編輯時，點選到B物件
+          {
+            EditMode(1);
+          }
+        }
+
+        if(INTERSECTED.name.includes("Tube"))
+        {
+          if(current_INTERSECTED==null)//避免A物件編輯時，點選到B物件
+          {
+            EditMode(2);
+          }
+        }
+
+        if(INTERSECTED.name==="20Base"||INTERSECTED.name==="24Base"||INTERSECTED.name==="4LegBase")
+        {
+          if(current_INTERSECTED==null)//避免A物件編輯時，點選到B物件
+          {
+            EditMode(3);
+          }
+        }
+
+        if(INTERSECTED.name.includes("Caster")&& !isCasterFocus)//編輯移動輪狀態不觸發
+        {
+          if(current_INTERSECTED==null)//避免A物件編輯時，點選到B物件
+          {
+            EditMode(4);
+          }
         }
       }
-
-      if(INTERSECTED.name.includes("Tube"))
-      {
-        if(current_INTERSECTED==null)//避免A物件編輯時，點選到B物件
-        {
-          EditMode(2);
-        }
-      }
-
-      if(INTERSECTED.name==="20Base"||INTERSECTED.name==="24Base"||INTERSECTED.name==="4LegBase")
-      {
-        if(current_INTERSECTED==null)//避免A物件編輯時，點選到B物件
-        {
-          EditMode(3);
-        }
-      }
-
-      if(INTERSECTED.name.includes("Caster")&& !isCasterFocus)//編輯移動輪狀態不觸發
-      {
-        if(current_INTERSECTED==null)//避免A物件編輯時，點選到B物件
-        {
-          EditMode(4);
-        }
-      }
-
+      
       if(INTERSECTED.name.includes("accessory"))
       {
         if(current_INTERSECTED==null)//避免A物件編輯時，點選到B物件
@@ -463,6 +466,11 @@ function EventListener()
       SetupCasterBrakePanelOn();
     }
   });
+}
+
+function isMobile()//偵測是否為行動裝置
+{
+  return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
 
 
@@ -1478,7 +1486,7 @@ function UpdateMoveModelPanelPos(target)
       _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
 
       //若無偵測到中心點重新執行一次
-      if(center===null&&FindLatestAccessory()!=null)
+      if(center===null&&FindLatestAccessory()!==null)
       {
         UpdateMoveModelPanelPos(FindLatestAccessory());
       }
