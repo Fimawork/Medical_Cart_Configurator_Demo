@@ -414,7 +414,7 @@ function EventListener()
         }
       }
 
-      if(INTERSECTED.name==="20Base"||INTERSECTED.name==="24Base"||INTERSECTED.name==="24Base")
+      if(INTERSECTED.name==="20Base"||INTERSECTED.name==="24Base"||INTERSECTED.name==="4LegBase")
       {
         if(current_INTERSECTED==null)//避免A物件編輯時，點選到B物件
         {
