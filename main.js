@@ -253,7 +253,7 @@ function init()
       
     () => new Promise((resolve) => setTimeout(() => { SetupBtnList(); resolve(); }, 400)),//設定Item案例群組
     () => new Promise((resolve) => setTimeout(() => { SetupLabelTarget(); resolve(); }, 450)),//LabelTarget
-    () => new Promise((resolve) => setTimeout(() => { isCameraManagerOn=true; pointer.set(1000,1000);resolve(); }, 500)),//啟用攝影機飛行功能//pointer設置在畫面外，避免初始時直接選到中柱
+    () => new Promise((resolve) => setTimeout(() => { isCameraManagerOn=true; DefaultRaycast();resolve(); }, 500)),//啟用攝影機飛行功能//重置Raycast狀態
     () => new Promise((resolve) => setTimeout(() => { _loading_canvas.style.display="none"; resolve(); }, 900)),//關閉Loading頁面
     () => new Promise((resolve) => setTimeout(() => { _labelContainer.style.cssText = "opacity: 1;"; resolve(); }, 1000)),//顯示SceneLabel      
 	];
@@ -274,13 +274,13 @@ function init()
   //依初始零件位置放置SceneLabelTarget 
   const LabelTargets = 
   [
-    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_instrumentMount,scene.getObjectByName    ("FixedAnglePanel"));SetupSenceTag("label label_fadeIn_anim","EditMode",1,_labelContainer);resolve(); }, 100)),
+    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_instrumentMount,scene.getObjectByName("FixedAnglePanel"));SetupSenceTag("label label_fadeIn_anim","EditMode",1,_labelContainer);resolve(); }, 100)),
 
-    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_column,scene.getObjectByName   ("15And20HeighAdjustableTube")); SetupSenceTag("label label_fadeIn_anim","EditMode",2,_labelContainer);resolve(); }, 200)),
+    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_column,scene.getObjectByName("15And20HeighAdjustableTube")); SetupSenceTag("label label_fadeIn_anim","EditMode",2,_labelContainer);resolve(); }, 200)),
 
-    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_base,scene.getObjectByName("24Base")); SetupSenceTag   ("label label_fadeIn_anim","EditMode",3,_labelContainer);resolve(); }, 300)),
+    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_base,scene.getObjectByName("24Base")); SetupSenceTag("label label_fadeIn_anim","EditMode",3,_labelContainer);resolve(); }, 300)),
 
-    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_caster,scene.getObjectByName   ("4inchCasterFor24BaseModule")); SetupSenceTag("label label_fadeIn_anim","EditMode",4,_labelContainer);resolve(); }, 400)),
+    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_caster,scene.getObjectByName("4inchCasterFor24BaseModule")); SetupSenceTag("label label_fadeIn_anim","EditMode",4,_labelContainer);resolve(); }, 400)),
 
     () => new Promise((resolve) => setTimeout(() => { UpdateSceneLabel();resolve(); }, 500)),//Label追蹤3D物件
   ];
@@ -400,22 +400,34 @@ function EventListener()
     {
       if(INTERSECTED.name.includes("Panel"))
       {
-        EditMode(1);
+        if(current_INTERSECTED==null)//避免A物件編輯時，點選到B物件
+        {
+          EditMode(1);
+        }
       }
 
       if(INTERSECTED.name.includes("Tube"))
       {
-        EditMode(2);
+        if(current_INTERSECTED==null)//避免A物件編輯時，點選到B物件
+        {
+          EditMode(2);
+        }
       }
 
       if(INTERSECTED.name==="20Base"||INTERSECTED.name==="24Base"||INTERSECTED.name==="24Base")
       {
-        EditMode(3);
+        if(current_INTERSECTED==null)//避免A物件編輯時，點選到B物件
+        {
+          EditMode(3);
+        }
       }
 
       if(INTERSECTED.name.includes("Caster")&& !isCasterFocus)//編輯移動輪狀態不觸發
       {
-        EditMode(4);
+        if(current_INTERSECTED==null)//避免A物件編輯時，點選到B物件
+        {
+          EditMode(4);
+        }
       }
 
       if(INTERSECTED.name.includes("accessory"))
@@ -974,6 +986,12 @@ function RaycastFunction()
 	}
 }
 
+function DefaultRaycast()
+{
+  pointer.set(1000,1000);//設置在畫面外(避免行動裝置介面上停留下在上一個點選物件)
+  INTERSECTED = null;
+  current_INTERSECTED = null;
+}
 
 function InstantiateLabelTarget(thisLabelTarget,targetObject)
 {
@@ -998,6 +1016,9 @@ function SetupSenceTag(ccsStyle,thisEvent,index,thisSceneTagHolder)
 
 function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座 4:移動輪 5:配件
 {
+
+  //重置所有Raycast狀態
+  DefaultRaycast();
   
   switch(i)
   {
@@ -1010,8 +1031,6 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
     MoveModelOFF();//關閉配件操作面板
 
     SetupCasterBrakePanelOFF();//關閉移動輪編輯面板
-
-    pointer.set(1000,1000);//pointer設置在畫面外(避免行動裝置介面上停留下在上一個點選物件)
 
     break;
 
@@ -1028,8 +1047,6 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
 
     SetupCasterBrakePanelOFF();//關閉移動輪編輯面板
 
-    pointer.set(1000,1000);//pointer設置在畫面外(避免行動裝置介面上停留下在上一個點選物件)
-    
     break;
 
     case 2:
@@ -1045,8 +1062,6 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
 
     SetupCasterBrakePanelOFF();//關閉移動輪編輯面板
 
-    pointer.set(1000,1000);//pointer設置在畫面外(避免行動裝置介面上停留下在上一個點選物件)
-    
     break;
 
     case 3:
@@ -1062,8 +1077,6 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
 
     SetupCasterBrakePanelOFF();//關閉移動輪編輯面板
 
-    pointer.set(1000,1000);//pointer設置在畫面外(避免行動裝置介面上停留下在上一個點選物件)
-    
     break;
 
     case 4:
@@ -1079,20 +1092,15 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
 
     CountBrakeNum();
 
-    SetupCasterBrakePanelOn();//開啟移動輪編輯面板
-
-    pointer.set(1000,1000);//pointer設置在畫面外(避免行動裝置介面上停留下在上一個點選物件)
+    setTimeout(() => {SetupCasterBrakePanelOn();}, 600);//開啟移動輪編輯面板
 
     break;
 
     case 5:
 
-
     FilterItems(5);
 
     SetupCasterBrakePanelOFF();//關閉移動輪編輯面板
-
-    pointer.set(1000,1000);//pointer設置在畫面外(避免行動裝置介面上停留下在上一個點選物件)
 
     break;
   }
@@ -1352,6 +1360,14 @@ function MoveModel(action)
 		console.log(`發生錯誤.${error}`);
 	}
 
+  finally 
+  {
+    if(current_INTERSECTED==null)
+    {
+      current_INTERSECTED=FindLatestAccessory();//如果未指向目標物件，則重新以指向高於推車那一個零件
+    }
+  }
+
 }
 
 function MoveModelON(target)
@@ -1418,6 +1434,9 @@ function MoveModelOFF()
   CameraManager(0);
 
   isSelectedItemControllerOn=false;
+
+  //重置Raycast狀態
+  DefaultRaycast();
 }
 
 function UpdateMoveModelPanelPos(target)  
@@ -1479,6 +1498,9 @@ function DeleteAccessory()
 
   //更新配件規格欄位
   UpdateAccessorySpecification();
+
+  //重置Raycast狀態
+  DefaultRaycast();
 }
 
 function UpdateAccessorySpecification()
@@ -1748,6 +1770,9 @@ function SetupCasterBrakePanelOFF()
   }
 
   CountBrakeNum();
+
+  //重置所有Raycast狀態
+  DefaultRaycast();
 }
 
 function CountBrakeNum()
