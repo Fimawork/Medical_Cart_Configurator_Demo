@@ -1500,10 +1500,10 @@ function UpdateMoveModelPanelPos(target)
 		console.log(`發生錯誤.${error}`);
 	}
 
-  finally 
-  {
-    _SelectedItemController.style.display="block";//強制顯示面板
-  }
+  //finally 
+  //{
+  //  _SelectedItemController.style.display="block";//強制顯示面板
+  //}
 }
 
 function DeleteAccessory()
