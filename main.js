@@ -1466,33 +1466,23 @@ function MoveModelOFF()
 
 function UpdateMoveModelPanelPos(target)  
 {
+  let center= new THREE.Vector3();
+
   try 
 	{
     isSelectedItemControllerOn=true;
 
-    let center= new THREE.Vector3();
     const box= new THREE.Box3().setFromObject(target);
     box.getCenter(center);
 
     var width = threeContainer.clientWidth, height = threeContainer.clientHeight;
     var widthHalf = width / 2, heightHalf = height / 2;
 
-    //setTimeout(() => {setPanelPos();}, 200);//1000=1sec}
-//
-    //function setPanelPos()
-    //{
-      center.project(camera);
-      center.x = ( center.x * widthHalf ) + widthHalf;
-      center.y = - ( (center.y) * heightHalf ) + heightHalf;
+    center.project(camera);
+    center.x = ( center.x * widthHalf ) + widthHalf;
+    center.y = - ( (center.y) * heightHalf ) + heightHalf;
       
-      _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
-
-      //若無偵測到中心點重新執行一次
-    //  if(center===null&&FindLatestAccessory()!==null)
-    //  {
-    //    UpdateMoveModelPanelPos(FindLatestAccessory());
-    //  }
-    //}
+    _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
   }
 
   catch (error) 
@@ -1500,10 +1490,10 @@ function UpdateMoveModelPanelPos(target)
 		console.log(`發生錯誤.${error}`);
 	}
 
-  //finally 
-  //{
-  //  _SelectedItemController.style.display="block";//強制顯示面板
-  //}
+  finally 
+  {
+    _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
+  }
 }
 
 function DeleteAccessory()
