@@ -253,8 +253,9 @@ function init()
     () => new Promise((resolve) => setTimeout(() => { ColumnManager(1520); resolve(); }, 120)),//中柱
       
     () => new Promise((resolve) => setTimeout(() => { SetupBtnList(); resolve(); }, 400)),//設定Item案例群組
-    () => new Promise((resolve) => setTimeout(() => { SetupLabelTarget(); resolve(); }, 450)),//LabelTarget
+    
     () => new Promise((resolve) => setTimeout(() => { isCameraManagerOn=true; DefaultRaycast();resolve(); }, 500)),//啟用攝影機飛行功能//重置Raycast狀態
+    () => new Promise((resolve) => setTimeout(() => { SetupLabelTarget(); resolve(); }, 750)),//LabelTarget
     () => new Promise((resolve) => setTimeout(() => { _loading_canvas.style.display="none"; resolve(); }, 900)),//關閉Loading頁面
     () => new Promise((resolve) => setTimeout(() => { _labelContainer.style.cssText = "opacity: 1;"; resolve(); }, 1000)),//顯示SceneLabel   
     () => new Promise((resolve) => setTimeout(() => { CheckIfSceneLabelSetupCorrectly(); resolve(); }, 1500)),//確認SceneLabel是否成功鎖定到LabelTarget     
