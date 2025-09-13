@@ -5,7 +5,6 @@
 		<meta name="viewport" content="width=device-width", initial-scale="1.0", maximum-scale="1.0", user-scalable="no"/>
 		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
 		<title>Medical Cart Configurator</title>
-		<link rel="stylesheet" href="./ItemImages.css">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 		<style type="text/css">
 			@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,500,700');  
@@ -18,7 +17,6 @@
 				overflow: hidden;
 			}
 			
-
 			canvas
 			{
 				width: 100%;
@@ -396,6 +394,110 @@
 				width: 180px;
 				height:180px;
 				background-image: url(./images/portfolio_2023_loading.png);
+			}
+
+			#caster_toggle_label_1
+			{
+				display: none;
+			}
+
+			#caster_toggle_label_2
+			{
+				display: none;
+			}
+
+			#caster_toggle_label_3
+			{
+				display: none;
+			}
+
+			#caster_toggle_label_4
+			{
+				display: none;
+			}
+
+			#caster_toggle_label_5
+			{
+				display: none;
+			}
+
+			#caster_toggle_label_6
+			{
+				display: none;
+			}
+
+			/* Toggle */
+			.switch {
+			  position:absolute;
+			  display: inline-block;
+			  width: 60px;
+			  height: 34px;
+			  scale: 0.75;
+			  pointer-events: fill;
+			}
+
+			.switch input { 
+			  opacity: 0;
+			  width: 0;
+			  height: 0;
+			}
+
+			.slider {
+			  position: absolute;
+			  cursor: pointer;
+			  top: 0;
+			  left: 0;
+			  right: 0;
+			  bottom: 0;
+			  background-color: #ccc;
+			  -webkit-transition: .4s;
+			  transition: .4s;
+			}
+
+			.slider:before {
+			  position: absolute;
+			  content: "";
+			  height: 26px;
+			  width: 26px;
+			  left: 4px;
+			  bottom: 4px;
+			  background-color: white;
+			  -webkit-transition: .4s;
+			  transition: .4s;
+			}
+
+			input:checked + .slider {
+			  background-color: #6bb4f7;
+			}
+
+			input:focus + .slider {
+			  box-shadow: 0 0 1px #6bb4f7;
+			}
+
+			input:checked + .slider:before {
+			  -webkit-transform: translateX(26px);
+			  -ms-transform: translateX(26px);
+			  transform: translateX(26px);
+			}
+
+			/* Rounded sliders */
+			.slider.round {
+			  border-radius: 34px;
+			}
+
+			.slider.round:before {
+			  border-radius: 50%;
+			}
+
+			.toggle_title
+			{
+			  position: absolute;
+			  left: -60px;
+			  top: 8.5px;
+			  font-size: 18px;
+			  text-align: center;
+			  color: #6bb4f7;
+				font-family: "Roboto", sans-serif;
 			}
 
 			@keyframes UI_rotate
@@ -981,71 +1083,71 @@
 				<div class="item_title">Angle Adjustable with Slide Panel</div>
 			</div>
 
-			<div class="item" id="item_04_btn"onclick="ColumnManager(1520)">
-				<div class="item_title">1.5"/2" Height Adjustable Tube</div>
-			</div>
-
-			<div class="item" id="item_05_btn"onclick="ColumnManager(1215)">
-				<div class="item_title">1.25"/1.5" Height Adjustable Tube</div>
-			</div>
-
-			<div class="item" id="item_06_btn"onclick="ColumnManager(1500)">
+			<div class="item" id="item_04_btn"onclick="ColumnManager(0)">
 				<div class="item_title">1.5" Stainless Steel Tube</div>
 			</div>
 
-			<div class="item" id="item_07_btn"onclick="BaseManager(20)">
+			<div class="item" id="item_05_btn"onclick="ColumnManager(1)">
+				<div class="item_title">1.5"/2" Height Adjustable Tube</div>
+			</div>
+
+			<div class="item" id="item_06_btn"onclick="ColumnManager(2)">
+				<div class="item_title">1.25"/1.5" Height Adjustable Tube</div>
+			</div>
+
+			<div class="item" id="item_07_btn"onclick="BaseManager(0)">
 				<div class="item_title">20" Base</div>
 			</div>
 
-			<div class="item" id="item_08_btn"onclick="BaseManager(24)">
+			<div class="item" id="item_08_btn"onclick="BaseManager(1)">
 				<div class="item_title">24" Base</div>
 			</div>
 
-			<div class="item" id="item_09_btn"onclick="BaseManager(40)">
+			<div class="item" id="item_09_btn"onclick="BaseManager(2)">
 				<div class="item_title">4 Leg Base</div>
 			</div>
 
-			<div class="item" id="item_10_btn"onclick="CasterManager(5)">
-				<div class="item_title">3" Medical Caster</div>
-			</div>
-
-			<div class="item" id="item_11_btn"onclick="CasterManager(4)">
-				<div class="item_title">4" Twin-Caster</div>
-			</div>
-
-			<div class="item" id="item_12_btn"onclick="CasterManager(3)">
+			<div class="item" id="item_10_btn"onclick="CasterManager(0)">
 				<div class="item_title">3" Twin-Caster</div>
 			</div>
 
-			<div class="item" id="item_13_btn"onclick="AccessoryManager(1)">
+			<div class="item" id="item_11_btn"onclick="CasterManager(1)">
+				<div class="item_title">4" Twin-Caster</div>
+			</div>
+
+			<div class="item" id="item_12_btn"onclick="CasterManager(2)">
+				<div class="item_title">3" Medical Caster</div>
+			</div>
+
+			<div class="item" id="item_13_btn"onclick="AccessoryManager(0)">
 				<div class="item_title">Basket</div>
 			</div>
 
-			<div class="item" id="item_14_btn"onclick="AccessoryManager(2)">
+			<div class="item" id="item_14_btn"onclick="AccessoryManager(1)">
 				<div class="item_title">Adapter Holder</div>
 			</div>
 
-			<div class="item" id="item_15_btn"onclick="AccessoryManager(3)">
+			<div class="item" id="item_15_btn"onclick="AccessoryManager(2)">
 				<div class="item_title">Shelf</div>
 			</div>
 
-			<div class="item" id="item_16_btn"onclick="AccessoryManager(4)">
+			<div class="item" id="item_16_btn"onclick="AccessoryManager(3)">
 				<div class="item_title">Cable Management Holder</div>
 			</div>
 
-			<div class="item" id="item_17_btn"onclick="AccessoryManager(5)">
+			<div class="item" id="item_17_btn"onclick="AccessoryManager(4)">
 				<div class="item_title">Barcode Scanner Holder</div>
 			</div>
 
-			<div class="item" id="item_18_btn"onclick="AccessoryManager(6)">
+			<div class="item" id="item_18_btn"onclick="AccessoryManager(5)">
 				<div class="item_title">Grip Handle</div>
 			</div>
 
-			<div class="item" id="item_19_btn"onclick="AccessoryManager(7)">
+			<div class="item" id="item_19_btn"onclick="AccessoryManager(6)">
 				<div class="item_title">Rail</div>
 			</div>
 
-			<div class="item" id="item_20_btn"onclick="AccessoryManager(8)">
+			<div class="item" id="item_20_btn"onclick="AccessoryManager(7)">
 				<div class="item_title">Printer Holder</div>
 			</div>
 		</div>

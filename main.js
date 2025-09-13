@@ -15,6 +15,8 @@ import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { FXAAShader } from 'three/addons/shaders/FXAAShader.js';
 
+import {instrument_mount_list,column_list,base_list,caster_list,accessory_list} from '/itemData.js';
+
 let scene, camera, renderer, stats, mixer, clock;
 let controls;
 let threeContainer = document.getElementById("threeContainer");
@@ -24,11 +26,11 @@ const modelRotation=new THREE.Vector3(0,Math.PI, 0);
 const modeScale=0.005;
 
 let instrumentMount_index=0;//預設為固定支撐版(目前用不到)
-let column_index=1520;//預設為1.5/2inch可調高度圓管(目前用不到)
+let column_index=1;//預設為1.5/2inch可調高度圓管(目前用不到)
 
 ///使用來觸發底座與移動輪連動
-let base_index=24;//預設為24吋底座
-let caster_index=4;//預設為4吋移動輪
+let base_index=1;//預設為24吋底座
+let caster_index=1;//預設為4吋移動輪
 
 
 let mousePos = { x: undefined, y: undefined };
@@ -78,6 +80,9 @@ let isSelectedItemControllerOn=false;
 //是否在編輯移動輪模式
 let isCasterFocus=false;
 
+const maximum_height=1;
+const minimum_height=-3.5;
+
 let _item_01_btn = document.querySelector('#item_01_btn');
 let _item_02_btn = document.querySelector('#item_02_btn');
 let _item_03_btn = document.querySelector('#item_03_btn');
@@ -100,16 +105,6 @@ let _item_19_btn = document.querySelector('#item_19_btn');
 let _item_20_btn = document.querySelector('#item_20_btn');
 
 let item_btn_list=[];
-
-let accessory_01_num=0;
-let accessory_02_num=0;
-let accessory_03_num=0;
-let accessory_04_num=0;
-let accessory_05_num=0;
-let accessory_06_num=0;
-let accessory_07_num=0;
-let accessory_08_num=0;
-let accessory_09_num=0;
 
 //煞車移動輪數量(預設為5個煞車)
 let current_brake_num=5;
@@ -138,12 +133,12 @@ let composer, effectFXAA, outlinePass;
 const scale=2.5;//提高渲染解析度渲染後縮小顯示
 
 const params = {
-				edgeStrength: 3.0,
-				edgeGlow: 1.5,
-				edgeThickness: 3.6,
-				pulsePeriod: 0,
-				color:'#6bb4f7'
-			};
+	edgeStrength: 3.0,
+	edgeGlow: 1.5,
+	edgeThickness: 3.6,
+	pulsePeriod: 0,
+	color:'#6bb4f7'
+};
 
 
 
@@ -248,11 +243,12 @@ function init()
   [
     () => new Promise((resolve) => setTimeout(() => { _loading_canvas.style.display="flex"; resolve(); }, 10)),//Loading頁面
     () => new Promise((resolve) => setTimeout(() => { _labelContainer.style.cssText = "opacity: 0;"; resolve(); }, 50)),//隱藏SceneLabel避免初始化完成前誤觸
-		() => new Promise((resolve) => setTimeout(() => { BaseManager(24); resolve(); }, 100)),//底座&移動輪
+		() => new Promise((resolve) => setTimeout(() => { BaseManager(1); resolve(); }, 100)),//底座&移動輪
     () => new Promise((resolve) => setTimeout(() => { InstrumentMountManager(0); resolve(); }, 110)),//儀器支撐版
-    () => new Promise((resolve) => setTimeout(() => { ColumnManager(1520); resolve(); }, 120)),//中柱
-      
-    () => new Promise((resolve) => setTimeout(() => { SetupBtnList(); resolve(); }, 400)),//設定Item案例群組
+    () => new Promise((resolve) => setTimeout(() => { ColumnManager(1); resolve(); }, 120)),//中柱
+    
+    () => new Promise((resolve) => setTimeout(() => { SetupItemImage(); resolve(); }, 200)),//設定Item的圖片
+    () => new Promise((resolve) => setTimeout(() => { SetupBtnList(); resolve(); }, 400)),//設定Item案例群組 
     
     () => new Promise((resolve) => setTimeout(() => { isCameraManagerOn=true; DefaultRaycast();resolve(); }, 500)),//啟用攝影機飛行功能//重置Raycast狀態
     () => new Promise((resolve) => setTimeout(() => { SetupLabelTarget(); resolve(); }, 750)),//LabelTarget
@@ -325,10 +321,6 @@ function init()
   labelTarget_accessory.position.set(1.7,3,0);
   scene.add(labelTarget_accessory);
 
-  
-
-  
-
   ///EventListener
   window.addEventListener( 'resize', onWindowResize );  
   window.addEventListener("pointerdown", (event) => {
@@ -340,7 +332,33 @@ function init()
 
 }
 
+function SetupItemImage()
+{
+  _item_01_btn.style.backgroundImage = `url('${instrument_mount_list[0].item_img}')`;
+  _item_02_btn.style.backgroundImage = `url('${instrument_mount_list[1].item_img}')`;
+  _item_03_btn.style.backgroundImage = `url('${instrument_mount_list[2].item_img}')`;
 
+  _item_04_btn.style.backgroundImage = `url('${column_list[0].item_img}')`;
+  _item_05_btn.style.backgroundImage = `url('${column_list[1].item_img}')`;
+  _item_06_btn.style.backgroundImage = `url('${column_list[2].item_img}')`;
+
+  _item_07_btn.style.backgroundImage = `url('${base_list[0].item_img}')`;
+  _item_08_btn.style.backgroundImage = `url('${base_list[1].item_img}')`;
+  _item_09_btn.style.backgroundImage = `url('${base_list[2].item_img}')`;
+
+  _item_10_btn.style.backgroundImage = `url('${caster_list[0][0].item_img}')`;
+  _item_11_btn.style.backgroundImage = `url('${caster_list[1][0].item_img}')`;
+  _item_12_btn.style.backgroundImage = `url('${caster_list[2][0].item_img}')`;
+
+  _item_13_btn.style.backgroundImage = `url('${accessory_list[0].item_img}')`;
+  _item_14_btn.style.backgroundImage = `url('${accessory_list[1].item_img}')`;
+  _item_15_btn.style.backgroundImage = `url('${accessory_list[2].item_img}')`;
+  _item_16_btn.style.backgroundImage = `url('${accessory_list[3].item_img}')`;
+  _item_17_btn.style.backgroundImage = `url('${accessory_list[4].item_img}')`;
+  _item_18_btn.style.backgroundImage = `url('${accessory_list[5].item_img}')`;
+  _item_19_btn.style.backgroundImage = `url('${accessory_list[6].item_img}')`;
+  _item_20_btn.style.backgroundImage = `url('${accessory_list[7].item_img}')`;
+}
 
 function onWindowResize() 
 {
@@ -361,14 +379,11 @@ function animate()
   //renderer.render( scene, camera );
   composer.render();//使用postprocessing替代
 
-  
-
   if(isCameraManagerOn)
   {
     UpdateCameraPosition(camera,controls);
     RaycastFunction();
   }
-
 }
 
 function EventListener()
@@ -457,6 +472,11 @@ function EventListener()
           addSelectedObject(INTERSECTED);
         }     
       }
+
+      if(isCasterFocus)//如果在編輯移動輪狀態，依據操作更新break_toggle位置
+      {
+        SetupCasterBrakePanelOn();
+      }
     }
   });
 
@@ -474,6 +494,17 @@ function isMobile()//偵測是否為行動裝置
   return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
 
+function InstantiatModel(scene_name,src,postprocessing_layer,delay)
+{
+  if(scene.getObjectByName(scene_name)==null)//
+  {
+    InstGLTFLoader(src,modelPosition,modelRotation,modeScale,scene_name,null, scene);
+    
+    //指定新outline指定物件，並hightlight該物件
+    setTimeout(() => {postprocessing_layer.push(scene.getObjectByName(scene_name));addSelectedObject(scene.getObjectByName(scene_name));}, delay*1000);//1000=1sec}
+  }
+}
+
 
 function InstrumentMountManager(i)//儀器支撐板設定 
 {
@@ -483,69 +514,12 @@ function InstrumentMountManager(i)//儀器支撐板設定
 
   ResetInstrumentModule();//重置儀器支架
 
-  let name="";
-
   if(isCameraManagerOn)CameraManager(1);
   
-  switch(i)
-  {
-    case 0: //固定支撐板
-    
-    name="FixedAnglePanel";
-    
-    if(scene.getObjectByName(name)==null)//
-    {
-      InstGLTFLoader('./models/FixedAnglePanel.glb',modelPosition,modelRotation,modeScale,name,null, scene);
-      
-      //指定新outline指定物件，並hightlight該物件
-      setTimeout(() => {current_instrument_mount.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
-    }
+  InstantiatModel(instrument_mount_list[i].scene_name,instrument_mount_list[i].src,current_instrument_mount,0.5);
 
-    //更新支架規格欄位
-    //_instrument_mount_content.textContent = "Fixed Mounting Plate";
+  UpdateSpecContent( _instrument_mount_content,instrument_mount_list[i].spec_name);
 
-    UpdateSpecContent( _instrument_mount_content,"Fixed Mounting Plate");
-
-    break;
-
-    case 1: //固定滑板支架
-    
-    name="FixedAngleWithSlidePanel";
-    
-    if(scene.getObjectByName(name)==null)//
-    {
-      InstGLTFLoader('./models/FixedAngleWithSlidePanel.glb',modelPosition,modelRotation,modeScale,name,null, scene);
-      
-      //指定新outline指定物件，並hightlight該物件
-      setTimeout(() => {current_instrument_mount.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
-    }
-
-    //更新支架規格欄位
-    //_instrument_mount_content.textContent = "Angle Adjustable With Slide Mounting Plate";
-
-    UpdateSpecContent( _instrument_mount_content,"Fixed Angle Instrument Holder with Slide-in Mounting Plate");
-
-    break;
-
-    case 2: //旋轉滑板支架
-    
-    name="AngleAdjustableWithSlidePanel";
-    
-    if(scene.getObjectByName(name)==null)//
-    {
-      InstGLTFLoader('./models/AngleAdjustableWithSlidePanel.glb',modelPosition,modelRotation,modeScale,name,null, scene);
-      
-      //指定新outline指定物件，並hightlight該物件
-      setTimeout(() => {current_instrument_mount.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
-    }
-
-    //更新支架規格欄位
-    //_instrument_mount_content.textContent = "Angle Adjustable With Slide Mounting Plate";
-
-    UpdateSpecContent( _instrument_mount_content,"Angle Adjustable Instrument Holder With Slide-in Mounting Plate");
-
-    break;
-  }
 }
 
 function ColumnManager(i)
@@ -556,68 +530,11 @@ function ColumnManager(i)
 
   ResetColumnModule()//重置中柱
 
-  let name="";
-
   if(isCameraManagerOn)CameraManager(2);
 
-  switch(i)
-  {
-    case 1500:
+  InstantiatModel(column_list[i].scene_name,column_list[i].src,current_column,0.5);
 
-    name="15StainlessSteelTube";
-
-    if(scene.getObjectByName(name)==null)//1.5"&2"管
-    {
-      InstGLTFLoader('./models/15StainlessSteelTube.glb',modelPosition,modelRotation,modeScale,name,null, scene);
-
-      //指定新outline指定物件，並hightlight該物件
-      setTimeout(() => {current_column.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
-    }
-
-    //更新中柱規格欄位
-    //_column_content.textContent="Ø1-1/2 inches stainless steel pole";
-
-    UpdateSpecContent( _column_content,"Ø1-1/2 inches stainless steel pole");
-    break;
-
-    case 1520:
-
-    name="15And20HeighAdjustableTube";
-
-    if(scene.getObjectByName(name)==null)//1.5"&2"管
-    {
-      InstGLTFLoader('./models/15And20Tube.glb',modelPosition,modelRotation,modeScale,name,null, scene);
-
-      //指定新outline指定物件，並hightlight該物件
-      setTimeout(() => {current_column.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
-    }
-
-    //更新中柱規格欄位
-    //_column_content.textContent="Ø1-1/2 inches/Ø2 inches pole";
-
-    UpdateSpecContent( _column_content,"Ø1-1/2 inches/Ø2 inches pole");
-
-    break;
-
-    case 1215:
-
-    name="12And15HeighAdjustableTube";
-
-    if(scene.getObjectByName(name)==null)//2吋鋁管
-    {
-      InstGLTFLoader('./models/12And15Tube.glb',modelPosition,modelRotation,modeScale,name,null, scene);
-
-      //指定新outline指定物件，並hightlight該物件
-      setTimeout(() => {current_column.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
-    }
-
-    //更新中柱規格欄位
-    //_column_content.textContent="Ø1-1/4 inches/Ø1.5 inches pole";
-
-    UpdateSpecContent( _column_content,"Ø1-1/4 inches/Ø1.5 inches pole");
-
-    break;
-  }
+  UpdateSpecContent( _column_content,column_list[i].spec_name);
 }
 
 function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
@@ -630,75 +547,13 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
 
   DefaultCasterToggle();//還原為預設移動輪煞車狀態(全部含煞車)
 
-  let name="";
-
   if(isCameraManagerOn)CameraManager(3);
 
-  switch(i)
-  {
-    case 20://20吋底座
+  InstantiatModel(base_list[i].scene_name,base_list[i].src,current_base,0.5);
+  
+  CasterManager(caster_index);//更新移動輪
 
-    name="20Base";
-
-    if(scene.getObjectByName(name)==null)//載入20吋底座
-    {
-      InstGLTFLoader('./models/20Base.glb',modelPosition,modelRotation,modeScale,name,null, scene);
-
-      //指定新outline指定物件，並hightlight該物件
-      setTimeout(() => {current_base.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
-    }
-
-    CasterManager(caster_index);//更新移動輪
-
-    //更新底座規格欄位
-    //_base_content.textContent="5-Leg Base (20”)";
-
-    UpdateSpecContent(_base_content,"5-Leg Base (20”)");
-
-    break;
-
-    case 24://24吋底座
-
-    name="24Base";
-
-    if(scene.getObjectByName(name)==null)
-    {
-      InstGLTFLoader('./models/24Base.glb',modelPosition,modelRotation,modeScale,name,null, scene);
-
-      //指定新outline指定物件，並hightlight該物件
-      setTimeout(() => {current_base.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
-    }
-
-    CasterManager(caster_index);//更新移動輪
-
-    //更新底座規格欄位
-    //_base_content.textContent="5-Leg Base (24”)";
-
-    UpdateSpecContent(_base_content,"5-Leg Base (24”)");
-
-    break;
-
-    case 40://4腳底座
-
-    name="4LegBase";
-
-    if(scene.getObjectByName(name)==null)//載入4腳底座
-    {
-      InstGLTFLoader('./models/4LegBase.glb',modelPosition,modelRotation,modeScale,name,null, scene);
-
-      //指定新outline指定物件，並hightlight該物件
-      setTimeout(() => {current_base.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
-    }
-
-    CasterManager(caster_index);//更新移動輪
-
-    //更新底座規格欄位
-    //_base_content.textContent="4-Leg Base";
-
-    UpdateSpecContent(_base_content,"4-Leg Base");
-
-    break;
-  }
+  UpdateSpecContent(_base_content,base_list[i].spec_name);
 
   setTimeout(() => {CountBrakeNum();}, 1000);//1000=1sec}
 }
@@ -715,122 +570,11 @@ function CasterManager(i)//移動輪設定功能
   caster_index=i;
 
   if(isCameraManagerOn)CameraManager(4);
-
-  switch(i)
-  {
-    case 3:
-
-    let name_301="3inchCasterFor20BaseModule";
-
-    caster_type="3 inch Twin-wheel Caster";
       
-    if(base_index==20&&scene.getObjectByName(name_301)==null)//4吋輪for20吋底座
-    {
-      InstGLTFLoader('./models/3inchCasterFor20Base.glb',modelPosition,modelRotation,modeScale,name_301,null, scene);
-
-      //指定新outline指定物件，並hightlight該物件(與底座有0.5秒時間差)
-      setTimeout(() => {current_caster.push(scene.getObjectByName(name_301));addSelectedObject(scene.getObjectByName(name_301));}, 1000);//1000=1sec}
-    }
-
-    let name_302="3inchCasterFor24BaseModule";
-
-    if(base_index==24&&scene.getObjectByName(name_302)==null)//4吋輪for24吋底座
-    {
-      InstGLTFLoader('./models/3inchCasterFor24Base.glb',modelPosition,modelRotation,modeScale,name_302,null, scene);
-
-      //指定新outline指定物件，並hightlight該物件(與底座有0.5秒時間差)
-      setTimeout(() => {current_caster.push(scene.getObjectByName(name_302));addSelectedObject(scene.getObjectByName(name_302));}, 1000);//1000=1sec}
-    }
-
-    let name_303="3inchCasterFor4LegBaseModule";
-
-    if(base_index==40&&scene.getObjectByName(name_303)==null)//4吋輪for24吋底座
-    {
-      InstGLTFLoader('./models/3inchCasterFor4LegBase.glb',modelPosition,modelRotation,modeScale,name_303,null, scene);
-
-      //指定新outline指定物件，並hightlight該物件(與底座有0.5秒時間差)
-      setTimeout(() => {current_caster.push(scene.getObjectByName(name_303));addSelectedObject(scene.getObjectByName(name_303));}, 1000);//1000=1sec}
-
-    }
-
-    break;
-
-    case 4:
-
-    let name_401="4inchCasterFor20BaseModule";
-
-    caster_type="4 inch Twin-wheel Caster";
-      
-    if(base_index==20&&scene.getObjectByName(name_401)==null)//4吋輪for20吋底座
-    {
-      InstGLTFLoader('./models/4inchCasterFor20Base.glb',modelPosition,modelRotation,modeScale,name_401,null, scene);
-
-      //指定新outline指定物件，並hightlight該物件(與底座有0.5秒時間差)
-      setTimeout(() => {current_caster.push(scene.getObjectByName(name_401));addSelectedObject(scene.getObjectByName(name_401));}, 1000);//1000=1sec}
-    }
-
-    let name_402="4inchCasterFor24BaseModule";
-
-    if(base_index==24&&scene.getObjectByName(name_402)==null)//4吋輪for24吋底座
-    {
-      InstGLTFLoader('./models/4inchCasterFor24Base.glb',modelPosition,modelRotation,modeScale,name_402,null, scene);
-
-      //指定新outline指定物件，並hightlight該物件(與底座有0.5秒時間差)
-      setTimeout(() => {current_caster.push(scene.getObjectByName(name_402));addSelectedObject(scene.getObjectByName(name_402));}, 1000);//1000=1sec}
-    }
-
-    let name_403="4inchCasterFor4LegBaseModule";
-
-    if(base_index==40&&scene.getObjectByName(name_403)==null)//4吋輪for24吋底座
-    {
-      InstGLTFLoader('./models/4inchCasterFor4LegBase.glb',modelPosition,modelRotation,modeScale,name_403,null, scene);
-
-      //指定新outline指定物件，並hightlight該物件(與底座有0.5秒時間差)
-      setTimeout(() => {current_caster.push(scene.getObjectByName(name_403));addSelectedObject(scene.getObjectByName(name_403));}, 1000);//1000=1sec}
-    }
-
-    break;
-
-    case 5:
-
-    let name_501="3incMedicalCasterFor20BaseModule";
-
-    caster_type="3 inch Medical Caster";
-      
-    if(base_index==20&&scene.getObjectByName(name_501)==null)//4吋輪for20吋底座
-    {
-      InstGLTFLoader('./models/3inchMedicalCasterFor20Base.glb',modelPosition,modelRotation,modeScale,name_501,null, scene);
-
-      //指定新outline指定物件，並hightlight該物件(與底座有0.5秒時間差)
-      setTimeout(() => {current_caster.push(scene.getObjectByName(name_501));addSelectedObject(scene.getObjectByName(name_501));}, 1000);//1000=1sec}
-    }
-
-    let name_502="3inchMedicalCasterFor24BaseModule";
-
-    if(base_index==24&&scene.getObjectByName(name_502)==null)//4吋輪for24吋底座
-    {
-      InstGLTFLoader('./models/3inchMedicalCasterFor24Base.glb',modelPosition,modelRotation,modeScale,name_502,null, scene);
-
-      //指定新outline指定物件，並hightlight該物件(與底座有0.5秒時間差)
-      setTimeout(() => {current_caster.push(scene.getObjectByName(name_502));addSelectedObject(scene.getObjectByName(name_502));}, 1000);//1000=1sec}
-    }
-
-    let name_503="3inchMedicalCasterFor4LegBaseModule";
-
-    if(base_index==40&&scene.getObjectByName(name_503)==null)//4吋輪for24吋底座
-    {
-      InstGLTFLoader('./models/3inchMedicalCasterFor4LegBase.glb',modelPosition,modelRotation,modeScale,name_503,null, scene);
-
-      //指定新outline指定物件，並hightlight該物件(與底座有0.5秒時間差)
-      setTimeout(() => {current_caster.push(scene.getObjectByName(name_503));addSelectedObject(scene.getObjectByName(name_503));}, 1000);//1000=1sec}
-
-    }
-
-    break;
-  }
+  InstantiatModel(caster_list[i][base_index].scene_name,caster_list[i][base_index].src,current_caster,1);
 
   //更新移動輪規格欄位
-  //UpdateSpecContent(_caster_content,caster_type+`(${current_brake_num}pcs with brakes)`);
+  caster_type=caster_list[i][base_index].spec_name;
 
   setTimeout(() => {CountBrakeNum();}, 1000);//1000=1sec}
 }
@@ -839,131 +583,52 @@ function AccessoryManager(i)
 {
   let instantiate_item_hight=2;
 
-  let item_name="";
-
   MoveModelOFF();//重置模型移動面板
 
   CameraManager(5);
 
-  switch(i)
-  {
-    case 1://管籃
-    accessory_01_num++;
-    
-    item_name="accessory_01_"+`${accessory_01_num}`;
-
-    InstGLTFLoader('./models/accessory_01.glb',new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,item_name,null, scene);
-
-    break;
-
-    case 2://變壓器架
-    accessory_02_num++;
-    
-    item_name="accessory_02_"+`${accessory_02_num}`;
-
-    InstGLTFLoader('./models/accessory_02.glb',new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,item_name,null, scene);
-
-    break;
-
-    case 3://層板架
-    accessory_03_num++;
-    
-    item_name="accessory_03_"+`${accessory_03_num}`;
-
-    InstGLTFLoader('./models/accessory_03.glb',new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,item_name,null, scene);
-
-    break;
-
-    case 4://變壓器架附整線器
-    accessory_04_num++;
-    
-    item_name="accessory_04_"+`${accessory_04_num}`;
-
-    InstGLTFLoader('./models/accessory_04.glb',new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,item_name,null, scene);
-
-    break;
-
-    case 5://掃描器架
-    accessory_05_num++;
-    
-    item_name="accessory_05_"+`${accessory_05_num}`;
-
-    InstGLTFLoader('./models/accessory_05.glb',new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,item_name,null, scene);
-
-    break;
-
-    case 6://把手
-    accessory_06_num++;
-    
-    item_name="accessory_06_"+`${accessory_06_num}`;
-
-    InstGLTFLoader('./models/accessory_06.glb',new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,item_name,null, scene);
-
-    break;
-
-    case 7://Rail
-    accessory_07_num++;
-    
-    item_name="accessory_07_"+`${accessory_07_num}`;
-
-    InstGLTFLoader('./models/accessory_07.glb',new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,item_name,null, scene);
-
-    break;
-
-    case 8://印表機架
-    accessory_08_num++;
-    
-    item_name="accessory_08_"+`${accessory_08_num}`;
-
-    InstGLTFLoader('./models/accessory_08.glb',new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,item_name,null, scene);
-
-    break;
-  }
+  InstGLTFLoader(accessory_list[i].src,new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,accessory_list[i].scene_name,null,scene);
 
   //指定新outline指定物件
-  setTimeout(() => {current_accessories.push(scene.getObjectByName(item_name));}, 500);//1000=1sec}
+  setTimeout(() => {current_accessories.push(scene.getObjectByName(accessory_list[i].scene_name));}, 500);//1000=1sec}
    
   //啟用模型移動面板
-  //setTimeout(() => {MoveModelON(scene.getObjectByName(item_name));}, 600);//1000=1sec} 
   setTimeout(() => {MoveModelON(FindLatestAccessory());}, 600);//1000=1sec}
-
-
-  //hightlight該物件(易失效，停用)
-  //setTimeout(() => {addSelectedObject(scene.getObjectByName(item_name));}, 1000);//1000=1sec} 
 }
 
 function ResetInstrumentModule()//重置儀器支架
 {
-  DestroyObject(scene.getObjectByName("AngleAdjustableWithSlidePanel"));
-  DestroyObject(scene.getObjectByName("FixedAngleWithSlidePanel"));
-  DestroyObject(scene.getObjectByName("FixedAnglePanel"));
+  for(let i=0;i<instrument_mount_list.length;i++)
+  {
+    DestroyObject(scene.getObjectByName(instrument_mount_list[i].scene_name));
+  }
 }
 
 function ResetColumnModule()//重置中柱
 {
-  DestroyObject(scene.getObjectByName("15And20HeighAdjustableTube"));
-  DestroyObject(scene.getObjectByName("12And15HeighAdjustableTube"));
-  DestroyObject(scene.getObjectByName("15StainlessSteelTube"));
+  for(let i=0;i<column_list.length;i++)
+  {
+    DestroyObject(scene.getObjectByName(column_list[i].scene_name));
+  }
 }
 
 function ResetBaseModule()//重置底座
 {
-  DestroyObject(scene.getObjectByName("24Base"));
-  DestroyObject(scene.getObjectByName("20Base"));
-  DestroyObject(scene.getObjectByName("4LegBase"));
+  for(let i=0;i<base_list.length;i++)
+  {
+    DestroyObject(scene.getObjectByName(base_list[i].scene_name));
+  }
 }
 
 function ResetCasterModule()//重置移動輪
 {
-  DestroyObject(scene.getObjectByName("3inchCasterFor20BaseModule"));
-  DestroyObject(scene.getObjectByName("3inchCasterFor24BaseModule"));
-  DestroyObject(scene.getObjectByName("3inchCasterFor4LegBaseModule"));
-  DestroyObject(scene.getObjectByName("4inchCasterFor20BaseModule"));
-  DestroyObject(scene.getObjectByName("4inchCasterFor24BaseModule"));
-  DestroyObject(scene.getObjectByName("4inchCasterFor4LegBaseModule"));
-  DestroyObject(scene.getObjectByName("3incMedicalCasterFor20BaseModule"));
-  DestroyObject(scene.getObjectByName("3inchMedicalCasterFor24BaseModule"));
-  DestroyObject(scene.getObjectByName("3inchMedicalCasterFor4LegBaseModule"));
+  for(let i=0;i<caster_list.length;i++)
+  {
+    for(let j=0;j<caster_list[i].length;j++)
+    {
+      DestroyObject(scene.getObjectByName(caster_list[i][j].scene_name));
+    }
+  }
 }
 
 function DestroyObject(target)
@@ -1133,6 +798,7 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
   
 }
 
+
 ///Outline效果&重置尺寸
 function addSelectedObject( object ) 
 {
@@ -1140,12 +806,11 @@ function addSelectedObject( object )
   {
     selectedObjects = [];
     selectedObjects.push( object );
-
     setTimeout(() => {outlinePass.selectedObjects = selectedObjects;}, 200);//1000=1sec}//oultine效果開始
     setTimeout(() => {outlinePass.selectedObjects = [];}, 1500);//1000=1sec}//oultine效果結束
-
+      
     //量測推車尺寸
-    setTimeout(() => {MeasureCartDimension();}, 1600);//1000=1sec}
+    setTimeout(() => {MeasureCartDimension();}, 1600);//1000=1sec} 
   }
 
   catch (error) 
@@ -1163,11 +828,11 @@ function SceneTag(target,lable,offset,targetCam)
     const worldPosition = new THREE.Vector3();
     target.getWorldPosition(worldPosition);
     var pos_3D = worldPosition.clone()
-      //var pos_3D = _target.position.clone();///object.position 取得的是相對座標（即該物體相對於其父物體的座標），而不是世界座標。
+    //var pos_3D = _target.position.clone();///object.position 取得的是相對座標（即該物體相對於其父物體的座標），而不是世界座標。
 
-      pos_3D.project(targetCam);
-      pos_3D.x = ( pos_3D.x * widthHalf ) + widthHalf;
-      pos_3D.y = - ( pos_3D.y * heightHalf ) + heightHalf;
+    pos_3D.project(targetCam);
+    pos_3D.x = ( pos_3D.x * widthHalf ) + widthHalf;
+    pos_3D.y = - ( pos_3D.y * heightHalf ) + heightHalf;
 
     lable.style.cssText = `position:absolute;top:${pos_3D.y/height*100+offset.y}%;left:${pos_3D.x/width*100+offset.x}%;`;
   }
@@ -1347,8 +1012,7 @@ function MeasureCartDimension()
   //4.986644500000001-->996.5(高度對照)
 
   const scale=996.5/4.9866445;
-   _dimension_content.textContent=`W ${Math.round(cartDimension.x*scale)}mm x D ${Math.round(cartDimension.z*scale)}mm x H ${Math.round(cartDimension.y*scale)}mm`;
-
+  _dimension_content.textContent=`W ${Math.round(cartDimension.x*scale)}mm x D ${Math.round(cartDimension.z*scale)}mm x H ${Math.round(cartDimension.y*scale)}mm`;
 }
 
 function MoveModel(action)
@@ -1517,6 +1181,8 @@ function DeleteAccessory()
 
   //重置Raycast狀態
   DefaultRaycast();
+
+  isSelectedItemControllerOn=false;
 }
 
 function UpdateAccessorySpecification()
@@ -1539,49 +1205,12 @@ function UpdateAccessorySpecification()
 
 function SetAccessoryName(target)
 {
-  if(target.name.includes("accessory_01_"))
+  for(let i=0;i<accessory_list.length;i++)
   {
-    return "Tubular Utility Basket";
-  }
-
-  if(target.name.includes("accessory_02_"))
-  {
-    return "Universal Adapter Holder";
-  }
-
-  if(target.name.includes("accessory_03_"))
-  {
-    return "Work Surface";
-  }
-
-  if(target.name.includes("accessory_04_"))
-  {
-    return "Universal Adapter Holder with Cable Management";
-  }
-
-  if(target.name.includes("accessory_05_"))
-  {
-    return "Barcode Scanner Holder";
-  }
-
-  if(target.name.includes("accessory_06_"))
-  {
-    return "Grip Handle";
-  }
-
-  if(target.name.includes("accessory_07_"))
-  {
-    return "Medical Rail";
-  }
-
-  if(target.name.includes("accessory_08_"))
-  {
-    return "Printer Holder";
-  }
-
-  else
-  {
-    return "";
+    if(target.name.includes(accessory_list[i].scene_name))
+    {
+      return accessory_list[i].spec_name;
+    }
   }
 }
 
@@ -1599,12 +1228,12 @@ function DeleteunreasonableItem()
   {
     if(scene.children[i].name.includes("accessory_"))
     {
-      if(scene.children[i].position.y>=1)
+      if(scene.children[i].position.y>=maximum_height)
       {
         scene.remove(scene.children[i]);
       }
 
-      if(scene.children[i].position.y<=-3.5)
+      if(scene.children[i].position.y<=minimum_height)
       {
         scene.remove(scene.children[i]);
       }
@@ -1618,7 +1247,7 @@ function FindLatestAccessory()
   {
     if(scene.children[i].name.includes("accessory_"))
     {
-      if(scene.children[i].position.y>=1)
+      if(scene.children[i].position.y>=maximum_height)
       {
         return scene.children[i];
       }
@@ -1699,7 +1328,6 @@ async function TakeScreenshot()
 	  worldTime = dateNow+' '+timeNow;
  }
  
-
  function DrawTheImage()
  {
     // Step 4: 建立新 canvas 合成兩層圖像
@@ -1744,8 +1372,6 @@ function ShowErrorDialog()
   setTimeout(() => {_system_info.style.display="block";}, 500);//1000=1sec}
   setTimeout(() => { _system_info.style.display="none";}, 2220);//1000=1sec}
 }
-
-
 
 function SetupCasterBrakePanelOn()
 {
@@ -1793,22 +1419,23 @@ function SetupCasterBrakePanelOFF()
 
 function CountBrakeNum()
 {
-    current_brake_num=0;//重置數量
-    //更新目前煞車移動輪的數量
+  current_brake_num=0;//重置數量
+  //更新目前煞車移動輪的數量
 
-    if(current_caster[0]!=null)
-    {
-      current_caster[0].children[0].traverse( function ( object ) {
+  if(current_caster[0]!=null)
+  {
+    current_caster[0].children[0].traverse( function ( object ) {
 
-	  		if ( object.name.includes("Break")&&object.visible)
-	  		{
-          current_brake_num++;
-	  		}
-      });
-    }
+	  	if ( object.name.includes("Break")&&object.visible)
+	  	{
+        current_brake_num++;
+	  	}
 
-    //更新移動輪規格欄位
-    UpdateSpecContent(_caster_content,caster_type+`(${current_brake_num}pcs with brakes)`);
+    });
+  }
+
+  //更新移動輪規格欄位
+  UpdateSpecContent(_caster_content,caster_type+`(${current_brake_num}pcs with brakes)`);
 }
 
 function ShowCasterLabel(cssLabel,target)  
@@ -1844,6 +1471,7 @@ function DefaultCasterToggle()
   _brake_toggle_4.checked=true;
   _brake_toggle_5.checked=true;
 }
+
 ///將函數掛載到全域範圍
 window.InstrumentMountManager=InstrumentMountManager;
 window.ColumnManager=ColumnManager;
