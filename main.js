@@ -15,7 +15,7 @@ import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { FXAAShader } from 'three/addons/shaders/FXAAShader.js';
 
-import {instrument_mount_list,column_list,base_list,caster_list,accessory_list} from '/itemData.js';
+import {instrument_mount_list,column_list,base_list,caster_list,accessory_list} from './itemData.js';
 
 let scene, camera, renderer, stats, mixer, clock;
 let controls;
