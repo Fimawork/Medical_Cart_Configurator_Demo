@@ -1,0 +1,205 @@
+
+///InstrumentMount
+
+const instrument_mount_01 = {
+	scene_name:"FixedAnglePanel",
+	src: './models/FixedAnglePanel.glb',
+	spec_name: "Fixed Mounting Plate",
+	item_img:'./images/FixAnglePanel.png'
+};
+
+const instrument_mount_02 = {
+	scene_name:"FixedAngleWithSlidePanel",
+	src: './models/FixedAngleWithSlidePanel.glb',
+	spec_name: "Fixed Angle Instrument Holder with Slide-in Mounting Plate",
+	item_img:'./images/FixedAngleWithSlidePanel.png'
+};
+
+const instrument_mount_03 = {
+	scene_name:"AngleAdjustableWithSlidePanel",
+	src: './models/AngleAdjustableWithSlidePanel.glb',
+	spec_name: "Angle Adjustable Instrument Holder With Slide-in Mounting Plate",
+	item_img:'./images/AngleAdjustableWithSlidePanel.png'
+};
+
+export let instrument_mount_list=[instrument_mount_01,instrument_mount_02,instrument_mount_03];
+
+
+///Column
+
+const column_01 = {
+	scene_name:"15StainlessSteelTube",
+	src: './models/15StainlessSteelTube.glb',
+	spec_name: "Ø1-1/2 inches stainless steel pole",
+	item_img:'./images/1500StainlessSteelTube.png'
+};
+
+const column_02 = {
+	scene_name:"15And20HeighAdjustableTube",
+	src: './models/15And20Tube.glb',
+	spec_name: "Ø1-1/2 inches/Ø2 inches pole",
+	item_img:'./images/1520HeightAjustableTube.png'
+};
+
+const column_03 = {
+	scene_name:"12And15HeighAdjustableTube",
+	src: './models/12And15Tube.glb',
+	spec_name: "Ø1-1/4 inches/Ø1.5 inches pole",
+	item_img:'./images/1215HeightAdjustableTube.png'
+};
+
+export let column_list=[column_01,column_02,column_03];
+
+
+///Base
+
+const base_01 = {
+	scene_name:"20Base",
+	src: './models/20Base.glb',
+	spec_name: "5-Leg Base (20”)",
+	item_img:'./images/20inchBase.png'
+};
+
+const base_02 = {
+	scene_name:"24Base",
+	src: './models/24Base.glb',
+	spec_name: "5-Leg Base (24”)",
+	item_img:'./images/24inchBase.png'
+};
+
+const base_03 = {
+	scene_name:"4LegBase",
+	src: './models/4LegBase.glb',
+	spec_name: "4-Leg Base",
+	item_img:'./images/4LegBase.png'
+};
+
+export let base_list=[base_01,base_02,base_03];
+
+
+///Caster
+
+const caster_01=[
+	{
+		scene_name:"3inchCasterFor20BaseModule",
+		src: './models/3inchCasterFor20Base.glb',
+		spec_name: "3 inch Twin-wheel Caster",
+		item_img:'./images/3inchTwinWheelCaster.png'
+	},
+	{
+		scene_name:"3inchCasterFor24BaseModule",
+		src: './models/3inchCasterFor24Base.glb',
+		spec_name: "3 inch Twin-wheel Caster",
+		item_img:'./images/3inchTwinWheelCaster.png'
+	},
+	{
+		scene_name:"3inchCasterFor4LegBaseModule",
+		src: './models/3inchCasterFor4LegBase.glb',
+		spec_name: "3 inch Twin-wheel Caster",
+		item_img:'./images/3inchTwinWheelCaster.png'
+	}
+]
+
+const caster_02=[
+	{
+		scene_name:"4inchCasterFor20BaseModule",
+		src: './models/4inchCasterFor20Base.glb',
+		spec_name: "4 inch Twin-wheel Caster",
+		item_img:'./images/4inchTwinWheelCaster.png'
+	},
+	{
+		scene_name:"4inchCasterFor24BaseModule",
+		src: './models/4inchCasterFor24Base.glb',
+		spec_name: "4 inch Twin-wheel Caster",
+		item_img:'./images/4inchTwinWheelCaster.png'
+	},
+	{
+		scene_name:"4inchCasterFor4LegBaseModule",
+		src: './models/4inchCasterFor4LegBase.glb',
+		spec_name: "4 inch Twin-wheel Caster",
+		item_img:'./images/4inchTwinWheelCaster.png'
+	}
+]
+
+const caster_03=[
+	{
+		scene_name:"3incMedicalCasterFor20BaseModule",
+		src: './models/3inchMedicalCasterFor20Base.glb',
+		spec_name: "3 inch Medical Caster",
+		item_img:'./images/3inchMedicalCaster.png'
+	},
+	{
+		scene_name:"3inchMedicalCasterFor24BaseModule",
+		src: './models/3inchMedicalCasterFor24Base.glb',
+		spec_name: "3 inch Medical Caster",
+		item_img:'./images/3inchMedicalCaster.png'
+	},
+	{
+		scene_name:"3inchMedicalCasterFor4LegBaseModule",
+		src: './models/3inchMedicalCasterFor4LegBase.glb',
+		spec_name: "3 inch Medical Caster",
+		item_img:'./images/3inchMedicalCaster.png'
+	}
+]
+
+export let caster_list=[caster_01,caster_02,caster_03];
+
+///Accessory
+///以accessory命名，方便一次查詢場景上的所有配件
+const accessory_01 = {
+	scene_name:"accessory_01_",
+	src: './models/accessory_01.glb',
+	spec_name: "Tubular Utility Basket",
+	item_img:'./images/Basket.png'
+};
+
+const accessory_02 = {
+	scene_name:"accessory_02_",
+	src: './models/accessory_02.glb',
+	spec_name: "Universal Adapter Holder",
+	item_img:'./images/AdapterHolder.png'
+};
+
+const accessory_03 = {
+	scene_name:"accessory_03_",
+	src: './models/accessory_03.glb',
+	spec_name: "Work Surface",
+	item_img:'./images/Shelf.png'
+};
+
+const accessory_04 = {
+	scene_name:"accessory_04_",
+	src: './models/accessory_04.glb',
+	spec_name: "Universal Adapter Holder with Cable Management",
+	item_img:'./images/CableManagementHolder.png'
+};
+
+const accessory_05 = {
+	scene_name:"accessory_05_",
+	src: './models/accessory_05.glb',
+	spec_name: "Barcode Scanner Holder",
+	item_img:'./images/BarcodeScannerHolder.png'
+};
+
+const accessory_06 = {
+	scene_name:"accessory_06_",
+	src: './models/accessory_06.glb',
+	spec_name: "Grip Handle",
+	item_img:'./images/Handle.png'
+};
+
+const accessory_07 = {
+	scene_name:"accessory_07_",
+	src: './models/accessory_07.glb',
+	spec_name: "Medical Rail",
+	item_img:'./images/Rail.png'
+};
+
+const accessory_08 = {
+	scene_name:"accessory_08_",
+	src: './models/accessory_08.glb',
+	spec_name: "Printer Holder",
+	item_img:'./images/PrinterHolder.png'
+};
+
+export let accessory_list=[accessory_01,accessory_02,accessory_03,accessory_04,accessory_05,accessory_06,accessory_07,accessory_08];
