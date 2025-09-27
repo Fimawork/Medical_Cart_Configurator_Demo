@@ -1163,10 +1163,10 @@ function UpdateMoveModelPanelPos(target)
 		console.log(`發生錯誤.${error}`);
 	}
 
-  finally 
-  {
-    _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
-  }
+  //finally 
+  //{
+  //  _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
+  //}
 }
 
 function DeleteAccessory()
