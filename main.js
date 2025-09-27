@@ -1147,7 +1147,15 @@ function UpdateMoveModelPanelPos(target)
     center.x = ( center.x * widthHalf ) + widthHalf;
     center.y = - ( (center.y) * heightHalf ) + heightHalf;
       
-    _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
+    if(center!=null)
+    {
+      _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
+    }
+    
+    else
+    {
+      _SelectedItemController.style.cssText = `position:absolute;top:24.65%;left:47.5%;display:block;`;
+    }
   }
 
   catch (error) 
