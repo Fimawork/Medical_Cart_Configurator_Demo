@@ -1172,7 +1172,7 @@ function UpdateMoveModelPanelPos(target)
 
     else
     {
-      _SelectedItemController.style.cssText = `position:absolute;top:24.65%;left:47.5%;display:block;`;
+      UpdateMoveModelPanelPos(FindLatestAccessory());
     }
   }
 }
