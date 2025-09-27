@@ -240,6 +240,9 @@ function init()
   ///紀錄相機的初始位置
 	SetDefaultCameraStatus(CameraDefaultPos,ControlsTargetDefaultPos);
 
+  ///宣告變數
+  current_INTERSECTED=null;
+  INTERSECTED=null;
 
 
 
