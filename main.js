@@ -1204,7 +1204,15 @@ function InstMoveModelPanel()
 
 function DeleteAccessory()
 {
-  scene.remove(current_INTERSECTED);
+  if(current_INTERSECTED!=null)
+  {
+    scene.remove(current_INTERSECTED);
+  }
+  
+  if(current_INTERSECTED===null)
+  {
+    scene.remove(FindLatestAccessory());
+  }
 
   _SelectedItemController.style.display="none";
 
