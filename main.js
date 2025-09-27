@@ -115,7 +115,6 @@ let current_base=[];
 let current_caster=[];
 let current_accessories=[];
 
-
 let cartDimension;
 let cartBox;
 
@@ -124,6 +123,9 @@ let labelTarget_column=new THREE.Object3D();
 let labelTarget_base=new THREE.Object3D();
 let labelTarget_caster=new THREE.Object3D();
 let labelTarget_accessory=new THREE.Object3D();
+
+let SelectedItemControllerTarget=new THREE.Object3D();
+
 
 let targetPosition=null;
 
@@ -171,6 +173,9 @@ function init()
   const ControlsTargetDefaultPos=new THREE.Vector3(-0.131,2.274,-0.023);
   camera.position.copy(CameraDefaultPos);
   posData[0]={ camera_pos:CameraDefaultPos, controlsTarget_pos:ControlsTargetDefaultPos};
+
+  SelectedItemControllerTarget.position.set(0,20,0);
+  scene.add(SelectedItemControllerTarget);
 
   //儀器支架
   posData[1]={ camera_pos:new THREE.Vector3(-0.244,5.351,-0.791), controlsTarget_pos:new THREE.Vector3(0.301,3.856,1.063)};
@@ -593,7 +598,7 @@ function AccessoryManager(i)
   setTimeout(() => {current_accessories.push(scene.getObjectByName(accessory_list[i].scene_name));}, 500);//1000=1sec}
    
   //啟用模型移動面板
-  setTimeout(() => {MoveModelON(FindLatestAccessory());}, 600);//1000=1sec}
+  setTimeout(() => {InstMoveModelPanel();}, 600);//1000=1sec}
 }
 
 function ResetInstrumentModule()//重置儀器支架
@@ -1175,6 +1180,25 @@ function UpdateMoveModelPanelPos(target)
       UpdateMoveModelPanelPos(FindLatestAccessory());
     }
   }
+}
+
+function InstMoveModelPanel()
+{
+  try
+  {
+    _SelectedItemController.style.cssText = `position:absolute;top:24.65%;left:47.5%;display:block;`;
+  }
+
+  catch (error) 
+	{
+		console.log(`發生錯誤.${error}`);
+	}
+
+  finally
+  {
+    current_INTERSECTED=FindLatestAccessory();
+  }
+  
 }
 
 function DeleteAccessory()
