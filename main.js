@@ -35,7 +35,8 @@ let caster_index=1;//預設為4吋移動輪
 
 let mousePos = { x: undefined, y: undefined };
 let hoverPos = { x: undefined, y: undefined };
-let current_INTERSECTED,INTERSECTED;
+let current_INTERSECTED=null;
+let INTERSECTED=null;
 //////Raycaster工具//////
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
@@ -238,10 +239,6 @@ function init()
 
   ///紀錄相機的初始位置
 	SetDefaultCameraStatus(CameraDefaultPos,ControlsTargetDefaultPos);
-
-  ///宣告變數
-  current_INTERSECTED=null;
-  INTERSECTED=null;
 
   //LabelTarget
   labelTarget_instrumentMount.position.set(0,4.6241445,0);
@@ -1219,7 +1216,8 @@ function DeleteAccessory()
   
   if(current_INTERSECTED===null)
   {
-    scene.remove(FindLatestAccessory());
+    //scene.remove(FindLatestAccessory());
+    DeleteunreasonableItem();
   }
 
   _SelectedItemController.style.display="none";
