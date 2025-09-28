@@ -1214,7 +1214,7 @@ function DeleteAccessory()
     scene.remove(current_INTERSECTED);
   }
   
-  if(current_INTERSECTED===null)
+  if(current_INTERSECTED==null)
   {
     //scene.remove(FindLatestAccessory());
     DeleteunreasonableItem();
