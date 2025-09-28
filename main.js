@@ -1209,35 +1209,47 @@ function InstMoveModelPanel()
 
 function DeleteAccessory()
 {
-  if(current_INTERSECTED!=null)
+  try
   {
-    scene.remove(current_INTERSECTED);
+    if(current_INTERSECTED!=null)
+    {
+      scene.remove(current_INTERSECTED);
+    }
+
+    if(current_INTERSECTED==null)
+    {
+      //scene.remove(FindLatestAccessory());
+      DeleteunreasonableItem();
+    }
+
+    _SelectedItemController.style.display="none";
+
+    if(!isLabelOn)
+    {
+      ShowSceneLabelToggle();
+    }
+
+    //量測推車尺寸
+    MeasureCartDimension();
+
+    //更新配件規格欄位
+    UpdateAccessorySpecification();
+
+    //重置Raycast狀態
+    DefaultRaycast();
+
+    isSelectedItemControllerOn=false;
   }
-  
-  if(current_INTERSECTED==null)
+
+  catch (error) 
+	{
+		console.log(`發生錯誤.${error}`);
+	}
+
+  finally
   {
-    //scene.remove(FindLatestAccessory());
-    DeleteunreasonableItem();
+    _SelectedItemController.style.display="none";
   }
-
-  _SelectedItemController.style.display="none";
-
-
-  if(!isLabelOn)
-  {
-    ShowSceneLabelToggle();
-  }
-
-  //量測推車尺寸
-  MeasureCartDimension();
-
-  //更新配件規格欄位
-  UpdateAccessorySpecification();
-
-  //重置Raycast狀態
-  DefaultRaycast();
-
-  isSelectedItemControllerOn=false;
 }
 
 function UpdateAccessorySpecification()
