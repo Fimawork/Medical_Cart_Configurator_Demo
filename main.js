@@ -123,7 +123,6 @@ let labelTarget_column=new THREE.Object3D();
 let labelTarget_base=new THREE.Object3D();
 let labelTarget_caster=new THREE.Object3D();
 let labelTarget_accessory=new THREE.Object3D();
-
 let SelectedItemControllerTarget=new THREE.Object3D();
 
 
@@ -244,7 +243,13 @@ function init()
   current_INTERSECTED=null;
   INTERSECTED=null;
 
-
+  //LabelTarget
+  labelTarget_instrumentMount.position.set(0,4.6241445,0);
+  labelTarget_column.position.set(-0.07, 2.5,0);
+  labelTarget_base.position.set(0.1283865274999999,0.325,0.000013582500000053344);
+  labelTarget_caster.position.set(0.0705078549999999,0.012500000000000011, -0.18730758749999998);
+  labelTarget_accessory.position.set(1.7,3,0);
+  scene.add(labelTarget_instrumentMount).add(labelTarget_column).add(labelTarget_base).add(labelTarget_caster).add(labelTarget_accessory);
 
   ///主要物件
 	const defaultScenes = 
@@ -294,13 +299,13 @@ function init()
   //依初始零件位置放置SceneLabelTarget 
   const LabelTargets = 
   [
-    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_instrumentMount,scene.getObjectByName("FixedAnglePanel"));SetupSenceTag("label label_fadeIn_anim","EditMode",1,_labelContainer);resolve(); }, 100)),
+    () => new Promise((resolve) => setTimeout(() => { SetupSenceTag("label label_fadeIn_anim","EditMode",1,_labelContainer);resolve(); }, 100)),
 
-    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_column,scene.getObjectByName("15And20HeighAdjustableTube")); SetupSenceTag("label label_fadeIn_anim","EditMode",2,_labelContainer);resolve(); }, 200)),
+    () => new Promise((resolve) => setTimeout(() => { SetupSenceTag("label label_fadeIn_anim","EditMode",2,_labelContainer);resolve(); }, 200)),
 
-    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_base,scene.getObjectByName("24Base")); SetupSenceTag("label label_fadeIn_anim","EditMode",3,_labelContainer);resolve(); }, 300)),
+    () => new Promise((resolve) => setTimeout(() => { SetupSenceTag("label label_fadeIn_anim","EditMode",3,_labelContainer);resolve(); }, 300)),
 
-    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_caster,scene.getObjectByName("4inchCasterFor24BaseModule")); SetupSenceTag("label label_fadeIn_anim","EditMode",4,_labelContainer);resolve(); }, 400)),
+    () => new Promise((resolve) => setTimeout(() => { SetupSenceTag("label label_fadeIn_anim","EditMode",4,_labelContainer);resolve(); }, 400)),
 
     () => new Promise((resolve) => setTimeout(() => { UpdateSceneLabel();resolve(); }, 500)),//Label追蹤3D物件
   ];
@@ -325,9 +330,8 @@ function init()
     
     console.log('All LabelTarget loaded');
   }
-
-  labelTarget_accessory.position.set(1.7,3,0);
-  scene.add(labelTarget_accessory);
+  
+ 
 
   ///EventListener
   window.addEventListener( 'resize', onWindowResize );  
@@ -692,6 +696,7 @@ function DefaultRaycast()
   current_INTERSECTED = null;
 }
 
+//棄用
 function InstantiateLabelTarget(thisLabelTarget,targetObject)
 {
   const box = new THREE.Box3().setFromObject(targetObject); // 創建包圍盒
