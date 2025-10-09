@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { Sky } from 'three/addons/objects/Sky.js';
@@ -106,6 +107,8 @@ let _item_19_btn = document.querySelector('#item_19_btn');
 let _item_20_btn = document.querySelector('#item_20_btn');
 
 let item_btn_list=[];
+
+let isBreakModifyAvailable;
 
 //煞車移動輪數量(預設為5個煞車)
 let current_brake_num=5;
@@ -393,6 +396,11 @@ function animate()
     UpdateCameraPosition(camera,controls);
     RaycastFunction();
   }
+
+  if(isCasterFocus)//如果在編輯移動輪狀態，依據操作更新break_toggle位置
+    {
+      SetupCasterBrakePanelOn();
+    }
 }
 
 function EventListener()
@@ -491,10 +499,10 @@ function EventListener()
 
 
   window.addEventListener( 'pointermove', function(e) {
-    if(isCasterFocus)//如果在編輯移動輪狀態，依據操作更新break_toggle位置
-    {
-      SetupCasterBrakePanelOn();
-    }
+  //  if(isCasterFocus)//如果在編輯移動輪狀態，依據操作更新break_toggle位置
+  //  {
+  //    SetupCasterBrakePanelOn();
+  //  }
   });
 }
 
@@ -585,7 +593,12 @@ function CasterManager(i)//移動輪設定功能
   //更新移動輪規格欄位
   caster_type=caster_list[i][base_index].spec_name;
 
-  setTimeout(() => {CountBrakeNum();}, 1000);//1000=1sec}
+  if(isBreakModifyAvailable)//初始化時不顯示此面板
+  {
+    setTimeout(() => {SetupCasterBrakePanelOn();}, 600);//開啟移動輪編輯面板
+  }
+  
+  setTimeout(() => {CountBrakeNum();isBreakModifyAvailable=true;}, 1000);//1000=1sec}
 }
 
 function AccessoryManager(i)
@@ -596,10 +609,12 @@ function AccessoryManager(i)
 
   CameraManager(5);
 
-  InstGLTFLoader(accessory_list[i].src,new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,accessory_list[i].scene_name,null,scene);
+//InstGLTFLoader(accessory_list[i].src,new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,accessory_list[i].//scene_name,null,scene);
 
-  //指定新outline指定物件
-  setTimeout(() => {current_accessories.push(scene.getObjectByName(accessory_list[i].scene_name));}, 500);//1000=1sec}
+  InstGLTFLoaderForAccessory(accessory_list[i].src,new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,accessory_list[i].scene_name);
+
+//  //指定新outline指定物件
+//  setTimeout(() => {current_accessories.push(scene.getObjectByName(accessory_list[i].scene_name));}, 500);//1000=1sec}
    
   //啟用模型移動面板
   setTimeout(() => {InstMoveModelPanel();}, 600);//1000=1sec}
@@ -1192,7 +1207,7 @@ function InstMoveModelPanel()
   try
   {
     _SelectedItemController.style.cssText = `position:absolute;top:24.65%;left:47.5%;display:block;`;
-    current_INTERSECTED=FindLatestAccessory();
+    //current_INTERSECTED=FindLatestAccessory();
   }
 
   catch (error) 
@@ -1200,10 +1215,10 @@ function InstMoveModelPanel()
 		console.log(`發生錯誤.${error}`);
 	}
 
-  finally
-  {
-    current_INTERSECTED=FindLatestAccessory();
-  }
+  //finally
+  //{
+  //  current_INTERSECTED=FindLatestAccessory();
+  //}
   
 }
 
@@ -1537,6 +1552,27 @@ function DefaultCasterToggle()
   _brake_toggle_3.checked=true;
   _brake_toggle_4.checked=true;
   _brake_toggle_5.checked=true;
+}
+
+function InstGLTFLoaderForAccessory(filePath,thisPos,thisRot,thisScale,thisName)
+{
+  const loader = new GLTFLoader();
+	loader.load( filePath, function ( gltf ) {
+
+	const model = gltf.scene;
+	model.position.copy(thisPos);
+	model.rotation.set(thisRot.x, thisRot.y, thisRot.z);
+	model.scale.set(thisScale,thisScale,thisScale);
+	model.name=thisName;
+
+  scene.add(model);
+
+  current_accessories.push(model);
+  current_INTERSECTED=model;
+
+  UpdateMoveModelPanelPos(model);
+
+	});
 }
 
 ///將函數掛載到全域範圍
