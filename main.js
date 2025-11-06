@@ -254,7 +254,7 @@ function init()
   labelTarget_caster.position.set(0.0705078549999999,0.012500000000000011, -0.18730758749999998);
   labelTarget_accessory.position.set(1.7,3,0);
   scene.add(labelTarget_instrumentMount).add(labelTarget_column).add(labelTarget_base).add(labelTarget_caster).add(labelTarget_accessory);
-
+  
   ///主要物件
 	const defaultScenes = 
   [
@@ -268,7 +268,7 @@ function init()
     () => new Promise((resolve) => setTimeout(() => { SetupBtnList(); resolve(); }, 400)),//設定Item案例群組 
     
     () => new Promise((resolve) => setTimeout(() => { isCameraManagerOn=true; DefaultRaycast();resolve(); }, 500)),//啟用攝影機飛行功能//重置Raycast狀態
-    () => new Promise((resolve) => setTimeout(() => { SetupLabelTarget(); resolve(); }, 750)),//LabelTarget
+    () => new Promise((resolve) => setTimeout(() => { UpdateSceneLabel(); resolve(); }, 750)),//LabelTarget
     () => new Promise((resolve) => setTimeout(() => { _loading_canvas.style.display="none"; resolve(); }, 900)),//關閉Loading頁面
     () => new Promise((resolve) => setTimeout(() => { _labelContainer.style.cssText = "opacity: 1;"; resolve(); }, 1000)),//顯示SceneLabel   
     () => new Promise((resolve) => setTimeout(() => { CheckIfSceneLabelSetupCorrectly(); resolve(); }, 1500)),//確認SceneLabel是否成功鎖定到LabelTarget     
@@ -299,21 +299,6 @@ function init()
     }
   }
 
-
-  //依初始零件位置放置SceneLabelTarget 
-  const LabelTargets = 
-  [
-    () => new Promise((resolve) => setTimeout(() => { SetupSenceTag("label label_fadeIn_anim","EditMode",1,_labelContainer);resolve(); }, 100)),
-
-    () => new Promise((resolve) => setTimeout(() => { SetupSenceTag("label label_fadeIn_anim","EditMode",2,_labelContainer);resolve(); }, 200)),
-
-    () => new Promise((resolve) => setTimeout(() => { SetupSenceTag("label label_fadeIn_anim","EditMode",3,_labelContainer);resolve(); }, 300)),
-
-    () => new Promise((resolve) => setTimeout(() => { SetupSenceTag("label label_fadeIn_anim","EditMode",4,_labelContainer);resolve(); }, 400)),
-
-    () => new Promise((resolve) => setTimeout(() => { UpdateSceneLabel();resolve(); }, 500)),//Label追蹤3D物件
-  ];
-
   function UpdateSceneLabel()
   {
     requestAnimationFrame( UpdateSceneLabel );
@@ -325,17 +310,6 @@ function init()
     SceneTag(labelTarget_accessory,document.querySelector('#label_5'),new THREE.Vector2(0,0),camera); 
   }
 
-  async function SetupLabelTarget()//綁定預設物件
-  {
-    for (const task of LabelTargets) 
-    {
-    	await task(); // 確保每個任務依次完成
-    }
-    
-    console.log('All LabelTarget loaded');
-  }
-  
- 
 
   ///EventListener
   window.addEventListener( 'resize', onWindowResize );  
