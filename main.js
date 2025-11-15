@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { Sky } from 'three/addons/objects/Sky.js';
-import {CameraManager,UpdateCameraPosition,CameraDefaultPos, InputEvent,Camera_Inspector,ControlsTargetDefaultPos,SetDefaultCameraStatus,InstFBXLoader,InstGLTFLoader,FindMataterialByName,posData,dracoLoader,InstGLTFDracoLoader} from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools/fx_functions.js';
+import {CameraManager,UpdateCameraPosition,CameraDefaultPos, InputEvent,Camera_Inspector,ControlsTargetDefaultPos,SetDefaultCameraStatus,InstFBXLoader,InstGLTFLoader,FindMataterialByName,posData,dracoLoader,InstGLTFDracoLoader,InstGLTFDracoBase64Loader} from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools/fx_functions.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
@@ -493,7 +493,7 @@ function InstantiatModel(scene_name,src,postprocessing_layer,delay)
 {
   if(scene.getObjectByName(scene_name)==null)//
   {
-    InstGLTFDracoLoader(src,modelPosition,modelRotation,modeScale,scene_name,null, scene);
+    InstGLTFDracoBase64Loader(src,modelPosition,modelRotation,modeScale,scene_name,null, scene);
     
     //指定新outline指定物件，並hightlight該物件
     setTimeout(() => {postprocessing_layer.push(scene.getObjectByName(scene_name));addSelectedObject(scene.getObjectByName(scene_name));}, delay*1000);//1000=1sec}
@@ -1532,26 +1532,52 @@ function DefaultCasterToggle()
   _brake_toggle_5.checked=true;
 }
 
-function InstGLTFLoaderForAccessory(filePath,thisPos,thisRot,thisScale,thisName)
+function InstGLTFLoaderForAccessory(base64String,thisPos,thisRot,thisScale,thisName)
 {
+  //加密模組
+	function base64ToArrayBuffer(base64) 
+	{
+		// 去除所有非 base64 字元
+		base64 = base64.replace(/[^A-Za-z0-9+/=]/g, "");
+
+    	const binary = atob(base64);
+    	const len = binary.length;
+    	const bytes = new Uint8Array(len);
+
+    	for (let i = 0; i < len; i++) 
+		{
+    	    bytes[i] = binary.charCodeAt(i);
+    	}
+
+    	return bytes.buffer;
+	}
+
+	const arrayBuffer = base64ToArrayBuffer(base64String);
+
   const loader = new GLTFLoader();
   loader.setDRACOLoader(dracoLoader);
-	loader.load( filePath, function ( gltf ) {
+  loader.parse(
+        arrayBuffer,
+        '',
+        (gltf) => {
+            
+            const model = gltf.scene;
+            model.position.copy(thisPos);
+            model.rotation.set(thisRot.x, thisRot.y, thisRot.z);
+            model.scale.set(thisScale,thisScale,thisScale);
+            model.name=thisName;
 
-	const model = gltf.scene;
-	model.position.copy(thisPos);
-	model.rotation.set(thisRot.x, thisRot.y, thisRot.z);
-	model.scale.set(thisScale,thisScale,thisScale);
-	model.name=thisName;
+            scene.add(model);
+            current_accessories.push(model);
+            current_INTERSECTED=model;
 
-  scene.add(model);
+            UpdateMoveModelPanelPos(model);
 
-  current_accessories.push(model);
-  current_INTERSECTED=model;
-
-  UpdateMoveModelPanelPos(model);
-
-	});
+        },
+        (error) => {
+            console.error('Failed to load model:', error);
+        }
+    );
 }
 
 ///將函數掛載到全域範圍
