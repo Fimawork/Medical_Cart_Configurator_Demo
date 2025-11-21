@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { Sky } from 'three/addons/objects/Sky.js';
-import {CameraManager,UpdateCameraPosition,CameraDefaultPos, InputEvent,Camera_Inspector,ControlsTargetDefaultPos,SetDefaultCameraStatus,InstFBXLoader,InstGLTFLoader,FindMataterialByName,posData,dracoLoader,InstGLTFDracoLoader,InstGLTFDracoBase64Loader} from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools/fx_functions.js';
+import {CameraManager,UpdateCameraPosition,CameraDefaultPos, InputEvent,Camera_Inspector,ControlsTargetDefaultPos,SetDefaultCameraStatus,InstFBXLoader,InstGLTFLoader,FindMataterialByName,posData,dracoLoader,InstGLTFDracoLoader,InstGLTFDracoBase64Loader,WebGLInspector} from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@V1.1/fx_functions.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
@@ -319,6 +319,9 @@ function init()
 		onPointerMove(event);//改以點擊作為Raycast判斷的時間點，改善觸控螢幕誤判狀況
   });
   window.addEventListener("wheel", (event) => {InputEvent();});
+
+
+  //WebGLInspector(threeContainer,renderer);
 
 }
 
@@ -1284,19 +1287,19 @@ function UpdateSpecContent(targetCSS,newContent)
 
 function DeleteunreasonableItem()
 {
-  for(let i=0;i<scene.children.length;i++)
+  for(let i=0;i<current_accessories.length;i++)
   {
-    if(scene.children[i].name.includes("accessory_"))
+    if(current_accessories[i].position.y>=maximum_height||current_accessories[i].position.y<=minimum_height)
     {
-      if(scene.children[i].position.y>=maximum_height)
-      {
-        scene.remove(scene.children[i]);
-      }
+      scene.remove(current_accessories[i]);
 
-      if(scene.children[i].position.y<=minimum_height)
-      {
-        scene.remove(scene.children[i]);
-      }
+      current_accessories[i].traverse( function ( object ) {
+
+			if ( object.isMesh )
+			{
+				object.geometry.dispose();
+			}
+		});
     }
   }
 }
