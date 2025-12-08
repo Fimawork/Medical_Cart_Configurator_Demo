@@ -2,9 +2,12 @@
 <html>
 	<head>
 		<meta charset="utf-8">
+		<meta name="google-site-verification" content="我是費馬工作室，專注於3D網頁介面與使用者體驗設計。" />
 		<meta name="viewport" content="width=device-width", initial-scale="1.0", maximum-scale="1.0", user-scalable="no"/>
+		<meta name="description" content="我是費馬工作室，專注於3D網頁介面與使用者體驗設計。"/>
+		<meta name="keywords" content="設計工作室,3D網頁設計,3D Website Design"/>
 		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-		<title>Medical Cart Configurator</title>
+		<title>3D產品配置器 | fimawork | 3D網頁設計、3D Website Design</title>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 		<style type="text/css">
 			@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,500,700');  
@@ -500,6 +503,37 @@
 				font-family: "Roboto", sans-serif;
 			}
 
+			.logo
+			{
+				position:fixed;
+				top:3%;
+				left: 3%;
+				height: 30px;
+				aspect-ratio: 80/13.75;
+				background-image: url(./images/fimawork_logo_C_white.png);
+				background-size: 100% 100%;
+				opacity: 1;
+				z-index: 9;
+				cursor: pointer;
+			}
+
+			h3
+			{
+				margin-top: 30px;
+				margin-right: -3px;
+				font-family:"Inter", sans-serif;
+			    font-size: 15px;
+			    color: #ffffff;
+				font-weight: 300;
+				text-align: right;
+				letter-spacing: 9px;
+			}
+
+			.logo:hover
+			{
+				opacity: 0.5;
+			}
+
 			@keyframes UI_rotate
 			{
 				0% {transform: rotate(0);}
@@ -761,6 +795,24 @@
 
 				#download_btn
 				{
+					display: none;
+				}
+
+				.logo
+				{
+					top:3%;
+					left: 6%;
+					height: 24px;
+					display: none;
+				}
+			
+				h3
+				{
+					margin-top: 24px;
+					margin-right: -2px;
+				    font-size: 15px;
+					text-align: right;
+					letter-spacing: 4.2px;
 					display: none;
 				}
 			}
@@ -1161,6 +1213,10 @@ This is an medical cart configurator demo. It aims to illustrate how WebGL offer
 		<div id="loading_canvas">
 			<div class="loadingUI rotate_anim"></div>
 		</div>
+
+		<div class="logo" onclick="parent.open('https://fimawork.tw/')">
+			<h3>費馬工作室</h3>
+		</div>	
 		<script type="module" src="main.js"></script>
 
     </body>
