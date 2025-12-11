@@ -201,6 +201,7 @@ function init()
 
   ///利用座標設定旋轉中心及鏡頭焦點，camera不須另外設定初始角度
   controls = new OrbitControls( camera, renderer.domElement );
+  controls.enableZoom=true;
   controls.enablePan = true;//右鍵平移效果
   controls.panSpeed = 0.4;
   controls.enableDamping = true;
@@ -318,7 +319,10 @@ function init()
      mousePos = { x: event.clientX, y: event.clientY };
 		onPointerMove(event);//改以點擊作為Raycast判斷的時間點，改善觸控螢幕誤判狀況
   });
-  window.addEventListener("wheel", (event) => {InputEvent();});
+
+  window.addEventListener("wheel", (event) => {
+    InputEvent();
+  });
 
 
   //WebGLInspector(threeContainer,renderer);
@@ -386,40 +390,22 @@ function animate()
 
 function EventListener()
 {
-  window.addEventListener("keydown",function (event) {
 
-      switch (event.code) 
+  _SelectedItemController.addEventListener("wheel",function (event) {
+
+      if(current_INTERSECTED!=null)
+    {
+      if(event.deltaY<0)
       {
-
-        case "Space":
-        //MoveModelOFF();
-        //_caster_toggle_01.checked=false;
-
-        break;
-
-        case "ArrowDown":
-
-       //console.log(scene);
-
-       //_caster_toggle_01.checked=true;
-
-        break;
-
-        case "ArrowUp":
-        
-        //EditMode(1);
-
-        
-        break;
-
-        case "ArrowLeft":
-
-        break;
-
-        case "ArrowRight":
-
-        break;
+        MoveModel("UP");
       }
+
+      if(event.deltaY>0)
+      {
+        MoveModel("DOWN");
+      }
+      
+    }
       
   });
 
