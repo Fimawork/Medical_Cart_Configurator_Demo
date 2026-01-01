@@ -33,117 +33,118 @@
 }
 			
 
-			#threeContainer
-			{
-				position: absolute;
-				width: 100%;
-				height: 100%;
-			}
+#threeContainer
+{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
 
-			#labelContainer
-			{
-				position: absolute;
-				width: 100%;
-				height: 100%;
-				pointer-events: none;
-				overflow: hidden;
-			}
+#labelContainer
+{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	overflow: hidden;
+}
 
-			#casterToggleContainer
-			{
-				position: absolute;
-				width: 100%;
-				height: 100%;
-				pointer-events: none;
-				overflow: hidden;
-				display: none;
-			}
+#casterToggleContainer
+{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	overflow: hidden;
+	display: none;
+}
 
-			#main_title
-			{
-				position: absolute;
-				left: 9%;
-				top:18%;
-				font-size: 30px;
-				font-family:Arial, Helvetica, sans-serif;
-				font-weight:lighter;
-				transform: translateX(0%);
-				pointer-events: none;
-			}
+#main_title
+{
+	position: absolute;
+	left: 9%;
+	top:18%;
+	font-size: 30px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-weight:lighter;
+	transform: translateX(0%);
+	pointer-events: none;
+}
 
-			#sub_title
-			{
-				position: absolute;
-				left: 9%;
-				top:23%;
-				width: 20%;
-				text-align: left;
-			  	font-family: "Roboto", sans-serif;
-			  	font-weight: 300;
-              	font-size: 12px;
-				line-height:150%;
-              	color: rgba(0, 0, 0, 0.75);
-				pointer-events: none;
-			}
+#sub_title
+{
+	position: absolute;
+	left: 9%;
+	top:23%;
+	width: 20%;
+	text-align: left;
+  	font-family: "Roboto", sans-serif;
+  	font-weight: 300;
+  	font-size: 12px;
+	line-height:150%;
+  	color: rgba(0, 0, 0, 0.75);
+	pointer-events: none;
+}
 
-			.mainBottom_panel
-			{
-				position: absolute;
-				right: 9%;
-				top:18%;
-                width: 24%;
-                height: 4%;
-                display: flex;
-                justify-content:center; 
-                z-index: 9;
-            }
+.mainBottom_panel
+{
+	position: absolute;
+	right: 9%;
+	top:18%;
+    width: 24%;
+    height: 4%;
+    display: flex;
+    justify-content:center; 
+    z-index: 9;
+}
 
-			.main_btn
-			{
-                position: relative;
-                width: 20%;
-                height: 100%;
-				background-color: rgba(255, 255, 255, 0);
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				margin-left: 1%;
-				margin-right: 1%;
-				border-radius: 15% / 50%;
-				pointer-events: auto;
-            }
+.main_btn
+{
+    position: relative;
+    width: 20%;
+    height: 100%;
+	background-color: rgba(255, 255, 255, 0);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-left: 1%;
+	margin-right: 1%;
+	border-radius: 15% / 50%;
+	pointer-events: auto;
+}
 
-			.btn_text
-			{
-				position: absolute;
-                right: 0px;
-                left: 0px;
-				text-align: center;
-				font-family: "Roboto", sans-serif;
-                font-size: 12px;
-				font-weight: 300;
-                color: rgba(0, 0, 0, 0.9);
-				display: block;
-			}
+.btn_text
+{
+	position: absolute;
+    right: 0px;
+    left: 0px;
+	text-align: center;
+	font-family: "Roboto", sans-serif;
+    font-size: 12px;
+	font-weight: 300;
+    color: rgba(0, 0, 0, 0.9);
+	display: block;
+}
 
 			
 
-			i{
-				color: rgba(255, 255, 255, 0);
-				display: none;
-			}
+i{
+	color: rgba(255, 255, 255, 0);
+	display: none;
+}
 
-			j
-			{
-				align-self: center;
-				color: rgba(10, 151, 207,0.5);
-			}
+j
+{
+	align-self: center;
+	color: rgba(10, 151, 207,0.5);
+}
 
-			k
-			{
-				padding-right: 3%;
-				color: rgba(255, 255, 255, 1);
-			}
+k
+{
+	padding-right: 3%;
+	color: rgba(255, 255, 255, 1);
+}
+
 
 			#grid-table 
 			{
@@ -206,14 +207,20 @@
 				transform: scale(0.75);
 			}
 
-			.hud_btn
-			{
-				width: 30px;
-				height: 30px;
-				color: rgba(0, 0, 0, 0.45);
-				margin-bottom: 18px;
-				text-align: center;
-			}
+.hud_btn
+{
+	position: relative;
+	width: 30px;
+	height: 30px;
+	color: rgba(0, 0, 0, 0.45);
+	margin-bottom: 18px;
+	text-align: center;
+}
+
+.hud_btn:nth-child(1)
+{
+	right: 3px;
+}
 
 			#download_btn
 			{

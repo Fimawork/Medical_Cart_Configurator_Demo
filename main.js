@@ -60,6 +60,8 @@ let _system_info= document.querySelector('#system_info');
 //Loading頁面
 let _loading_canvas=document.getElementById('loading_canvas');
 
+
+
 //移動輪規格欄位類型資訊
 let caster_type="";
 
@@ -151,7 +153,7 @@ const params = {
 init();
 animate();
 EventListener();
-//Camera_Inspector(camera,controls);
+BtnEventListener();
 
 
 
@@ -600,11 +602,10 @@ function AccessoryManager(i)
 
   InstGLTFLoaderForAccessory(accessory_list[i].src,new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,accessory_list[i].scene_name);
 
-//  //指定新outline指定物件
-//  setTimeout(() => {current_accessories.push(scene.getObjectByName(accessory_list[i].scene_name));}, 500);//1000=1sec}
-   
-  //啟用模型移動面板
-  //setTimeout(() => {InstMoveModelPanel();}, 600);//1000=1sec}
+  if(isLabelOn)//生成零件時不顯示Label
+  {
+    ShowSceneLabelToggle();
+  }
 }
 
 function ResetInstrumentModule()//重置儀器支架
@@ -860,14 +861,14 @@ function ShowSceneLabelToggle()
   if(!isLabelOn)
   {
     _labelContainer.style.display="block";
-    _ShowLabelToggle.style.cssText = "color: #6bb4f7;";
+    //_ShowLabelToggle.style.cssText = "color: #6bb4f7;";
     isLabelOn=true;
   }
 
   else
   {
     _labelContainer.style.display="none";
-    _ShowLabelToggle.style.cssText = "color: rgba(0, 0, 0, 0.45);";
+    //_ShowLabelToggle.style.cssText = "color: rgba(0, 0, 0, 0.45);";
     isLabelOn=false;
   }
 }
@@ -1087,11 +1088,6 @@ function MoveModelON(target)
 	{
 		console.log(`發生錯誤.${error}`);
 	}
-
-  finally 
-  {
-    current_INTERSECTED=target;
-  }
 }
 
 function MoveModelOFF()
@@ -1546,6 +1542,17 @@ function UpdateMoveModelPanelPos()
   {
     _SelectedItemController.style.display="none";
   }
+}
+
+function BtnEventListener()
+{
+  let _default_camera_btn=document.getElementById('default_camera_btn');
+  
+  _default_camera_btn.addEventListener("click",function () {
+
+    CameraManager(0);
+      
+  });
 }
 
 ///將函數掛載到全域範圍
