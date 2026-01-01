@@ -140,7 +140,7 @@ const scale=2.5;//提高渲染解析度渲染後縮小顯示
 const params = {
 	edgeStrength: 3.0,
 	edgeGlow: 1.5,
-	edgeThickness: 3.6,
+	edgeThickness: 1.0,
 	pulsePeriod: 0,
 	color:'#6bb4f7'
 };
@@ -164,7 +164,7 @@ function init()
   //renderer.setSize( threeContainer.clientWidth, threeContainer.clientHeight );//非全螢幕比例設定
 
   //提高渲染解析度渲染後縮小顯示
-  renderer.setSize(threeContainer.clientWidth * scale, threeContainer.clientHeight * scale, false);
+  renderer.setSize(threeContainer.clientWidth, threeContainer.clientHeight, false);
 
   renderer.setClearColor(0x000000, 0.0);//需加入這一條，否則看不到CSS的底圖
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -223,27 +223,27 @@ function init()
 
 	} );
 
-  ///postprocessing
-	composer = new EffectComposer( renderer );
-
-	const renderPass = new RenderPass( scene, camera );
-  renderPass.clearAlpha=0;
-	composer.addPass( renderPass );
-
-	outlinePass = new OutlinePass( new THREE.Vector2( threeContainer.clientWidth, threeContainer.clientHeight ), scene, camera );
-	composer.addPass( outlinePass );
-
-	const outputPass = new OutputPass();
-	composer.addPass( outputPass );
-
-	effectFXAA = new ShaderPass( FXAAShader );
-	effectFXAA.uniforms[ 'resolution' ].value.set( 1 / threeContainer.clientWidth, 1 / threeContainer.clientHeight );
-	composer.addPass( effectFXAA );
-
-  outlinePass.edgeStrength = params.edgeStrength;
-  outlinePass.edgeGlow= params.edgeGlow;
-	outlinePass.edgeThickness= params.edgeThickness;
-  outlinePass.visibleEdgeColor.set(params.color);
+   ///postprocessing
+    composer = new EffectComposer( renderer );
+  
+    const renderPass = new RenderPass( scene, camera );
+    renderPass.clearAlpha=0;
+    composer.addPass( renderPass );
+  
+    outlinePass = new OutlinePass( new THREE.Vector2( threeContainer.clientWidth, threeContainer.clientHeight ), scene, camera );
+    composer.addPass( outlinePass );
+  
+    const outputPass = new OutputPass();
+    composer.addPass( outputPass );
+  
+    effectFXAA = new ShaderPass( FXAAShader );
+    effectFXAA.uniforms[ 'resolution' ].value.set( 1 / threeContainer.clientWidth, 1 / threeContainer.clientHeight );
+    composer.addPass( effectFXAA );
+  
+    outlinePass.edgeStrength = params.edgeStrength;
+    outlinePass.edgeGlow= params.edgeGlow;
+    outlinePass.edgeThickness= params.edgeThickness;
+    outlinePass.visibleEdgeColor.set(params.color);
 
   ///紀錄相機的初始位置
 	SetDefaultCameraStatus(CameraDefaultPos,ControlsTargetDefaultPos);
@@ -361,9 +361,9 @@ function onWindowResize()
 {
     camera.aspect = threeContainer.clientWidth/threeContainer.clientHeight;//非全螢幕比例設定
 		camera.updateProjectionMatrix();
-    renderer.setSize( threeContainer.clientWidth* scale, threeContainer.clientHeight* scale, false );
+    renderer.setSize( threeContainer.clientWidth, threeContainer.clientHeight, false );
 
-    composer.setSize( threeContainer.clientWidth* scale, threeContainer.clientHeight* scale, false );
+    composer.setSize( threeContainer.clientWidth, threeContainer.clientHeight, false );
 
 		effectFXAA.uniforms[ 'resolution' ].value.set( 1 / threeContainer.clientWidth, 1 / threeContainer.clientHeight );
 }
@@ -373,8 +373,8 @@ function animate()
   requestAnimationFrame( animate );
   
   controls.update();
-  //renderer.render( scene, camera );
-  composer.render();//使用postprocessing替代
+  
+  RenderSwitch();
 
   if(isCameraManagerOn)
   {
@@ -383,9 +383,29 @@ function animate()
   }
 
   if(isCasterFocus)//如果在編輯移動輪狀態，依據操作更新break_toggle位置
-    {
-      SetupCasterBrakePanelOn();
-    }
+  {
+    SetupCasterBrakePanelOn();
+  }
+
+  if(!isCasterFocus)
+  {
+    _casterToggleContainer.style.display="none";
+  }
+
+    UpdateMoveModelPanelPos();
+}
+
+function RenderSwitch()
+{
+  if(selectedObjects.length>0)
+  {
+    composer.render();//使用postprocessing替代
+  }
+
+  else
+  {
+    renderer.render( scene, camera );
+  }
 }
 
 function EventListener()
@@ -584,7 +604,7 @@ function AccessoryManager(i)
 //  setTimeout(() => {current_accessories.push(scene.getObjectByName(accessory_list[i].scene_name));}, 500);//1000=1sec}
    
   //啟用模型移動面板
-  setTimeout(() => {InstMoveModelPanel();}, 600);//1000=1sec}
+  //setTimeout(() => {InstMoveModelPanel();}, 600);//1000=1sec}
 }
 
 function ResetInstrumentModule()//重置儀器支架
@@ -799,7 +819,7 @@ function addSelectedObject( object )
     selectedObjects = [];
     selectedObjects.push( object );
     setTimeout(() => {outlinePass.selectedObjects = selectedObjects;}, 200);//1000=1sec}//oultine效果開始
-    setTimeout(() => {outlinePass.selectedObjects = [];}, 1500);//1000=1sec}//oultine效果結束
+    setTimeout(() => {outlinePass.selectedObjects = [];selectedObjects = [];}, 1500);//1000=1sec}//oultine效果結束
       
     //量測推車尺寸
     setTimeout(() => {MeasureCartDimension();}, 1600);//1000=1sec} 
@@ -1032,8 +1052,6 @@ function MoveModel(action)
       {
         current_INTERSECTED.rotation.y-=Math.PI*0.5;
       }
-
-      UpdateMoveModelPanelPos(current_INTERSECTED);//更新控制面板位置 
     }
   }
 
@@ -1080,7 +1098,7 @@ function MoveModelOFF()
 {
   if(current_INTERSECTED!=null&&current_INTERSECTED.position.y>=1)
   {
-    scene.remove(current_INTERSECTED);
+    current_INTERSECTED=null;
 
     //提示面板
     ShowErrorDialog();
@@ -1088,16 +1106,12 @@ function MoveModelOFF()
 
   if(current_INTERSECTED!=null&&current_INTERSECTED.position.y<=-3.5)
   {
-    scene.remove(current_INTERSECTED);
+    current_INTERSECTED=null;
 
     //提示面板
     ShowErrorDialog();
   }
   
-  setTimeout(() => {current_INTERSECTED=null;}, 100);//1000=1sec}
-  
-  _SelectedItemController.style.display="none";
-
   if(!isLabelOn)
   {
     ShowSceneLabelToggle();
@@ -1113,7 +1127,7 @@ function MoveModelOFF()
   DeleteunreasonableItem();
 
   //回復預設視角
-  CameraManager(0);
+  //CameraManager(0);
 
   isSelectedItemControllerOn=false;
 
@@ -1121,81 +1135,15 @@ function MoveModelOFF()
   DefaultRaycast();
 }
 
-function UpdateMoveModelPanelPos(target)  
-{
-  let center= new THREE.Vector3();
-
-  try 
-	{
-    isSelectedItemControllerOn=true;
-
-    const box= new THREE.Box3().setFromObject(target);
-    box.getCenter(center);
-
-    var width = threeContainer.clientWidth, height = threeContainer.clientHeight;
-    var widthHalf = width / 2, heightHalf = height / 2;
-
-    center.project(camera);
-    center.x = ( center.x * widthHalf ) + widthHalf;
-    center.y = - ( (center.y) * heightHalf ) + heightHalf;
-      
-    if(center!=null)
-    {
-      _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
-    }
-    
-    else
-    {
-      _SelectedItemController.style.cssText = `position:absolute;top:24.65%;left:47.5%;display:block;`;
-    }
-  }
-
-  catch (error) 
-	{
-		console.log(`發生錯誤.${error}`);
-	}
-
-  finally 
-  {
-    if(center!=null)
-    {
-      _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
-    }
-
-    else
-    {
-      UpdateMoveModelPanelPos(FindLatestAccessory());
-    }
-  }
-}
-
-function InstMoveModelPanel()
-{
-  try
-  {
-    _SelectedItemController.style.cssText = `position:absolute;top:24.65%;left:47.5%;display:block;`;
-    //current_INTERSECTED=FindLatestAccessory();
-  }
-
-  catch (error) 
-	{
-		console.log(`發生錯誤.${error}`);
-	}
-
-  //finally
-  //{
-  //  current_INTERSECTED=FindLatestAccessory();
-  //}
-  
-}
-
 function DeleteAccessory()
 {
   try
   {
+    
     if(current_INTERSECTED!=null)
     {
       scene.remove(current_INTERSECTED);
+      current_INTERSECTED=null;
     }
 
     if(current_INTERSECTED==null)
@@ -1203,8 +1151,6 @@ function DeleteAccessory()
       //scene.remove(FindLatestAccessory());
       DeleteunreasonableItem();
     }
-
-    _SelectedItemController.style.display="none";
 
     if(!isLabelOn)
     {
@@ -1227,11 +1173,6 @@ function DeleteAccessory()
 	{
 		console.log(`發生錯誤.${error}`);
 	}
-
-  finally
-  {
-    _SelectedItemController.style.display="none";
-  }
 }
 
 function UpdateAccessorySpecification()
@@ -1453,7 +1394,7 @@ function SetupCasterBrakePanelOn()
 function SetupCasterBrakePanelOFF()
 {
   isCasterFocus=false;
-  _casterToggleContainer.style.display="none";
+  //_casterToggleContainer.style.display="none";
 
   for(let i=0;i<_casterToggleContainer.children.length;i++)
   {
@@ -1560,13 +1501,51 @@ function InstGLTFLoaderForAccessory(base64String,thisPos,thisRot,thisScale,thisN
             current_accessories.push(model);
             current_INTERSECTED=model;
 
-            UpdateMoveModelPanelPos(model);
-
+            addSelectedObject(model);
         },
         (error) => {
             console.error('Failed to load model:', error);
         }
     );
+}
+
+
+function UpdateMoveModelPanelPos()
+{
+  if(current_INTERSECTED!=null)
+  {
+    const aspect = window.innerWidth / window.innerHeight;
+
+		//if(aspect>1.5)//PC或平板
+		//{
+			let center= new THREE.Vector3();
+
+      isSelectedItemControllerOn=true;
+
+      const box= new THREE.Box3().setFromObject(current_INTERSECTED);
+      box.getCenter(center);
+
+      var width = threeContainer.clientWidth, height = threeContainer.clientHeight;
+      var widthHalf = width / 2, heightHalf = height / 2;
+
+      center.project(camera);
+      center.x = ( center.x * widthHalf ) + widthHalf;
+      center.y = - ( (center.y) * heightHalf ) + heightHalf;
+
+      _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
+	//	}
+//
+  //  else
+  //  {
+  //    _SelectedItemController.style.cssText = `position:absolute;top:50%;left:50%;display:block;`;
+  //  }
+    
+  }
+
+  else
+  {
+    _SelectedItemController.style.display="none";
+  }
 }
 
 ///將函數掛載到全域範圍
