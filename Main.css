@@ -189,6 +189,7 @@ k
 				flex-direction: column;
 				pointer-events: auto;
 				opacity: 0;
+				user-select: none;
 			}
 
 			.alignCenter
@@ -217,11 +218,12 @@ k
 	text-align: center;
 }
 
-.hud_btn:nth-child(1)
+#default_camera_btn
 {
-	right: 3px;
+	position: absolute;
+	top: 15%;
+	left: 30%;
 }
-
 			#download_btn
 			{
 				display: block;
@@ -969,5 +971,11 @@ k
 				.ControllerBtn:active
 				{
 					opacity: 0.6;
+				}
+
+				#default_camera_btn
+				{
+					top: 10%;
+					left: 5%;
 				}
 			}

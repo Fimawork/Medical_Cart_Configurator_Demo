@@ -1553,6 +1553,14 @@ function BtnEventListener()
     CameraManager(0);
       
   });
+
+  let _reset_btn=document.getElementById('reset_btn');
+
+  _reset_btn.addEventListener("click",function () {
+
+    EditMode(0);
+      
+  });
 }
 
 ///將函數掛載到全域範圍
