@@ -170,28 +170,36 @@ k
     		  border: 1px solid rgba(255, 255, 255, 0.15);
     		}
 
-			.label 
-			{
-				position: absolute;
-				width: 30px;
-				height: 30px;
-				color: #000000;
-				font-family: sans-serif;
-				padding: 2px;
-				background: rgba(255, 255, 255, 0.45);
-				border-radius: 50% / 50%;
-				border-style: solid;
-  				border-width: 1px;
+.label 
+{
+	position: absolute;
+	width: 30px;
+	height: 30px;
+	color: #000000;
+	font-family: sans-serif;
+	padding: 2px;
+	background: rgba(255, 255, 255, 0.45);
+	border-radius: 50% / 50%;
+	border-style: solid;
+	border-width: 1px;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	pointer-events: auto;
+	opacity: 1;
+	user-select: none;
+}
 
-				text-align: center;
-				display: flex;
-				justify-content: center;
-				flex-direction: column;
-				pointer-events: auto;
-				opacity: 0;
-				user-select: none;
-			}
-
+.accessory_tag
+{
+	position: absolute;
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	background-color: #6bb4f7;
+	user-select: none;
+}
 			.alignCenter
 			{
 				display: flex;
@@ -611,6 +619,11 @@ k
 				.label:hover
 				{
 					background-color: rgba(0, 0, 0, 0.05);
+				}
+
+				.accessory_tag:hover
+				{
+					opacity: 0.5;
 				}
 
 				.hud_btn:hover

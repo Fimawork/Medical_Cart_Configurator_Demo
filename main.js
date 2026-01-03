@@ -21,6 +21,7 @@ import {instrument_mount_list,column_list,base_list,caster_list,accessory_list} 
 let scene, camera, renderer, stats, mixer, clock;
 let controls;
 let threeContainer = document.getElementById("threeContainer");
+let labelRenderer;
 
 const modelPosition=new THREE.Vector3(0,0,0);
 const modelRotation=new THREE.Vector3(0,Math.PI, 0);
@@ -49,7 +50,6 @@ let _caster_content = document.getElementById('caster_content');
 let _accessory_content = document.getElementById('accessory_content');
 let _dimension_content= document.getElementById('dimension_content');
 
-let _labelContainer = document.getElementById('labelContainer');
 let _ShowLabelToggle = document.getElementById('ShowLabelToggle');
 let _label_5 = document.getElementById('label_5');//配件用Label，同時用來檢查是否成功鎖定SceneTarget
 
@@ -60,7 +60,7 @@ let _system_info= document.getElementById('system_info');
 //Loading頁面
 let _loading_canvas=document.getElementById('loading_canvas');
 
-
+let _show_accessory_btn=document.getElementById('show_accessory_btn');
 
 //移動輪規格欄位類型資訊
 let caster_type="";
@@ -121,6 +121,9 @@ let current_base=[];
 let current_caster=[];
 let current_accessories=[];
 
+let sceneLabels=[];
+let accessoryLabels=[];
+
 let cartDimension;
 let cartBox;
 
@@ -176,6 +179,12 @@ function init()
   //document.body.appendChild( renderer.domElement );
   threeContainer.appendChild( renderer.domElement );
 
+  labelRenderer = new CSS2DRenderer();
+	labelRenderer.setSize( threeContainer.clientWidth, threeContainer.clientHeight );
+	labelRenderer.domElement.style.position = 'absolute';
+	labelRenderer.domElement.style.top = '0px';
+	threeContainer.appendChild( labelRenderer.domElement );
+
 
   const CameraDefaultPos=new THREE.Vector3(-4.848,5.501,-4.925);
   const ControlsTargetDefaultPos=new THREE.Vector3(-0.131,2.274,-0.023);
@@ -201,7 +210,8 @@ function init()
   FX.posData[6]={ camera_pos:new THREE.Vector3(5.219,5.358,5.276), controlsTarget_pos:new THREE.Vector3(0.073,1.928,0.010)};
 
   ///利用座標設定旋轉中心及鏡頭焦點，camera不須另外設定初始角度
-  controls = new OrbitControls( camera, renderer.domElement );
+  //controls = new OrbitControls( camera, renderer.domElement );
+  controls = new OrbitControls( camera, labelRenderer.domElement );
   controls.enableZoom=true;
   controls.enablePan = true;//右鍵平移效果
   controls.panSpeed = 0.4;
@@ -240,19 +250,11 @@ function init()
   ///紀錄相機的初始位置
 	FX.SetDefaultCameraStatus(CameraDefaultPos,ControlsTargetDefaultPos);
 
-  //LabelTarget
-  labelTarget_instrumentMount.position.set(0,4.6241445,0);
-  labelTarget_column.position.set(-0.07, 2.5,0);
-  labelTarget_base.position.set(0.1283865274999999,0.325,0.000013582500000053344);
-  labelTarget_caster.position.set(0.0705078549999999,0.012500000000000011, -0.18730758749999998);
-  labelTarget_accessory.position.set(1.7,3,0);
-  scene.add(labelTarget_instrumentMount).add(labelTarget_column).add(labelTarget_base).add(labelTarget_caster).add(labelTarget_accessory);
   
   ///主要物件
 	const defaultScenes = 
   [
     () => new Promise((resolve) => setTimeout(() => { _loading_canvas.style.display="flex"; resolve(); }, 10)),//Loading頁面
-    () => new Promise((resolve) => setTimeout(() => { _labelContainer.style.cssText = "opacity: 0;"; resolve(); }, 50)),//隱藏SceneLabel避免初始化完成前誤觸
 		() => new Promise((resolve) => setTimeout(() => { BaseManager(1); resolve(); }, 100)),//底座&移動輪
     () => new Promise((resolve) => setTimeout(() => { InstrumentMountManager(0); resolve(); }, 110)),//儀器支撐版
     () => new Promise((resolve) => setTimeout(() => { ColumnManager(1); resolve(); }, 120)),//中柱
@@ -261,10 +263,8 @@ function init()
     () => new Promise((resolve) => setTimeout(() => { SetupBtnList(); resolve(); }, 400)),//設定Item案例群組 
     
     () => new Promise((resolve) => setTimeout(() => { isCameraManagerOn=true; DefaultRaycast();resolve(); }, 500)),//啟用攝影機飛行功能//重置Raycast狀態
-    () => new Promise((resolve) => setTimeout(() => { UpdateSceneLabel(); resolve(); }, 750)),//LabelTarget
-    () => new Promise((resolve) => setTimeout(() => { _loading_canvas.style.display="none"; resolve(); }, 900)),//關閉Loading頁面
-    () => new Promise((resolve) => setTimeout(() => { _labelContainer.style.cssText = "opacity: 1;"; resolve(); }, 1000)),//顯示SceneLabel   
-    () => new Promise((resolve) => setTimeout(() => { CheckIfSceneLabelSetupCorrectly(); resolve(); }, 1500)),//確認SceneLabel是否成功鎖定到LabelTarget     
+    () => new Promise((resolve) => setTimeout(() => { SetupSceneLabel(); resolve(); }, 750)),//LabelTarget
+    () => new Promise((resolve) => setTimeout(() => { _loading_canvas.style.display="none"; resolve(); }, 900)),//關閉Loading頁面 
 	];
 
 	async function SetupDefaultScene() 
@@ -292,15 +292,22 @@ function init()
     }
   }
 
-  function UpdateSceneLabel()
+  function SetupSceneLabel()
   {
-    requestAnimationFrame( UpdateSceneLabel );
+    //LabelTarget
+    labelTarget_instrumentMount.position.set(-0.5,4.6241445,0);
+    labelTarget_column.position.set(-0.5, 2.5,0);
+    labelTarget_base.position.set(0.5,0.5,0);
+    labelTarget_caster.position.set(-1,0.012500000000000011, 0);
+    labelTarget_accessory.position.set(1,3,0);
+    scene.add(labelTarget_instrumentMount).add(labelTarget_column).add(labelTarget_base).add(labelTarget_caster).add(labelTarget_accessory);
+
+    InstSceneLabel(labelTarget_instrumentMount,'label','label_1','1',"Select Mount Solution",1);
+    InstSceneLabel(labelTarget_column,'label','label_2','2',"Select Column",2);
+    InstSceneLabel(labelTarget_base,'label','label_3','3',"Select Base",3);
+    InstSceneLabel(labelTarget_caster,'label','label_4','4',"Select Casters",4);
+    InstSceneLabel(labelTarget_accessory,'label','label_5','5',"Select Accessories",5);
     
-    SceneTag(labelTarget_instrumentMount,document.querySelector('#label_1'),new THREE.Vector2(-5,-2.5),camera);  
-    SceneTag(labelTarget_column,document.querySelector('#label_2'),new THREE.Vector2(2,-2.5),camera);  
-    SceneTag(labelTarget_base,document.querySelector('#label_3'),new THREE.Vector2(-10,-10),camera);  
-    SceneTag(labelTarget_caster,document.querySelector('#label_4'),new THREE.Vector2(10,0),camera); 
-    SceneTag(labelTarget_accessory,document.querySelector('#label_5'),new THREE.Vector2(0,0),camera); 
   }
 
 
@@ -354,6 +361,7 @@ function onWindowResize()
     camera.aspect = threeContainer.clientWidth/threeContainer.clientHeight;//非全螢幕比例設定
 		camera.updateProjectionMatrix();
     renderer.setSize( threeContainer.clientWidth, threeContainer.clientHeight, false );
+    labelRenderer.setSize( threeContainer.clientWidth, threeContainer.clientHeight );
 
     composer.setSize( threeContainer.clientWidth, threeContainer.clientHeight, false );
 
@@ -365,6 +373,8 @@ function animate()
   requestAnimationFrame( animate );
   
   controls.update();
+
+  labelRenderer.render( scene, camera );
   
   RenderSwitch();
 
@@ -405,7 +415,7 @@ function EventListener()
 
   _SelectedItemController.addEventListener("wheel",function (event) {
 
-      if(current_INTERSECTED!=null)
+    if(current_INTERSECTED!=null)
     {
       if(event.deltaY<0)
       {
@@ -415,8 +425,7 @@ function EventListener()
       if(event.deltaY>0)
       {
         MoveModel("DOWN");
-      }
-      
+      }  
     }
       
   });
@@ -590,7 +599,7 @@ function AccessoryManager(i)
 
 //InstGLTFLoader(accessory_list[i].src,new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,accessory_list[i].//scene_name,null,scene);
 
-  InstGLTFLoaderForAccessory(accessory_list[i].src,new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,accessory_list[i].scene_name);
+  InstGLTFLoaderForAccessory(accessory_list[i].src,new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,accessory_list[i].scene_name,accessory_list[i].spec_name);
 
   if(isLabelOn)//生成零件時不顯示Label
   {
@@ -697,15 +706,59 @@ function InstantiateLabelTarget(thisLabelTarget,targetObject)
   scene.add(thisLabelTarget);
 }
 
-function SetupSenceTag(ccsStyle,thisEvent,index,thisSceneTagHolder)
+function InstSceneLabel(thisLabelTarget,thisCSS,thisID,thisContent,thisTitle,thisEvent)
 {
-  let thisSceneTag = document.createElement("div");
-	thisSceneTag.setAttribute("id", `label_${index}`);
-	thisSceneTag.setAttribute("class", ccsStyle);
-  thisSceneTag.textContent=`${index}`;
-	thisSceneTag.setAttribute("onclick", thisEvent+`(${index})`);
-  
-	thisSceneTagHolder.append(thisSceneTag);
+  const thisDiv = document.createElement( 'div' );
+  thisDiv.className = thisCSS;
+
+  if(thisContent!=null)thisDiv.textContent = thisContent;
+  if(thisID!=null)thisDiv.setAttribute("id",thisID);
+  if(thisTitle!=null)thisDiv.title=thisTitle;
+
+  const thisLabel = new CSS2DObject( thisDiv );
+  thisLabel.position.set( 0,0,0);
+  thisLabel.center.set( 0.5, 0.5 );
+  thisLabelTarget.add( thisLabel );
+  thisLabel.layers.set( 0 );
+
+  sceneLabels.push(thisLabel);
+
+  thisDiv.addEventListener("pointerdown", () => {
+
+    EditMode(thisEvent);
+    
+  });
+}
+
+function InstAccessorySceneLabel(thisLabelTarget,thisCSS,thisID,thisContent,thisTitle,thisEvent)
+{
+  const thisDiv = document.createElement( 'div' );
+  thisDiv.className = thisCSS;
+
+  if(thisContent!=null)thisDiv.textContent = thisContent;
+  if(thisID!=null)thisDiv.setAttribute("id",thisID);
+  if(thisTitle!=null)thisDiv.title=thisTitle;
+
+  let center= new THREE.Vector3();
+  const box= new THREE.Box3().setFromObject(thisLabelTarget);
+  box.getCenter(center);
+
+  console.log(center);
+
+  const thisLabel = new CSS2DObject( thisDiv );
+  thisLabel.position.set( center.x,center.y,center.z);
+  thisLabel.center.set( 0.5, 0.5 );
+  thisLabelTarget.attach( thisLabel );
+  thisLabel.layers.set( 0 );
+
+  accessoryLabels.push(thisLabel);
+
+  thisDiv.addEventListener("pointerdown", () => {
+
+    MoveModelON(thisEvent);
+    addSelectedObject(thisEvent);
+    
+  });
 }
 
 function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座 4:移動輪 5:配件
@@ -850,16 +903,48 @@ function ShowSceneLabelToggle()
 {
   if(!isLabelOn)
   {
-    _labelContainer.style.display="block";
+    //_labelContainer.style.display="block";
     //_ShowLabelToggle.style.cssText = "color: #6bb4f7;";
+
+    for(let i=0;i<sceneLabels.length;i++)
+    {
+      sceneLabels[i].visible=true;
+    }
+    
     isLabelOn=true;
   }
 
   else
   {
-    _labelContainer.style.display="none";
+    //_labelContainer.style.display="none";
     //_ShowLabelToggle.style.cssText = "color: rgba(0, 0, 0, 0.45);";
+
+    for(let i=0;i<sceneLabels.length;i++)
+    {
+      sceneLabels[i].visible=false;
+    }
+
     isLabelOn=false;
+  }
+}
+
+function ShowAccessorySceneLabelToggle()
+{
+  let isOn=accessoryLabels[0].visible;
+
+  for(let i=0;i<accessoryLabels.length;i++)
+  {
+    accessoryLabels[i].visible=!isOn;
+  }
+
+  if(accessoryLabels[0].visible)
+  {
+    _show_accessory_btn.style.cssText = "color:#6bb4f7";
+  }
+
+  else
+  {
+    _show_accessory_btn.style.cssText = "color:rgba(0, 0, 0, 0.45);";
   }
 }
 
@@ -1240,7 +1325,7 @@ async function TakeScreenshot()
  const _backgroundImage = await html2canvas(backgroundImage, {
    backgroundColor: null, // null保持透明,false不透明
    useCORS: true,
-   scale: 2.5
+   scale: 1
  });
 
   //載入玻璃面板
@@ -1248,7 +1333,7 @@ async function TakeScreenshot()
  const _frozenGlassPanel = await html2canvas(frozenGlassPanel, {
    backgroundColor: false, // null保持透明,false不透明
    useCORS: true,
-   scale: 2.5
+   scale: 1
  });
 
  //使用 html2canvas 渲染 UI（不包含 WebGL canvas）
@@ -1256,7 +1341,7 @@ async function TakeScreenshot()
   const _specificationTable = await html2canvas(specificationTable, {
     backgroundColor: null, // null保持透明,false不透明
     useCORS: true,
-    scale: 3
+    scale: 1
   });
 
   //主標題
@@ -1264,7 +1349,7 @@ async function TakeScreenshot()
   const _MainTitle = await html2canvas(MainTitle, {
    backgroundColor: null, // null保持透明,false不透明
    useCORS: true,
-   scale: 2.5
+   scale: 1
   });
 
   //副標題
@@ -1272,27 +1357,27 @@ async function TakeScreenshot()
   const _SubTitle = await html2canvas(SubTitle, {
    backgroundColor: null, // null保持透明,false不透明
    useCORS: true,
-   scale: 2.5
+   scale: 1
   });
 
-  setTimeout(() => {_loading_canvas.style.display="flex";CameraManager(0);}, 100);//1000=1sec}//開啟LoadingPage，回預設鏡頭位置
+  setTimeout(() => {_loading_canvas.style.display="flex";FX.CameraManager(0);}, 100);//1000=1sec}//開啟LoadingPage，回預設鏡頭位置
   setTimeout(() => { firstShot();}, 750);//1000=1sec}
-  setTimeout(() => {CameraManager(6);}, 1000);//1000=1sec}鏡頭轉向推車背面
+  setTimeout(() => {FX.CameraManager(6);}, 1000);//1000=1sec}鏡頭轉向推車背面
   setTimeout(() => { SecondShot();}, 2000);//1000=1sec}
   setTimeout(() => { SetupTimeData();}, 2500);//1000=1sec}
   setTimeout(() => { DrawTheImage();}, 3000);//1000=1sec}
-  setTimeout(() => { CameraManager(0);}, 4000);//1000=1sec}下載結束鏡頭歸位
+  setTimeout(() => { FX.CameraManager(0);}, 4000);//1000=1sec}下載結束鏡頭歸位
   setTimeout(() => { _loading_canvas.style.display="none";}, 5000);//1000=1sec}//隱藏LoadingPage
 
  function firstShot()//取得 Three.js 第一張畫面為圖片
  {
-    composer.render(); // 如果你有使用 postprocessing  
+    renderer.render( scene, camera ); // 如果你有使用 postprocessing  
     threeImageData_01 = renderer.domElement.toDataURL('image/png');
  }
 
  function SecondShot()//取得 Three.js 第二張畫面為圖片
  {
-    composer.render(); // 如果你有使用 postprocessing
+    renderer.render( scene, camera ); // 如果你有使用 postprocessing
     threeImageData_02 = renderer.domElement.toDataURL('image/png');
  }
 
@@ -1321,7 +1406,7 @@ async function TakeScreenshot()
       //ctx.drawImage(_frozenGlassPanel , 0, 0);
       
       ctx.drawImage(threeImg_01, 100, 0);
-      ctx.drawImage(threeImg_02, 1100, 0);
+      ctx.drawImage(threeImg_02, 540, 0);
 
       // Step 6: 再畫上 UI 圖像（透明背景）
       ctx.drawImage(_specificationTable, 150, 630);
@@ -1448,7 +1533,7 @@ function DefaultCasterToggle()
   _brake_toggle_5.checked=true;
 }
 
-function InstGLTFLoaderForAccessory(base64String,thisPos,thisRot,thisScale,thisName)
+function InstGLTFLoaderForAccessory(base64String,thisPos,thisRot,thisScale,thisName,thisSpecName)
 {
 
 	const arrayBuffer = FX.Base64ToArrayBuffer(base64String);
@@ -1471,6 +1556,10 @@ function InstGLTFLoaderForAccessory(base64String,thisPos,thisRot,thisScale,thisN
             current_INTERSECTED=model;
 
             addSelectedObject(model);
+
+            //InstSceneLabel(thisLabelTarget,thisCSS,thisID,thisContent,thisTitle,thisEvent)
+
+            InstAccessorySceneLabel(model,'accessory_tag','accessory','',`${thisSpecName}`,model);
         },
         (error) => {
             console.error('Failed to load model:', error);
@@ -1532,6 +1621,15 @@ function BtnEventListener()
   _reset_btn.addEventListener("click",function () {
 
     EditMode(0);
+      
+  });
+
+  
+  _show_accessory_btn.style.cssText = "color:#6bb4f7";
+
+  _show_accessory_btn.addEventListener("click",function () {
+
+    ShowAccessorySceneLabelToggle();
       
   });
 }
