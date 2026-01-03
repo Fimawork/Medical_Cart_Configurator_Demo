@@ -753,8 +753,8 @@ function InstAccessorySceneLabel(thisLabelTarget,thisCSS,thisID,thisContent,this
 
   thisDiv.addEventListener("pointerdown", () => {
 
-    MoveModelON(thisEvent);
-    //addSelectedObject(thisEvent);
+    //MoveModelON(thisEvent);<--
+    addSelectedObject(thisEvent);
     
   });
 }
