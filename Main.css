@@ -289,10 +289,10 @@ k
 				width: 18%;
 				aspect-ratio: 1 / 1;
 				cursor: move;
-				display: none;
+				display: block;
 				z-index: 9;
 				pointer-events: fill;
-				transform: translate(-50%,-50%);
+				/*transform: translate(-50%,-50%);*/
 			}
 
 			#SelectedItemWindow

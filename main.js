@@ -53,8 +53,7 @@ let _dimension_content= document.getElementById('dimension_content');
 let _ShowLabelToggle = document.getElementById('ShowLabelToggle');
 let _label_5 = document.getElementById('label_5');//配件用Label，同時用來檢查是否成功鎖定SceneTarget
 
-//配件編輯面板
-let _SelectedItemController= document.getElementById('SelectedItemController'); 
+
 //系統訊息
 let _system_info= document.getElementById('system_info'); 
 //Loading頁面
@@ -155,7 +154,7 @@ const params = {
 
 init();
 animate();
-EventListener();
+//EventListener();
 BtnEventListener();
 FX.InputEventListener(threeContainer);
 
@@ -394,7 +393,7 @@ function animate()
     _casterToggleContainer.style.display="none";
   }
 
-    UpdateMoveModelPanelPos();
+    //UpdateMoveModelPanelPos();
 }
 
 function RenderSwitch()
@@ -751,14 +750,191 @@ function InstAccessorySceneLabel(thisLabelTarget,thisCSS,thisID,thisContent,this
 
   accessoryLabels.push(thisLabel);
 
+
+  InstItemController(thisLabelTarget);
+
   thisDiv.addEventListener("pointerdown", () => {
 
     //MoveModelON(thisEvent);
-    current_INTERSECTED=scene.getObjectByName(`${thisID}`);
+    //current_INTERSECTED=scene.getObjectByName(`${thisID}`);
     
     //addSelectedObject(scene.getObjectByName(`${thisID}`));
-    
+    InstItemController(scene.getObjectByName(`${thisID}`))
   });
+}
+
+function InstItemController(target)
+{
+  current_INTERSECTED=target;
+
+  const controllerDiv = document.createElement( 'div' );
+  controllerDiv.className = "label_fadeIn_anim";
+  controllerDiv.setAttribute("id","SelectedItemController");
+  controllerDiv.style.display="block";
+
+
+  controllerDiv.addEventListener("wheel",function (event) {
+
+    if(target!=null)
+    {
+      if(event.deltaY<0)
+      {
+        MoveModel("UP");
+      }
+
+      if(event.deltaY>0)
+      {
+        MoveModel("DOWN");
+      }  
+    }
+
+    ///不執行Zoom in/out 
+    event.preventDefault();
+    event.stopPropagation();
+      
+  });
+ 
+  const windowDiv = document.createElement( 'div' );
+  windowDiv.className = "window_blinking_anim";
+  windowDiv.setAttribute("id","SelectedItemWindow");
+
+  controllerDiv.append(windowDiv);
+
+  const leftBtnDiv = document.createElement( 'div' );
+  leftBtnDiv.className = "ControllerBtn";
+  leftBtnDiv.title="Turn Clockwise";
+  leftBtnDiv.style.setProperty('top', '50%');
+	leftBtnDiv.style.setProperty('left', '5%');
+
+  const icon_left = document.createElement( 'j' );
+  icon_left.className = "fa-solid fa-angle-left fa-2x";
+  leftBtnDiv.append(icon_left);
+
+  windowDiv.append(leftBtnDiv);
+
+
+  leftBtnDiv.addEventListener("pointerdown",function () {
+
+    MoveModel(`LEFT`);
+      
+  });
+
+  const rightBtnDiv = document.createElement( 'div' );
+  rightBtnDiv.className = "ControllerBtn";
+  rightBtnDiv.title="Turn Counterclockwise";
+  rightBtnDiv.style.setProperty('top', '50%');
+	rightBtnDiv.style.setProperty('right', '-15%');
+
+  const icon_right = document.createElement( 'j' );
+  icon_right.className = "fa-solid fa-angle-right fa-2x";
+  rightBtnDiv.append(icon_right);
+
+  windowDiv.append(rightBtnDiv);
+
+  rightBtnDiv.addEventListener("pointerdown",function () {
+
+    MoveModel(`RIGHT`);
+      
+  });
+
+  const upBtnDiv = document.createElement( 'div' );
+  upBtnDiv.className = "ControllerBtn";
+  upBtnDiv.title="Move Up";
+  upBtnDiv.style.setProperty('top', '5%');
+	upBtnDiv.style.setProperty('left', '50%');
+
+  const icon_up = document.createElement( 'j' );
+  icon_up.className = "fa-solid fa-angle-up fa-2x";
+  upBtnDiv.append(icon_up);
+
+  windowDiv.append(upBtnDiv);
+
+  upBtnDiv.addEventListener("pointerdown",function () {
+
+    MoveModel(`UP`);
+      
+  });
+
+  const downBtnDiv = document.createElement( 'div' );
+  downBtnDiv.className = "ControllerBtn";
+  downBtnDiv.title="Move Down";
+  downBtnDiv.style.setProperty('bottom', '-15%');
+	downBtnDiv.style.setProperty('left', '50%');
+
+  const icon_down = document.createElement( 'j' );
+  icon_down.className = "fa-solid fa-angle-down fa-2x";
+  downBtnDiv.append(icon_down);
+
+  windowDiv.append(downBtnDiv);
+
+  downBtnDiv.addEventListener("pointerdown",function () {
+
+    MoveModel(`DOWN`);
+      
+  });
+
+  const confirmBtnDiv = document.createElement( 'div' );
+  confirmBtnDiv.className = "ControllerBtn";
+  confirmBtnDiv.title="Confirm";
+  confirmBtnDiv.style.setProperty('top', '4%');
+	confirmBtnDiv.style.setProperty('right', '-8%');
+  confirmBtnDiv.style.setProperty('width', '15%');
+	confirmBtnDiv.style.setProperty('height', '15%');
+  confirmBtnDiv.style.setProperty('box-shadow', '0 4px 30px rgba(0, 0, 0, 0.1)');
+
+  const icon_confirm = document.createElement( 'j' );
+  icon_confirm.className = "fa-solid fa-check fa-1.8x";
+  confirmBtnDiv.append(icon_confirm);
+
+  windowDiv.append(confirmBtnDiv);
+
+  confirmBtnDiv.addEventListener("pointerdown",function () {
+
+    MoveModelOFF();
+
+    target.remove(controllerDiv);
+    target.remove(thisLabel);
+    controllerDiv.remove();
+    controllerDiv.element = null;
+        
+  });
+
+  const deleteBtnDiv = document.createElement( 'div' );
+  deleteBtnDiv.className = "ControllerBtn";
+  deleteBtnDiv.title="Delete";
+  deleteBtnDiv.style.setProperty('bottom', '-10%');
+	deleteBtnDiv.style.setProperty('right', '-8%');
+  deleteBtnDiv.style.setProperty('width', '15%');
+	deleteBtnDiv.style.setProperty('height', '15%');
+  deleteBtnDiv.style.setProperty('box-shadow', '0 4px 30px rgba(0, 0, 0, 0.1)');
+
+  const icon_delete = document.createElement( 'j' );
+  icon_delete.className = "fa-solid fa-xmark fa-1.8x";
+  deleteBtnDiv.append(icon_delete);
+
+  windowDiv.append(deleteBtnDiv);
+
+  deleteBtnDiv.addEventListener("pointerdown",function () {
+
+    target.remove(controllerDiv);
+    target.remove(thisLabel);
+    controllerDiv.remove();
+    controllerDiv.element = null;
+
+    DeleteAccessory();
+      
+  });
+
+  let center= new THREE.Vector3();
+  const box= new THREE.Box3().setFromObject(target);
+  box.getCenter(center);
+ 
+  const thisLabel = new CSS2DObject( controllerDiv );
+  thisLabel.position.set( center.x,center.y,center.z);
+  thisLabel.center.set( 0.5, 0.5 );
+  target.attach( thisLabel );
+  thisLabel.layers.set( 0 );
+
 }
 
 function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座 4:移動輪 5:配件
@@ -1166,6 +1342,7 @@ function MoveModelON(target)
 
 function MoveModelOFF()
 {
+  
   if(current_INTERSECTED!=null&&current_INTERSECTED.position.y>=1)
   {
     current_INTERSECTED=null;
@@ -1209,7 +1386,6 @@ function DeleteAccessory()
 {
   try
   {
-    
     if(current_INTERSECTED!=null)
     {
       //刪除accessory label
@@ -1583,43 +1759,33 @@ function UpdateMoveModelPanelPos()
 {
   if(current_INTERSECTED!=null)
   {
-//    const aspect = threeContainer.clientWidth / threeContainer.clientHeight;
+    const aspect = threeContainer.clientWidth / threeContainer.clientHeight;
 
-		//if(aspect>1.5)//PC或平板
-		//{
-//			let center= new THREE.Vector3();
+		if(aspect>1.5)//PC或平板
+		{
+			let center= new THREE.Vector3();
 
       isSelectedItemControllerOn=true;
 
-//     const box= new THREE.Box3().setFromObject(current_INTERSECTED);
-//     box.getCenter(center);
-//
-//     var width = threeContainer.clientWidth, height = threeContainer.clientHeight;
-//     var widthHalf = width / 2, heightHalf = height / 2;
-//
-//     center.project(camera);
-//     center.x = ( center.x * widthHalf ) + widthHalf;
-//     center.y = - ( (center.y) * heightHalf ) + heightHalf;
-//
-      //_SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
-	//	}
-//
-  //  else
-  //  {
-  //    _SelectedItemController.style.cssText = `position:absolute;top:50%;left:50%;display:block;`;
-  //  }
-  let target=document.getElementById(`${current_INTERSECTED.name}`);
+      const box= new THREE.Box3().setFromObject(current_INTERSECTED);
+      box.getCenter(center);
 
-  let rect=target.getBoundingClientRect();
+      var width = threeContainer.clientWidth, height = threeContainer.clientHeight;
+      var widthHalf = width / 2, heightHalf = height / 2;
 
-  let center_x=(rect.left+rect.right)/2;
-  let center_y=(rect.top+rect.bottom)/2;
- 
-  //_SelectedItemController.style.cssText = `position:absolute;top:${center_y/threeContainer.clientHeight*100}%;left:${center_x/threeContainer.clientWidth*100}%;//display:block;`;
+      center.project(camera);
+      center.x = ( center.x * widthHalf ) + widthHalf;
+      center.y = - ( (center.y) * heightHalf ) + heightHalf;
 
-  _SelectedItemController.style.cssText = `display:block;`;
-    
-   //console.log(current_INTERSECTED);
+      _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
+		}
+
+    else
+    {
+      _SelectedItemController.style.cssText = `position:absolute;top:50%;left:50%;display:block;`;
+    }
+
+
   }
 
   else
