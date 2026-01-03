@@ -755,11 +755,11 @@ function InstAccessorySceneLabel(thisLabelTarget,thisCSS,thisID,thisContent,this
 
   thisDiv.addEventListener("pointerdown", () => {
 
-    //MoveModelON(thisEvent);
-    //current_INTERSECTED=scene.getObjectByName(`${thisID}`);
-    
-    //addSelectedObject(scene.getObjectByName(`${thisID}`));
-    InstItemController(scene.getObjectByName(`${thisID}`))
+    if(document.getElementById('SelectedItemController')===null)
+    {
+      InstItemController(scene.getObjectByName(`${thisID}`));
+    };
+
   });
 }
 
@@ -892,10 +892,10 @@ function InstItemController(target)
 
     MoveModelOFF();
 
-    target.remove(controllerDiv);
-    target.remove(thisLabel);
-    controllerDiv.remove();
-    controllerDiv.element = null;
+    //target.remove(controllerDiv);
+    //target.remove(thisLabel);
+    //controllerDiv.remove();
+    //controllerDiv.element = null;
         
   });
 
@@ -934,15 +934,13 @@ function InstItemController(target)
   thisLabel.center.set( 0.5, 0.5 );
   target.attach( thisLabel );
   thisLabel.layers.set( 0 );
-
+  thisLabel.name="CSS2D_SelectedItemController";
+   console.log(target);
 }
 
 function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座 4:移動輪 5:配件
 {
 
-  //重置所有Raycast狀態
-  DefaultRaycast();
-  
   switch(i)
   {
     case 0:
@@ -1027,6 +1025,9 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
 
     break;
   }
+
+    //重置所有Raycast狀態
+  DefaultRaycast();
   
 }
 
@@ -1342,7 +1343,17 @@ function MoveModelON(target)
 
 function MoveModelOFF()
 {
-  
+
+  if(document.getElementById('SelectedItemController')!=null)
+  {
+    current_INTERSECTED.traverse((obj) => {
+      if (obj.isCSS2DObject&&obj.name==="CSS2D_SelectedItemController") {
+        current_INTERSECTED.remove(document.getElementById('SelectedItemController'));
+        current_INTERSECTED.remove(obj);
+      }
+    });
+  }
+
   if(current_INTERSECTED!=null&&current_INTERSECTED.position.y>=1)
   {
     current_INTERSECTED=null;
