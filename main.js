@@ -1601,14 +1601,18 @@ function UpdateMoveModelPanelPos()
       center.x = ( center.x * widthHalf ) + widthHalf;
       center.y = - ( (center.y) * heightHalf ) + heightHalf;
 
-      _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
+      //_SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
 	//	}
 //
   //  else
   //  {
   //    _SelectedItemController.style.cssText = `position:absolute;top:50%;left:50%;display:block;`;
   //  }
+  let target=document.getElementById(`${current_INTERSECTED.name}`);
+
+  _SelectedItemController.style.cssText = `position:absolute;top:${target.style.top}%;left:${target.style.left}%;display:block;`;
     
+   //console.log(current_INTERSECTED);
   }
 
   else
