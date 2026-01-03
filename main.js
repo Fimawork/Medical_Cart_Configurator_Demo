@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { Sky } from 'three/addons/objects/Sky.js';
-import {CameraManager,UpdateCameraPosition,CameraDefaultPos, InputEvent,Camera_Inspector,ControlsTargetDefaultPos,SetDefaultCameraStatus,InstFBXLoader,InstGLTFLoader,FindMataterialByName,posData,dracoLoader,InstGLTFDracoLoader,InstGLTFDracoBase64Loader,WebGLInspector} from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@V1.1/fx_functions.js';
+import * as FX from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@v1.6/fx_functions.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
@@ -42,21 +42,21 @@ let INTERSECTED=null;
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 
-let _instrument_mount_content = document.querySelector('#instrument_mount_content');
-let _column_content = document.querySelector('#column_content');
-let _base_content = document.querySelector('#base_content');
-let _caster_content = document.querySelector('#caster_content');
-let _accessory_content = document.querySelector('#accessory_content');
-let _dimension_content= document.querySelector('#dimension_content');
+let _instrument_mount_content = document.getElementById('instrument_mount_content');
+let _column_content = document.getElementById('column_content');
+let _base_content = document.getElementById('base_content');
+let _caster_content = document.getElementById('caster_content');
+let _accessory_content = document.getElementById('accessory_content');
+let _dimension_content= document.getElementById('dimension_content');
 
-let _labelContainer = document.querySelector('#labelContainer');
-let _ShowLabelToggle = document.querySelector('#ShowLabelToggle');
-let _label_5 = document.querySelector('#label_5');//配件用Label，同時用來檢查是否成功鎖定SceneTarget
+let _labelContainer = document.getElementById('labelContainer');
+let _ShowLabelToggle = document.getElementById('ShowLabelToggle');
+let _label_5 = document.getElementById('label_5');//配件用Label，同時用來檢查是否成功鎖定SceneTarget
 
 //配件編輯面板
-let _SelectedItemController= document.querySelector('#SelectedItemController'); 
+let _SelectedItemController= document.getElementById('SelectedItemController'); 
 //系統訊息
-let _system_info= document.querySelector('#system_info'); 
+let _system_info= document.getElementById('system_info'); 
 //Loading頁面
 let _loading_canvas=document.getElementById('loading_canvas');
 
@@ -67,12 +67,12 @@ let caster_type="";
 
 
 //caster煞車選配按鈕功能
-let _casterToggleContainer=document.querySelector('#casterToggleContainer');
-let _brake_toggle_1=document.querySelector('#brake_toggle_1');
-let _brake_toggle_2=document.querySelector('#brake_toggle_2');
-let _brake_toggle_3=document.querySelector('#brake_toggle_3');
-let _brake_toggle_4=document.querySelector('#brake_toggle_4');
-let _brake_toggle_5=document.querySelector('#brake_toggle_5');
+let _casterToggleContainer=document.getElementById('casterToggleContainer');
+let _brake_toggle_1=document.getElementById('brake_toggle_1');
+let _brake_toggle_2=document.getElementById('brake_toggle_2');
+let _brake_toggle_3=document.getElementById('brake_toggle_3');
+let _brake_toggle_4=document.getElementById('brake_toggle_4');
+let _brake_toggle_5=document.getElementById('brake_toggle_5');
 //let _caster_toggle_06=document.getElementById('caster_toggle_06');
 
 let current_accessory_list=[];
@@ -87,26 +87,26 @@ let isCasterFocus=false;
 const maximum_height=1;
 const minimum_height=-3.5;
 
-let _item_01_btn = document.querySelector('#item_01_btn');
-let _item_02_btn = document.querySelector('#item_02_btn');
-let _item_03_btn = document.querySelector('#item_03_btn');
-let _item_04_btn = document.querySelector('#item_04_btn');
-let _item_05_btn = document.querySelector('#item_05_btn');
-let _item_06_btn = document.querySelector('#item_06_btn');
-let _item_07_btn = document.querySelector('#item_07_btn');
-let _item_08_btn = document.querySelector('#item_08_btn');
-let _item_09_btn = document.querySelector('#item_09_btn');
-let _item_10_btn = document.querySelector('#item_10_btn');
-let _item_11_btn = document.querySelector('#item_11_btn');
-let _item_12_btn = document.querySelector('#item_12_btn');
-let _item_13_btn = document.querySelector('#item_13_btn');
-let _item_14_btn = document.querySelector('#item_14_btn');
-let _item_15_btn = document.querySelector('#item_15_btn');
-let _item_16_btn = document.querySelector('#item_16_btn');
-let _item_17_btn = document.querySelector('#item_17_btn');
-let _item_18_btn = document.querySelector('#item_18_btn');
-let _item_19_btn = document.querySelector('#item_19_btn');
-let _item_20_btn = document.querySelector('#item_20_btn');
+let _item_01_btn = document.getElementById('item_01_btn');
+let _item_02_btn = document.getElementById('item_02_btn');
+let _item_03_btn = document.getElementById('item_03_btn');
+let _item_04_btn = document.getElementById('item_04_btn');
+let _item_05_btn = document.getElementById('item_05_btn');
+let _item_06_btn = document.getElementById('item_06_btn');
+let _item_07_btn = document.getElementById('item_07_btn');
+let _item_08_btn = document.getElementById('item_08_btn');
+let _item_09_btn = document.getElementById('item_09_btn');
+let _item_10_btn = document.getElementById('item_10_btn');
+let _item_11_btn = document.getElementById('item_11_btn');
+let _item_12_btn = document.getElementById('item_12_btn');
+let _item_13_btn = document.getElementById('item_13_btn');
+let _item_14_btn = document.getElementById('item_14_btn');
+let _item_15_btn = document.getElementById('item_15_btn');
+let _item_16_btn = document.getElementById('item_16_btn');
+let _item_17_btn = document.getElementById('item_17_btn');
+let _item_18_btn = document.getElementById('item_18_btn');
+let _item_19_btn = document.getElementById('item_19_btn');
+let _item_20_btn = document.getElementById('item_20_btn');
 
 let item_btn_list=[];
 
@@ -154,11 +154,13 @@ init();
 animate();
 EventListener();
 BtnEventListener();
-
+FX.InputEventListener(threeContainer);
 
 
 function init()
 {
+  FX.SetupEnvironment("cloud");
+
   scene = new THREE.Scene();
   //scene.background= new THREE.Color( 0xFFFFFF );
   camera = new THREE.PerspectiveCamera( 50, threeContainer.clientWidth / threeContainer.clientHeight, 0.1, 1000 );//非全螢幕比例設定
@@ -174,32 +176,29 @@ function init()
   //document.body.appendChild( renderer.domElement );
   threeContainer.appendChild( renderer.domElement );
 
-  //draco模組
-  dracoLoader.setDecoderPath( 'https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/libs/draco/' );
-  dracoLoader.preload();
 
   const CameraDefaultPos=new THREE.Vector3(-4.848,5.501,-4.925);
   const ControlsTargetDefaultPos=new THREE.Vector3(-0.131,2.274,-0.023);
   camera.position.copy(CameraDefaultPos);
-  posData[0]={ camera_pos:CameraDefaultPos, controlsTarget_pos:ControlsTargetDefaultPos};
+  FX.posData[0]={ camera_pos:CameraDefaultPos, controlsTarget_pos:ControlsTargetDefaultPos};
 
   SelectedItemControllerTarget.position.set(0,20,0);
   scene.add(SelectedItemControllerTarget);
 
   //儀器支架
-  posData[1]={ camera_pos:new THREE.Vector3(-0.244,5.351,-0.791), controlsTarget_pos:new THREE.Vector3(0.301,3.856,1.063)};
+  FX.posData[1]={ camera_pos:new THREE.Vector3(-0.244,5.351,-0.791), controlsTarget_pos:new THREE.Vector3(0.301,3.856,1.063)};
   //中柱
-  posData[2]={ camera_pos:new THREE.Vector3(-4.642,3.297,2.753), controlsTarget_pos:new THREE.Vector3(0.570,2.752,-0.238)};
+  FX.posData[2]={ camera_pos:new THREE.Vector3(-4.642,3.297,2.753), controlsTarget_pos:new THREE.Vector3(0.570,2.752,-0.238)};
   //底座
-  posData[3]={ camera_pos:new THREE.Vector3(-3.681,3.052,-1.480), controlsTarget_pos:new THREE.Vector3(0.014,0.174,-0.001)};
+  FX.posData[3]={ camera_pos:new THREE.Vector3(-3.681,3.052,-1.480), controlsTarget_pos:new THREE.Vector3(0.014,0.174,-0.001)};
   //移動輪
-  posData[4]={ camera_pos:new THREE.Vector3(0.494,3.414,-3.141), controlsTarget_pos:new THREE.Vector3(-0.090,0.533,-0.423)};
+  FX.posData[4]={ camera_pos:new THREE.Vector3(0.494,3.414,-3.141), controlsTarget_pos:new THREE.Vector3(-0.090,0.533,-0.423)};
   
   //配件(增加配件時觸發)
-  posData[5]={ camera_pos:new THREE.Vector3(-8.263,6.645,-7.018), controlsTarget_pos:new THREE.Vector3(0.380,3.145,0.451)};
+  FX.posData[5]={ camera_pos:new THREE.Vector3(-8.263,6.645,-7.018), controlsTarget_pos:new THREE.Vector3(0.380,3.145,0.451)};
 
   //推車背面(下載檔案時觸發)
-  posData[6]={ camera_pos:new THREE.Vector3(5.219,5.358,5.276), controlsTarget_pos:new THREE.Vector3(0.073,1.928,0.010)};
+  FX.posData[6]={ camera_pos:new THREE.Vector3(5.219,5.358,5.276), controlsTarget_pos:new THREE.Vector3(0.073,1.928,0.010)};
 
   ///利用座標設定旋轉中心及鏡頭焦點，camera不須另外設定初始角度
   controls = new OrbitControls( camera, renderer.domElement );
@@ -214,16 +213,7 @@ function init()
   controls.update();
 
   ///hdri 環境光源
-  new RGBELoader()
-					.setPath( 'textures/hdri/' )
-					.load( 'studio_small_09_2k.hdr', function ( texture ) {
-
-						texture.mapping = THREE.EquirectangularReflectionMapping;
-
-						//scene.background = texture;
-						scene.environment = texture;
-
-	} );
+  FX.LoadHDRWithPMREM('./textures/hdri/studio_small_09_2k.hdr',scene,renderer);
 
    ///postprocessing
     composer = new EffectComposer( renderer );
@@ -248,7 +238,7 @@ function init()
     outlinePass.visibleEdgeColor.set(params.color);
 
   ///紀錄相機的初始位置
-	SetDefaultCameraStatus(CameraDefaultPos,ControlsTargetDefaultPos);
+	FX.SetDefaultCameraStatus(CameraDefaultPos,ControlsTargetDefaultPos);
 
   //LabelTarget
   labelTarget_instrumentMount.position.set(0,4.6241445,0);
@@ -317,13 +307,13 @@ function init()
   ///EventListener
   window.addEventListener( 'resize', onWindowResize );  
   window.addEventListener("pointerdown", (event) => {
-    InputEvent();
+    //InputEvent();
      mousePos = { x: event.clientX, y: event.clientY };
 		onPointerMove(event);//改以點擊作為Raycast判斷的時間點，改善觸控螢幕誤判狀況
   });
 
   window.addEventListener("wheel", (event) => {
-    InputEvent();
+    //InputEvent();
   });
 
 
@@ -380,7 +370,7 @@ function animate()
 
   if(isCameraManagerOn)
   {
-    UpdateCameraPosition(camera,controls);
+    FX.UpdateCameraPosition(camera,controls);
     RaycastFunction();
   }
 
@@ -504,7 +494,7 @@ function InstantiatModel(scene_name,src,postprocessing_layer,delay)
 {
   if(scene.getObjectByName(scene_name)==null)//
   {
-    InstGLTFDracoBase64Loader(src,modelPosition,modelRotation,modeScale,scene_name,null, scene);
+    FX.InstGLTFDracoBase64Loader(src,modelPosition,modelRotation,modeScale,scene_name,null, scene);
     
     //指定新outline指定物件，並hightlight該物件
     setTimeout(() => {postprocessing_layer.push(scene.getObjectByName(scene_name));addSelectedObject(scene.getObjectByName(scene_name));}, delay*1000);//1000=1sec}
@@ -520,7 +510,7 @@ function InstrumentMountManager(i)//儀器支撐板設定
 
   ResetInstrumentModule();//重置儀器支架
 
-  if(isCameraManagerOn)CameraManager(1);
+  if(isCameraManagerOn)FX.CameraManager(1);
   
   InstantiatModel(instrument_mount_list[i].scene_name,instrument_mount_list[i].src,current_instrument_mount,0.5);
 
@@ -536,7 +526,7 @@ function ColumnManager(i)
 
   ResetColumnModule()//重置中柱
 
-  if(isCameraManagerOn)CameraManager(2);
+  if(isCameraManagerOn)FX.CameraManager(2);
 
   InstantiatModel(column_list[i].scene_name,column_list[i].src,current_column,0.5);
 
@@ -553,7 +543,7 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
 
   DefaultCasterToggle();//還原為預設移動輪煞車狀態(全部含煞車)
 
-  if(isCameraManagerOn)CameraManager(3);
+  if(isCameraManagerOn)FX.CameraManager(3);
 
   InstantiatModel(base_list[i].scene_name,base_list[i].src,current_base,0.5);
   
@@ -575,7 +565,7 @@ function CasterManager(i)//移動輪設定功能
 
   caster_index=i;
 
-  if(isCameraManagerOn)CameraManager(4);
+  if(isCameraManagerOn)FX.CameraManager(4);
       
   InstantiatModel(caster_list[i][base_index].scene_name,caster_list[i][base_index].src,current_caster,1);
 
@@ -596,7 +586,7 @@ function AccessoryManager(i)
 
   MoveModelOFF();//重置模型移動面板
 
-  CameraManager(5);
+  FX.CameraManager(5);
 
 //InstGLTFLoader(accessory_list[i].src,new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,accessory_list[i].//scene_name,null,scene);
 
@@ -728,7 +718,7 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
   {
     case 0:
 
-    CameraManager(0);
+    FX.CameraManager(0);
 
     FilterItems(0);//還原篩選狀態
 
@@ -740,7 +730,7 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
 
     case 1:
 
-    CameraManager(1);
+    FX.CameraManager(1);
 
     for(let i=0;i<current_instrument_mount.length;i++)
     {
@@ -755,7 +745,7 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
 
     case 2:
 
-    CameraManager(2);
+    FX.CameraManager(2);
 
     for(let i=0;i<current_column.length;i++)
     {
@@ -770,7 +760,7 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
 
     case 3:
 
-    CameraManager(3);
+    FX.CameraManager(3);
 
     for(let i=0;i<current_base.length;i++)
     {
@@ -785,7 +775,7 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
 
     case 4:
 
-    CameraManager(4);
+    FX.CameraManager(4);
 
     for(let i=0;i<current_caster.length;i++)
     {
@@ -1460,28 +1450,11 @@ function DefaultCasterToggle()
 
 function InstGLTFLoaderForAccessory(base64String,thisPos,thisRot,thisScale,thisName)
 {
-  //加密模組
-	function base64ToArrayBuffer(base64) 
-	{
-		// 去除所有非 base64 字元
-		base64 = base64.replace(/[^A-Za-z0-9+/=]/g, "");
 
-    	const binary = atob(base64);
-    	const len = binary.length;
-    	const bytes = new Uint8Array(len);
-
-    	for (let i = 0; i < len; i++) 
-		{
-    	    bytes[i] = binary.charCodeAt(i);
-    	}
-
-    	return bytes.buffer;
-	}
-
-	const arrayBuffer = base64ToArrayBuffer(base64String);
+	const arrayBuffer = FX.Base64ToArrayBuffer(base64String);
 
   const loader = new GLTFLoader();
-  loader.setDRACOLoader(dracoLoader);
+  loader.setDRACOLoader(FX.dracoLoader);
   loader.parse(
         arrayBuffer,
         '',
@@ -1550,7 +1523,7 @@ function BtnEventListener()
   
   _default_camera_btn.addEventListener("click",function () {
 
-    CameraManager(0);
+    FX.CameraManager(0);
       
   });
 
