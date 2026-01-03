@@ -1583,24 +1583,24 @@ function UpdateMoveModelPanelPos()
 {
   if(current_INTERSECTED!=null)
   {
-    const aspect = threeContainer.clientWidth / threeContainer.clientHeight;
+//    const aspect = threeContainer.clientWidth / threeContainer.clientHeight;
 
 		//if(aspect>1.5)//PC或平板
 		//{
-			let center= new THREE.Vector3();
+//			let center= new THREE.Vector3();
 
       isSelectedItemControllerOn=true;
 
-      const box= new THREE.Box3().setFromObject(current_INTERSECTED);
-      box.getCenter(center);
-
-      var width = threeContainer.clientWidth, height = threeContainer.clientHeight;
-      var widthHalf = width / 2, heightHalf = height / 2;
-
-      center.project(camera);
-      center.x = ( center.x * widthHalf ) + widthHalf;
-      center.y = - ( (center.y) * heightHalf ) + heightHalf;
-
+//     const box= new THREE.Box3().setFromObject(current_INTERSECTED);
+//     box.getCenter(center);
+//
+//     var width = threeContainer.clientWidth, height = threeContainer.clientHeight;
+//     var widthHalf = width / 2, heightHalf = height / 2;
+//
+//     center.project(camera);
+//     center.x = ( center.x * widthHalf ) + widthHalf;
+//     center.y = - ( (center.y) * heightHalf ) + heightHalf;
+//
       //_SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
 	//	}
 //
