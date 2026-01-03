@@ -1615,7 +1615,9 @@ function UpdateMoveModelPanelPos()
   let center_x=(rect.left+rect.right)/2;
   let center_y=(rect.top+rect.bottom)/2;
  
-  _SelectedItemController.style.cssText = `position:absolute;top:${center_y/threeContainer.clientHeight*100}%;left:${center_x/threeContainer.clientWidth*100}%;display:block;`;
+  //_SelectedItemController.style.cssText = `position:absolute;top:${center_y/threeContainer.clientHeight*100}%;left:${center_x/threeContainer.clientWidth*100}%;//display:block;`;
+
+  _SelectedItemController.style.cssText = `display:block;`;
     
    //console.log(current_INTERSECTED);
   }
