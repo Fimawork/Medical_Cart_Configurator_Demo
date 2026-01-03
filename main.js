@@ -730,7 +730,7 @@ function InstSceneLabel(thisLabelTarget,thisCSS,thisID,thisContent,thisTitle,thi
   });
 }
 
-function InstAccessorySceneLabel(thisLabelTarget,thisCSS,thisID,thisContent,thisTitle,thisEvent)
+function InstAccessorySceneLabel(thisLabelTarget,thisCSS,thisID,thisContent,thisTitle)
 {
   const thisDiv = document.createElement( 'div' );
   thisDiv.className = thisCSS;
@@ -754,8 +754,9 @@ function InstAccessorySceneLabel(thisLabelTarget,thisCSS,thisID,thisContent,this
   thisDiv.addEventListener("pointerdown", () => {
 
     //MoveModelON(thisEvent);
-    current_INTERSECTED=thisEvent;
-    addSelectedObject(thisEvent);
+    current_INTERSECTED=scene.getObjectByName(`${thisID}`);
+    
+    addSelectedObject(scene.getObjectByName(`${thisID}`));
     
   });
 }
@@ -1569,7 +1570,7 @@ function InstGLTFLoaderForAccessory(base64String,thisPos,thisRot,thisScale,thisN
 
             //InstSceneLabel(thisLabelTarget,thisCSS,thisID,thisContent,thisTitle,thisEvent)
 
-            InstAccessorySceneLabel(model,'accessory_tag',`${thisName}`,'',`${thisSpecName}`,model);
+            InstAccessorySceneLabel(model,'accessory_tag',`${thisName}`,'',`${thisSpecName}`);
         },
         (error) => {
             console.error('Failed to load model:', error);
