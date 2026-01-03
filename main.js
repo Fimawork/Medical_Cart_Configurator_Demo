@@ -467,17 +467,17 @@ function EventListener()
             EditMode(4);
           }
         }
+
+        if(INTERSECTED.name.includes("accessory"))
+        {
+          if(current_INTERSECTED==null)//避免A物件編輯時，點選到B物件
+          {
+            MoveModelON(INTERSECTED);
+            addSelectedObject(INTERSECTED);
+          }     
+        }
       }
       
-      if(INTERSECTED.name.includes("accessory"))
-      {
-        if(current_INTERSECTED==null)//避免A物件編輯時，點選到B物件
-        {
-          MoveModelON(INTERSECTED);
-          addSelectedObject(INTERSECTED);
-        }     
-      }
-
       if(isCasterFocus)//如果在編輯移動輪狀態，依據操作更新break_toggle位置
       {
         SetupCasterBrakePanelOn();
@@ -753,7 +753,7 @@ function InstAccessorySceneLabel(thisLabelTarget,thisCSS,thisID,thisContent,this
 
   thisDiv.addEventListener("pointerdown", () => {
 
-    //MoveModelON(thisEvent);<--
+    MoveModelON(thisEvent);
     addSelectedObject(thisEvent);
     
   });
