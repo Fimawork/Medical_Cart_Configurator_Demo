@@ -743,8 +743,6 @@ function InstAccessorySceneLabel(thisLabelTarget,thisCSS,thisID,thisContent,this
   const box= new THREE.Box3().setFromObject(thisLabelTarget);
   box.getCenter(center);
 
-  console.log(center);
-
   const thisLabel = new CSS2DObject( thisDiv );
   thisLabel.position.set( center.x,center.y,center.z);
   thisLabel.center.set( 0.5, 0.5 );
@@ -756,7 +754,7 @@ function InstAccessorySceneLabel(thisLabelTarget,thisCSS,thisID,thisContent,this
   thisDiv.addEventListener("pointerdown", () => {
 
     MoveModelON(thisEvent);
-    addSelectedObject(thisEvent);
+    //addSelectedObject(thisEvent);
     
   });
 }
@@ -1213,6 +1211,12 @@ function DeleteAccessory()
     
     if(current_INTERSECTED!=null)
     {
+      //刪除accessory label
+      if(document.getElementById(`${current_INTERSECTED.name}`)!=null)
+      {
+        document.getElementById(`${current_INTERSECTED.name}`).remove();
+      }
+
       scene.remove(current_INTERSECTED);
       current_INTERSECTED=null;
     }
@@ -1289,6 +1293,12 @@ function DeleteunreasonableItem()
   {
     if(current_accessories[i].position.y>=maximum_height||current_accessories[i].position.y<=minimum_height)
     {
+      //刪除Accessory Label
+      if(document.getElementById(`${current_accessories[i].name}`)!=null)
+      {
+        document.getElementById(`${current_accessories[i].name}`).remove();
+      }
+
       scene.remove(current_accessories[i]);
 
       current_accessories[i].traverse( function ( object ) {
@@ -1559,7 +1569,7 @@ function InstGLTFLoaderForAccessory(base64String,thisPos,thisRot,thisScale,thisN
 
             //InstSceneLabel(thisLabelTarget,thisCSS,thisID,thisContent,thisTitle,thisEvent)
 
-            InstAccessorySceneLabel(model,'accessory_tag','accessory','',`${thisSpecName}`,model);
+            InstAccessorySceneLabel(model,'accessory_tag',`${thisName}`,'',`${thisSpecName}`,model);
         },
         (error) => {
             console.error('Failed to load model:', error);
