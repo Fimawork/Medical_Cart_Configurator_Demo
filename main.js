@@ -756,7 +756,7 @@ function InstAccessorySceneLabel(thisLabelTarget,thisCSS,thisID,thisContent,this
     //MoveModelON(thisEvent);
     current_INTERSECTED=scene.getObjectByName(`${thisID}`);
     
-    addSelectedObject(scene.getObjectByName(`${thisID}`));
+    //addSelectedObject(scene.getObjectByName(`${thisID}`));
     
   });
 }
