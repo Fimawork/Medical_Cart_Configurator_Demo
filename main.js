@@ -1582,7 +1582,7 @@ function UpdateMoveModelPanelPos()
 {
   if(current_INTERSECTED!=null)
   {
-    const aspect = window.innerWidth / window.innerHeight;
+    const aspect = threeContainer.clientWidth / threeContainer.clientHeight;
 
 		//if(aspect>1.5)//PC或平板
 		//{
