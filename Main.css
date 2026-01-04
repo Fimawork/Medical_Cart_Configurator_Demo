@@ -164,7 +164,7 @@ k
   text-align: left;
   font-family: "Roboto", sans-serif;
   font-weight: 300;
-  font-size: 12px;
+  font-size: 15px;
   line-height:150%;
   color: rgba(0, 0, 0, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.15);
@@ -207,14 +207,13 @@ k
 				flex-direction: column;
 			}
 			
-			#hud_btn_panel
-			{
-				position: absolute;
-				right: 31%;
-				top:21%;
-				width: 30px;
-				transform: scale(0.75);
-			}
+#hud_btn_panel
+{
+	position: absolute;
+	right: 31%;
+	top:21%;
+	width: 30px;
+}
 
 .hud_btn
 {
@@ -691,7 +690,6 @@ h3
 					left: 68%;
 					top:18%;
 					width: 33px;
-					transform: scale(0.75);
 				}
 
 				.hud_btn
@@ -754,7 +752,6 @@ h3
 					left: 6%;
 					top:15%;
 					width: 30px;
-					transform: scale(1);
 				}
 
 				#main_title
@@ -870,6 +867,7 @@ h3
 	{
 		top:140%;
 		width: 75%;
+		display: none;
 	}
 
 	.mainBottom_panel
@@ -935,14 +933,13 @@ h3
 	  display: flex;
 	  flex-direction: column;
 	  justify-content: center;
-	  font-size: 12px;
+	  font-size: 15px;
     }
 
 	#hud_btn_panel
 	{
 		left:88%;
 		top:30%;
-		transform: scale(0.6);
 	}
 
 	.hud_btn
