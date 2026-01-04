@@ -747,6 +747,7 @@ function InstAccessorySceneLabel(thisLabelTarget,thisCSS,thisID,thisContent,this
   thisLabel.center.set( 0.5, 0.5 );
   thisLabelTarget.attach( thisLabel );
   thisLabel.layers.set( 0 );
+  thisLabel.name="CSS2D_Accessory_SceneLabel";
 
   accessoryLabels.push(thisLabel);
 
@@ -757,7 +758,7 @@ function InstAccessorySceneLabel(thisLabelTarget,thisCSS,thisID,thisContent,this
 
     if(document.getElementById('SelectedItemController')===null)
     {
-      InstItemController(scene.getObjectByName(`${thisID}`));
+      InstItemController(thisLabelTarget);
     };
 
   });
@@ -883,7 +884,7 @@ function InstItemController(target)
   confirmBtnDiv.style.setProperty('box-shadow', '0 4px 30px rgba(0, 0, 0, 0.1)');
 
   const icon_confirm = document.createElement( 'j' );
-  icon_confirm.className = "fa-solid fa-check fa-1.8x";
+  icon_confirm.className = "fa-solid fa-check fa-2x";
   confirmBtnDiv.append(icon_confirm);
 
   windowDiv.append(confirmBtnDiv);
@@ -891,12 +892,7 @@ function InstItemController(target)
   confirmBtnDiv.addEventListener("pointerdown",function () {
 
     MoveModelOFF();
-
-    //target.remove(controllerDiv);
-    //target.remove(thisLabel);
-    //controllerDiv.remove();
-    //controllerDiv.element = null;
-        
+      
   });
 
   const deleteBtnDiv = document.createElement( 'div' );
@@ -909,7 +905,7 @@ function InstItemController(target)
   deleteBtnDiv.style.setProperty('box-shadow', '0 4px 30px rgba(0, 0, 0, 0.1)');
 
   const icon_delete = document.createElement( 'j' );
-  icon_delete.className = "fa-solid fa-xmark fa-1.8x";
+  icon_delete.className = "fa-solid fa-xmark fa-2x";
   deleteBtnDiv.append(icon_delete);
 
   windowDiv.append(deleteBtnDiv);
@@ -935,7 +931,7 @@ function InstItemController(target)
   target.attach( thisLabel );
   thisLabel.layers.set( 0 );
   thisLabel.name="CSS2D_SelectedItemController";
-   console.log(target);
+
 }
 
 function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座 4:移動輪 5:配件
@@ -1348,14 +1344,24 @@ function MoveModelOFF()
   {
     current_INTERSECTED.traverse((obj) => {
       if (obj.isCSS2DObject&&obj.name==="CSS2D_SelectedItemController") {
-        current_INTERSECTED.remove(document.getElementById('SelectedItemController'));
+
         current_INTERSECTED.remove(obj);
+
       }
     });
   }
 
   if(current_INTERSECTED!=null&&current_INTERSECTED.position.y>=1)
   {
+
+    current_INTERSECTED.traverse((obj) => {
+        if (obj.isCSS2DObject&&obj.name==="CSS2D_Accessory_SceneLabel") {
+
+          current_INTERSECTED.remove(obj);
+          
+        }
+    });
+
     current_INTERSECTED=null;
 
     //提示面板
@@ -1364,6 +1370,15 @@ function MoveModelOFF()
 
   if(current_INTERSECTED!=null&&current_INTERSECTED.position.y<=-3.5)
   {
+
+    current_INTERSECTED.traverse((obj) => {
+        if (obj.isCSS2DObject&&obj.name==="CSS2D_Accessory_SceneLabel") {
+
+          current_INTERSECTED.remove(obj);
+          
+        }
+    });
+
     current_INTERSECTED=null;
 
     //提示面板
@@ -1399,11 +1414,14 @@ function DeleteAccessory()
   {
     if(current_INTERSECTED!=null)
     {
-      //刪除accessory label
-      if(document.getElementById(`${current_INTERSECTED.name}`)!=null)
-      {
-        document.getElementById(`${current_INTERSECTED.name}`).remove();
-      }
+      
+      current_INTERSECTED.traverse((obj) => {
+        if (obj.isCSS2DObject&&obj.name==="CSS2D_Accessory_SceneLabel") {
+
+          current_INTERSECTED.remove(obj);
+
+        }
+      });
 
       scene.remove(current_INTERSECTED);
       current_INTERSECTED=null;
