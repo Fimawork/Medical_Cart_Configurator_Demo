@@ -684,6 +684,11 @@ h3
     			 	width: 25%;
     			}
 
+				.cell 
+				{
+				  font-size: 12px;
+    			}
+
 				#hud_btn_panel
 				{
 					position: absolute;
@@ -775,6 +780,11 @@ h3
 					top:78%;
 					left: 6%;
     			 	width: 88%;
+    			}
+
+				.cell 
+				{
+				  font-size: 12px;
     			}
 
 				#item_container
