@@ -796,12 +796,23 @@ function InstItemController(target)
     event.stopPropagation();
       
   });
+
+//  controllerDiv.addEventListener("pointermove",function (event) {
+//
+//    console.log(event);
+//    ///不執行Zoom in/out 
+//    //event.preventDefault();
+//    //event.stopPropagation();
+//      
+//  });
  
   const windowDiv = document.createElement( 'div' );
   windowDiv.className = "window_blinking_anim";
   windowDiv.setAttribute("id","SelectedItemWindow");
 
   controllerDiv.append(windowDiv);
+
+  
 
   const leftBtnDiv = document.createElement( 'div' );
   leftBtnDiv.className = "ControllerBtn";
@@ -826,7 +837,7 @@ function InstItemController(target)
   rightBtnDiv.className = "ControllerBtn";
   rightBtnDiv.title="Turn Counterclockwise";
   rightBtnDiv.style.setProperty('top', '50%');
-	rightBtnDiv.style.setProperty('right', '-15%');
+	rightBtnDiv.style.setProperty('right', '-20%');
 
   const icon_right = document.createElement( 'j' );
   icon_right.className = "fa-solid fa-angle-right fa-2x";
@@ -861,7 +872,7 @@ function InstItemController(target)
   const downBtnDiv = document.createElement( 'div' );
   downBtnDiv.className = "ControllerBtn";
   downBtnDiv.title="Move Down";
-  downBtnDiv.style.setProperty('bottom', '-15%');
+  downBtnDiv.style.setProperty('bottom', '-20%');
 	downBtnDiv.style.setProperty('left', '50%');
 
   const icon_down = document.createElement( 'j' );
