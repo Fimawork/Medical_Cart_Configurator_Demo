@@ -142,9 +142,9 @@ let composer, effectFXAA, outlinePass;
 const scale=2.5;//提高渲染解析度渲染後縮小顯示
 
 const params = {
-	edgeStrength: 3.0,
-	edgeGlow: 1.5,
-	edgeThickness: 1.0,
+	edgeStrength: 1.0,
+	edgeGlow: 0,
+	edgeThickness: 1,
 	pulsePeriod: 0,
 	color:'#6bb4f7'
 };
@@ -760,6 +760,8 @@ function InstAccessorySceneLabel(thisLabelTarget,thisCSS,thisID,thisContent,this
     {
       InstItemController(thisLabelTarget);
     };
+
+    addSelectedObject( thisLabelTarget ); 
 
   });
 }
