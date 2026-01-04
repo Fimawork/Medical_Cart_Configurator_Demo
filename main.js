@@ -832,9 +832,13 @@ function InstItemController(target)
   windowDiv.append(leftBtnDiv);
 
 
-  leftBtnDiv.addEventListener("pointerdown",function () {
+  leftBtnDiv.addEventListener("pointerdown",function (event) {
 
     MoveModel(`LEFT`);
+
+    ///不執行頁面縮放 
+    event.preventDefault();
+    event.stopPropagation();
       
   });
 
@@ -850,9 +854,13 @@ function InstItemController(target)
 
   windowDiv.append(rightBtnDiv);
 
-  rightBtnDiv.addEventListener("pointerdown",function () {
+  rightBtnDiv.addEventListener("pointerdown",function (event) {
 
     MoveModel(`RIGHT`);
+
+     ///不執行頁面縮放 
+    event.preventDefault();
+    event.stopPropagation();
       
   });
 
@@ -868,9 +876,13 @@ function InstItemController(target)
 
   windowDiv.append(upBtnDiv);
 
-  upBtnDiv.addEventListener("pointerdown",function () {
+  upBtnDiv.addEventListener("pointerdown",function (event) {
 
     MoveModel(`UP`);
+
+    ///不執行頁面縮放 
+    event.preventDefault();
+    event.stopPropagation();
       
   });
 
@@ -886,9 +898,13 @@ function InstItemController(target)
 
   windowDiv.append(downBtnDiv);
 
-  downBtnDiv.addEventListener("pointerdown",function () {
+  downBtnDiv.addEventListener("pointerdown",function (event) {
 
     MoveModel(`DOWN`);
+
+    ///不執行頁面縮放 
+    event.preventDefault();
+    event.stopPropagation();
       
   });
 
