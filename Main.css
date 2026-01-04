@@ -146,29 +146,29 @@ k
 }
 
 
-			#grid-table 
-			{
-				position: absolute;	
-				top:36%;
-				left: 9%;
-    		 	display: grid;
-    		 	grid-template-columns: 0.1fr 1fr 2fr;
-    		 	gap: 0px;
-    		 	width: 21%;
-    		 	background-color: rgba(255, 255, 255, 0);
-    		}
+#grid_table 
+{
+	position: absolute;	
+	top:36%;
+	left: 9%;
+ 	display: grid;
+ 	grid-template-columns: 0.1fr 1fr 2fr;
+ 	gap: 0px;
+ 	width: 21%;
+ 	background-color: rgba(255, 255, 255, 0);
+}
 
-    		.cell {
-    		  background-color: rgba(0, 0, 0, 0.05);
-    		  padding: 6px;
-    		  text-align: left;
-			  font-family: "Roboto", sans-serif;
-			  font-weight: 300;
-              font-size: 12px;
-			  line-height:150%;
-              color: rgba(0, 0, 0, 0.9);
-    		  border: 1px solid rgba(255, 255, 255, 0.15);
-    		}
+.cell {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 6px;
+  text-align: left;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  font-size: 12px;
+  line-height:150%;
+  color: rgba(0, 0, 0, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
 
 .label 
 {
@@ -232,26 +232,44 @@ k
 	top: 15%;
 	left: 30%;
 }
-			#download_btn
-			{
-				display: block;
-			}
 
-			#item_container
-			{
-				position: absolute;	
-				top:24%;
-				right: 7.5%;
-				width: 24%;
-				height: 60%;
-				gap: 48px 18px;
-    		 	display: flex;
-				flex-wrap:  wrap;
-				align-content:flex-start;
-				overflow-y: auto;
-				pointer-events: fill;
-				user-select: none;
-			}
+#show_spec_btn
+{
+	position: absolute;
+	top: 15%;
+	right: 30%;	
+	display: none;
+}
+
+#hide_spec_btn
+{
+	position: absolute;
+	top: 15%;
+	right: 30%;	
+	display: none;
+	z-index: 10;
+}
+
+#download_btn
+{
+	display: block;
+}
+
+#item_container
+{
+	position: absolute;	
+	top:24%;
+	right: 7.5%;
+	width: 24%;
+	height: 60%;
+	gap: 48px 18px;
+ 	display: flex;
+	flex-wrap:  wrap;
+	align-content:flex-start;
+	overflow-y: auto;
+	pointer-events: fill;
+	user-select: none;
+}
 
 			.item
 			{
@@ -659,7 +677,7 @@ h3
 					text-align: left;
 				}
 
-				#grid-table 
+				#grid_table 
 				{
 					position: absolute;	
 					top:36%;
@@ -754,7 +772,7 @@ h3
 					transform: translate(-50%);
 				}
 
-				#grid-table 
+				#grid_table 
 				{
 					position: absolute;	
 					top:78%;
@@ -813,7 +831,7 @@ h3
 
 @media screen and (max-width:768px)/*手機*/
 {
-	body
+/*	body
 	{
 		overflow-x: hidden;
 		overflow-y: scroll;
@@ -824,13 +842,13 @@ h3
 		height: 150%;
 		opacity: 1;
 		background-size: auto 100%;
-	}
+	}*/
 
 	#frozenGlassPanel
 	{
-		top:2%;
+		
 		height: 94%;
-		transform: translate(-50%, 0%);
+		transform: translate(-50%, -50%);
 	}
 
 	#threeContainer
@@ -898,17 +916,26 @@ h3
 		display: block;
 	}
 
-	#grid-table 
+	#grid_table 
 	{
-		position: absolute;	
-		top:100%;
-		left: 5%;
+		position:absolute;
+		top: 50%;
+		left: 50%;
      	width: 90%;
+		height: 96%;
+		background-color: rgba(255, 255, 255,0);
+		transform: translate(-50%,-50%);
+		z-index: 9;
+		display: none;
     }
 
 	.cell 
 	{
-      background-color: rgba(0, 0, 0, 0.1);
+      background-color: rgb(215, 215, 215);
+	  display: flex;
+	  flex-direction: column;
+	  justify-content: center;
+	  font-size: 12px;
     }
 
 	#hud_btn_panel
@@ -984,5 +1011,21 @@ h3
 	{
 		top: 10%;
 		left: 5%;
+	}
+
+	#show_spec_btn
+	{
+		top: 10%;
+		left: 5%;	
+		display: block;
+	}
+
+	#hide_spec_btn
+	{
+		position: absolute;
+		top: 0%;
+		right: 6%;	
+		display: none;
+		border: solid 1px rgba(255, 255, 255, 1);
 	}
 }

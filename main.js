@@ -759,9 +759,14 @@ function InstAccessorySceneLabel(thisLabelTarget,thisCSS,thisID,thisContent,this
     if(document.getElementById('SelectedItemController')===null)
     {
       InstItemController(thisLabelTarget);
-    };
+    }
 
     addSelectedObject( thisLabelTarget ); 
+
+    if(isLabelOn)//編輯零件時不顯示Label
+    {
+      ShowSceneLabelToggle();
+    }
 
   });
 }
@@ -1566,7 +1571,7 @@ async function TakeScreenshot()
  });
 
  //使用 html2canvas 渲染 UI（不包含 WebGL canvas）
-  const specificationTable = document.getElementById('grid-table');
+  const specificationTable = document.getElementById('grid_table');
   const _specificationTable = await html2canvas(specificationTable, {
     backgroundColor: null, // null保持透明,false不透明
     useCORS: true,
@@ -1838,13 +1843,13 @@ function UpdateMoveModelPanelPos()
 
 function BtnEventListener()
 {
-  let _default_camera_btn=document.getElementById('default_camera_btn');
-  
-  _default_camera_btn.addEventListener("click",function () {
-
-    FX.CameraManager(0);
-      
-  });
+  //let _default_camera_btn=document.getElementById('default_camera_btn');
+  //
+  //_default_camera_btn.addEventListener("click",function () {
+//
+  //  FX.CameraManager(0);
+  //    
+  //});
 
   let _reset_btn=document.getElementById('reset_btn');
 
@@ -1861,6 +1866,24 @@ function BtnEventListener()
 
     ShowAccessorySceneLabelToggle();
       
+  });
+
+  let _show_spec_btn=document.getElementById('show_spec_btn');
+  let _hide_spec_btn=document.getElementById('hide_spec_btn');
+  let _grid_table=document.getElementById('grid_table');
+
+  _show_spec_btn.addEventListener("click",function () {
+
+    _grid_table.style.display="grid";
+    _hide_spec_btn.style.display="block";
+
+  });
+
+  _hide_spec_btn.addEventListener("click",function () {
+
+    _grid_table.style.display="none";
+    _hide_spec_btn.style.display="none";
+
   });
 }
 

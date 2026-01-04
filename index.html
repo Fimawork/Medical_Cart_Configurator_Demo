@@ -77,12 +77,13 @@
 				<div class="hud_btn fa-solid fa-download fa-2x" id="download_btn" onclick="TakeScreenshot()" title="DOWNLOAD"></div>
 			</div>
 
-			<div id="default_camera_btn" class="hud_btn fa-solid fa-camera-rotate fa-2x" title="Reset Camera"></div>
+			<!--<div id="default_camera_btn" class="hud_btn fa-solid fa-camera-rotate fa-2x" title="Reset Camera"></div>-->
+			<div id="show_spec_btn" class="hud_btn fa-solid fa-file-lines fa-2x" title="Reset Camera"></div>
 			<div id="system_info"><k class="fa-solid fa-circle-exclamation"></k>Exceeds installation limits</div>
 			
 		</div>
 
-		<div id="grid-table">
+		<div id="grid_table">
 			<div class="cell alignCenter">1</div>
 			<div class="cell alignCenter">Instrument Mount</div>
 			<div class="cell" id="instrument_mount_content">Description</div>
@@ -108,6 +109,7 @@
 			<div class="cell" id="dimension_content">L 1000mm x W 560mm x H 1500mm</div>
 		</div>
 		
+		<div id="hide_spec_btn" class="hud_btn fa-solid fa-xmark fa-2x" title="Close Spec Table"></div>
 
 		<div class="mainBottom_panel">
 			<div class="main_btn" onclick="EditMode(0)">
