@@ -754,7 +754,7 @@ function InstAccessorySceneLabel(thisLabelTarget,thisCSS,thisID,thisContent,this
 
   InstItemController(thisLabelTarget);
 
-  thisDiv.addEventListener("pointerdown", () => {
+  thisDiv.addEventListener("pointerdown", (event) => {
 
     if(document.getElementById('SelectedItemController')===null)
     {
@@ -767,6 +767,10 @@ function InstAccessorySceneLabel(thisLabelTarget,thisCSS,thisID,thisContent,this
     {
       ShowSceneLabelToggle();
     }
+
+     ///不執行頁面縮放 
+    event.preventDefault();
+    event.stopPropagation();
 
   });
 }
