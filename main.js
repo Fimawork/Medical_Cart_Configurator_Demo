@@ -398,7 +398,7 @@ function animate()
 
 function RenderSwitch()
 {
-  if(selectedObjects.length>0)
+  if(current_INTERSECTED!=null)
   {
     composer.render();//使用postprocessing替代
   }
