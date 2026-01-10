@@ -446,9 +446,9 @@ k
 .switch {
   position:absolute;
   display: inline-block;
-  width: 60px;
-  height: 34px;
-  scale: 0.75;
+  width: 48px;
+  height: 25px;
+  scale: 1;
   pointer-events: fill;
 }
 
@@ -473,10 +473,10 @@ k
 .slider:before {
   position: absolute;
   content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
+  height: 22px;
+  width: 22px;
+  left: -1px;
+  bottom: 1.5px;
   background-color: white;
   -webkit-transition: .4s;
   transition: .4s;

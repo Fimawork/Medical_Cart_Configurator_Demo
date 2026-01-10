@@ -120,6 +120,8 @@ let current_base=[];
 let current_caster=[];
 let current_accessories=[];
 
+let current_caster_css2D=[];
+
 let sceneLabels=[];
 let accessoryLabels=[];
 
@@ -382,18 +384,6 @@ function animate()
     FX.UpdateCameraPosition(camera,controls);
     RaycastFunction();
   }
-
-  if(isCasterFocus)//如果在編輯移動輪狀態，依據操作更新break_toggle位置
-  {
-    SetupCasterBrakePanelOn();
-  }
-
-  if(!isCasterFocus)
-  {
-    _casterToggleContainer.style.display="none";
-  }
-
-    //UpdateMoveModelPanelPos();
 }
 
 function RenderSwitch()
@@ -518,6 +508,8 @@ function InstrumentMountManager(i)//儀器支撐板設定
 
   ResetInstrumentModule();//重置儀器支架
 
+  SetupCasterBrakePanelOFF();//關閉移動輪編輯面板
+
   if(isCameraManagerOn)FX.CameraManager(1);
   
   InstantiatModel(instrument_mount_list[i].scene_name,instrument_mount_list[i].src,current_instrument_mount,0.5);
@@ -534,6 +526,8 @@ function ColumnManager(i)
 
   ResetColumnModule()//重置中柱
 
+  SetupCasterBrakePanelOFF();//關閉移動輪編輯面板
+
   if(isCameraManagerOn)FX.CameraManager(2);
 
   InstantiatModel(column_list[i].scene_name,column_list[i].src,current_column,0.5);
@@ -549,7 +543,7 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
 
   ResetBaseModule();//重置底座
 
-  DefaultCasterToggle();//還原為預設移動輪煞車狀態(全部含煞車)
+  //DefaultCasterToggle();//還原為預設移動輪煞車狀態(全部含煞車)
 
   if(isCameraManagerOn)FX.CameraManager(3);
 
@@ -565,11 +559,13 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
 
 function CasterManager(i)//移動輪設定功能
 {
+  SetupCasterBrakePanelOFF();
+
   current_caster=[];//移除原outline指定物件
 
   ResetCasterModule();//刪除目前場景上的移動輪
 
-  DefaultCasterToggle();//還原為預設移動輪煞車狀態(全部含煞車)
+  //DefaultCasterToggle();//還原為預設移動輪煞車狀態(全部含煞車)
 
   caster_index=i;
 
@@ -582,9 +578,9 @@ function CasterManager(i)//移動輪設定功能
 
   if(isBreakModifyAvailable)//初始化時不顯示此面板
   {
-    setTimeout(() => {SetupCasterBrakePanelOn();}, 600);//開啟移動輪編輯面板
+    setTimeout(() => {SetupCasterBrakePanelOn();}, 1000);//開啟移動輪編輯面板
   }
-  
+    
   setTimeout(() => {CountBrakeNum();isBreakModifyAvailable=true;}, 1000);//1000=1sec}
 }
 
@@ -594,9 +590,9 @@ function AccessoryManager(i)
 
   MoveModelOFF();//重置模型移動面板
 
-  FX.CameraManager(5);
+  SetupCasterBrakePanelOFF();//關閉移動輪編輯面板
 
-//InstGLTFLoader(accessory_list[i].src,new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,accessory_list[i].//scene_name,null,scene);
+  FX.CameraManager(5);
 
   InstGLTFLoaderForAccessory(accessory_list[i].src,new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,accessory_list[i].scene_name,accessory_list[i].spec_name);
 
@@ -805,23 +801,12 @@ function InstItemController(target)
     event.stopPropagation();
       
   });
-
-//  controllerDiv.addEventListener("pointermove",function (event) {
-//
-//    console.log(event);
-//    ///不執行Zoom in/out 
-//    //event.preventDefault();
-//    //event.stopPropagation();
-//      
-//  });
  
   const windowDiv = document.createElement( 'div' );
   windowDiv.className = "window_blinking_anim";
   windowDiv.setAttribute("id","SelectedItemWindow");
 
   controllerDiv.append(windowDiv);
-
-  
 
   const leftBtnDiv = document.createElement( 'div' );
   leftBtnDiv.className = "ControllerBtn";
@@ -1114,9 +1099,6 @@ function ShowSceneLabelToggle()
 {
   if(!isLabelOn)
   {
-    //_labelContainer.style.display="block";
-    //_ShowLabelToggle.style.cssText = "color: #6bb4f7;";
-
     for(let i=0;i<sceneLabels.length;i++)
     {
       sceneLabels[i].visible=true;
@@ -1127,9 +1109,6 @@ function ShowSceneLabelToggle()
 
   else
   {
-    //_labelContainer.style.display="none";
-    //_ShowLabelToggle.style.cssText = "color: rgba(0, 0, 0, 0.45);";
-
     for(let i=0;i<sceneLabels.length;i++)
     {
       sceneLabels[i].visible=false;
@@ -1691,26 +1670,56 @@ function ShowErrorDialog()
 function SetupCasterBrakePanelOn()
 {
   isCasterFocus=true;
-  _casterToggleContainer.style.display="block";
-
-  let i=0;//console.log(current_caster[0].children[0]);
-  let label="";
-  let toggle="";
 
   if(current_caster[0]!=null)
   {
     current_caster[0].children[0].traverse( function ( object ) {
-
+    
 			if ( object.name.includes("Break"))
 			{
-        i++;
-        //object.visible=false;
-        label=document.querySelector(`#caster_toggle_label_${i}`);
-        toggle=document.querySelector(`#brake_toggle_${i}`);
-        ShowCasterLabel(label,object);  
-        label.style.display="block";
+        const thisLabel = document.createElement( 'label' );
+        thisLabel.className = "switch label_fadeIn_anim";
 
-        object.visible=toggle.checked;
+        const thisInput = document.createElement('input');
+        thisInput.type = 'checkbox';
+
+
+        thisInput.checked = object.visible;
+
+        thisLabel.append(thisInput);
+
+        thisLabel.addEventListener("pointerdown",function (event) {
+                  
+          thisInput.checked=!thisInput.checked ;
+
+          object.visible=thisInput.checked;
+
+          CountBrakeNum();
+
+        });
+
+        const thisSpan = document.createElement('span');
+        thisSpan.className = 'slider round';
+
+        thisLabel.append(thisSpan);
+
+        const thisDiv = document.createElement('div');
+        thisDiv.className = 'toggle_title';
+        thisDiv.draggable = false;
+        thisDiv.textContent = 'Brake';
+
+        thisLabel.append(thisDiv);
+
+        current_caster_css2D.push(thisLabel);
+
+        let center= new THREE.Vector3();
+        const box= new THREE.Box3().setFromObject(object);
+        box.getCenter(center);
+
+        const caster_toggle = new CSS2DObject( thisLabel );
+        caster_toggle.position.set( center.x,center.y,center.z);
+        caster_toggle.center.set( 0.5, 0.5 );
+        object.parent.attach( caster_toggle );
 			}
     });
   }
@@ -1719,12 +1728,19 @@ function SetupCasterBrakePanelOn()
 function SetupCasterBrakePanelOFF()
 {
   isCasterFocus=false;
-  //_casterToggleContainer.style.display="none";
 
-  for(let i=0;i<_casterToggleContainer.children.length;i++)
+  for(let i=0;i<current_caster.length;i++)
   {
-    _casterToggleContainer.children[i].style.display="none";
+    current_caster[i].traverse((obj) => {
+        if (obj.isCSS2DObject) {
+          
+          obj.parent.remove(obj);
+
+        }
+      });
   }
+
+  current_caster_css2D=[];
 
   CountBrakeNum();
 
