@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { Sky } from 'three/addons/objects/Sky.js';
-import * as FX from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@v1.6/fx_functions.js';
+import * as FX from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@v1.7/fx_functions.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
@@ -413,7 +413,7 @@ function EventListener()
   window.addEventListener("pointerdown", function(e) {
     if(INTERSECTED!=null&&!isSelectedItemControllerOn)//在零件位置編輯狀態時禁用，必免誤觸
     {
-      if(!isMobile())//行動裝置上不支援
+      if(!FX.isMobile())//行動裝置上不支援
       {
         if(INTERSECTED.name.includes("Panel"))
         {
@@ -471,11 +471,6 @@ function EventListener()
   //    SetupCasterBrakePanelOn();
   //  }
   });
-}
-
-function isMobile()//偵測是否為行動裝置
-{
-  return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
 
 function InstantiatModel(scene_name,src,postprocessing_layer,delay)
@@ -1678,7 +1673,7 @@ function SetupCasterBrakePanelOn()
 
         thisLabel.append(thisInput);
 
-        if(isMobile())
+        if(FX.isMobile())
         {
           thisLabel.addEventListener("change",function (event) {
                   
@@ -1688,7 +1683,7 @@ function SetupCasterBrakePanelOn()
           });
         }
 
-        if(!isMobile())
+        if(!FX.isMobile())
         {
           thisLabel.addEventListener("pointerdown",function (event) {
                   
