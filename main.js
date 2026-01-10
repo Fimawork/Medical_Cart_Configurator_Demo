@@ -64,16 +64,6 @@ let _show_accessory_btn=document.getElementById('show_accessory_btn');
 //移動輪規格欄位類型資訊
 let caster_type="";
 
-
-//caster煞車選配按鈕功能
-let _casterToggleContainer=document.getElementById('casterToggleContainer');
-let _brake_toggle_1=document.getElementById('brake_toggle_1');
-let _brake_toggle_2=document.getElementById('brake_toggle_2');
-let _brake_toggle_3=document.getElementById('brake_toggle_3');
-let _brake_toggle_4=document.getElementById('brake_toggle_4');
-let _brake_toggle_5=document.getElementById('brake_toggle_5');
-//let _caster_toggle_06=document.getElementById('caster_toggle_06');
-
 let current_accessory_list=[];
 let isLabelOn=true;
 //是否啟用鏡頭飛行模式，避免初始零件生成同時觸發飛行功能
@@ -1688,15 +1678,28 @@ function SetupCasterBrakePanelOn()
 
         thisLabel.append(thisInput);
 
-        thisLabel.addEventListener("pointerdown",function (event) {
+        if(isMobile())
+        {
+          thisLabel.addEventListener("change",function (event) {
                   
-          thisInput.checked=!thisInput.checked ;
+            object.visible = thisInput.checked;
+            CountBrakeNum();
 
-          object.visible=thisInput.checked;
+          });
+        }
 
-          CountBrakeNum();
+        if(!isMobile())
+        {
+          thisLabel.addEventListener("pointerdown",function (event) {
+                  
+            thisInput.checked=!thisInput.checked;
+            object.visible=thisInput.checked;
+            CountBrakeNum();
 
         });
+        }
+
+
 
         const thisSpan = document.createElement('span');
         thisSpan.className = 'slider round';
