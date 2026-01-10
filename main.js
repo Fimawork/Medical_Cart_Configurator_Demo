@@ -374,6 +374,20 @@ function animate()
     FX.UpdateCameraPosition(camera,controls);
     RaycastFunction();
   }
+
+  if(!isCasterFocus)//強制刪除按鍵
+  {
+    for(let i=0;i<current_caster.length;i++)
+    {
+      current_caster[i].traverse((obj) => {
+          if (obj.isCSS2DObject) {
+
+            obj.parent.remove(obj);
+
+          }
+      });
+    }
+  }
 }
 
 function RenderSwitch()
@@ -1725,8 +1739,6 @@ function SetupCasterBrakePanelOn()
 
 function SetupCasterBrakePanelOFF()
 {
-  isCasterFocus=false;
-
   for(let i=0;i<current_caster.length;i++)
   {
     current_caster[i].traverse((obj) => {
@@ -1744,6 +1756,8 @@ function SetupCasterBrakePanelOFF()
 
   //重置所有Raycast狀態
   DefaultRaycast();
+
+  isCasterFocus=false;
 }
 
 function CountBrakeNum()

@@ -724,6 +724,7 @@ h3
 
 				#SelectedItemController
 				{
+					top: 5%;/*誤差修正*/
 					width: 24%;
 				}
 
