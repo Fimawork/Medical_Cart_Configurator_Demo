@@ -22,6 +22,7 @@ let scene, camera, renderer, stats, mixer, clock;
 let controls;
 let threeContainer = document.getElementById("threeContainer");
 let labelRenderer;
+let rear_camera;
 
 const modelPosition=new THREE.Vector3(0,0,0);
 const modelRotation=new THREE.Vector3(0,Math.PI, 0);
@@ -160,6 +161,11 @@ function init()
   camera = new THREE.PerspectiveCamera( 50, threeContainer.clientWidth / threeContainer.clientHeight, 0.1, 1000 );//非全螢幕比例設定
   renderer = new THREE.WebGLRenderer({ antialias: true });
   //renderer.setSize( threeContainer.clientWidth, threeContainer.clientHeight );//非全螢幕比例設定
+
+  rear_camera = new THREE.PerspectiveCamera( 50, threeContainer.clientWidth / threeContainer.clientHeight, 0.1, 1000 );//非全螢幕比例設定
+
+  rear_camera.position.set(5.219,5.358,5.276);
+  rear_camera.lookAt(0.073,1.928,0.010);
 
   //提高渲染解析度渲染後縮小顯示
   renderer.setSize(threeContainer.clientWidth, threeContainer.clientHeight, false);
@@ -1594,11 +1600,11 @@ async function TakeScreenshot()
 
   setTimeout(() => {_loading_canvas.style.display="flex";FX.CameraManager(0);}, 100);//1000=1sec}//開啟LoadingPage，回預設鏡頭位置
   setTimeout(() => { firstShot();}, 750);//1000=1sec}
-  setTimeout(() => {FX.CameraManager(6);}, 1000);//1000=1sec}鏡頭轉向推車背面
-  setTimeout(() => { SecondShot();}, 2000);//1000=1sec}
+  //setTimeout(() => {FX.CameraManager(6);}, 1000);//1000=1sec}鏡頭轉向推車背面
+  setTimeout(() => { SecondShot();}, 1500);//1000=1sec}
   setTimeout(() => { SetupTimeData();}, 2500);//1000=1sec}
   setTimeout(() => { DrawTheImage();}, 3000);//1000=1sec}
-  setTimeout(() => { FX.CameraManager(0);}, 4000);//1000=1sec}下載結束鏡頭歸位
+  //setTimeout(() => { FX.CameraManager(0);}, 4000);//1000=1sec}下載結束鏡頭歸位
   setTimeout(() => { _loading_canvas.style.display="none";}, 5000);//1000=1sec}//隱藏LoadingPage
 
  function firstShot()//取得 Three.js 第一張畫面為圖片
@@ -1609,7 +1615,7 @@ async function TakeScreenshot()
 
  function SecondShot()//取得 Three.js 第二張畫面為圖片
  {
-    renderer.render( scene, camera ); // 如果你有使用 postprocessing
+    renderer.render( scene, rear_camera ); // 直接用背後的攝影機進行渲染
     threeImageData_02 = renderer.domElement.toDataURL('image/png');
  }
 
@@ -1641,10 +1647,10 @@ async function TakeScreenshot()
       ctx.drawImage(threeImg_02, 540, 0);
 
       // Step 6: 再畫上 UI 圖像（透明背景）
-      ctx.drawImage(_specificationTable, 150, 630);
+      ctx.drawImage(_specificationTable, 150, 315);
 
-      ctx.drawImage(_MainTitle, 150, 250);
-      ctx.drawImage(_SubTitle, 150, 350);
+      ctx.drawImage(_MainTitle, 150, 125);
+      ctx.drawImage(_SubTitle, 150, 175);
       
 
       // Step 7: 將合成後的圖像轉為下載
