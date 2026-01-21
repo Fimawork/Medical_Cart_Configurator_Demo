@@ -1946,13 +1946,20 @@ function BtnEventListener()
     
       if(FX.isMobile())//行動裝置
       {
-        FX.CameraManager(0);
-        
-        renderer.render(scene, camera); // 確保擷取的是當前畫面
-        renderer.domElement.toBlob((blob) => {
-        const url = URL.createObjectURL(blob);
-        showMobilePreview(url);
-        }, 'image/png');
+        try {
+          FX.CameraManager(0);
+          
+          renderer.render(scene, camera); // 確保擷取的是當前畫面
+          renderer.domElement.toBlob((blob) => {
+          const url = URL.createObjectURL(blob);
+          showMobilePreview(url);
+          }, 'image/png');
+        }
+
+        catch (e) 
+        {
+          alert("截圖失敗，可能是跨域貼圖問題：" + e.message);
+        }
       }
     
       else
@@ -1968,7 +1975,7 @@ function showMobilePreview(imgUrl) {
     // 裡面放一個 <img src="imgUrl" style="width:100%">
     // 並附註「長按圖片儲存」
     alert("圖片已產生！請長按圖片選擇『儲存影像』");
-    const previewWindow = window.open(url); 
+    const previewWindow = window.open(imgUrl); 
 }
 
 ///將函數掛載到全域範圍
