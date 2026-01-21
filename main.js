@@ -1939,6 +1939,29 @@ function BtnEventListener()
     _hide_spec_btn.style.display="none";
 
   });
+
+  let _download_btn=document.getElementById('download_btn');
+
+  _download_btn.addEventListener("click",function () {
+    
+      if(FX.isMobile())//行動裝置
+      {
+        FX.CameraManager(0);
+        
+        renderer.render(scene, camera); // 確保擷取的是當前畫面
+        renderer.domElement.toBlob((blob) => {
+        const url = URL.createObjectURL(blob); 
+        // 手機端：開新視窗或顯示 Modal 讓使用者長按儲存
+        window.open(url, '_blank');   
+        }, 'image/png');
+      }
+    
+      else
+      {
+        TakeScreenshot();
+      }
+
+  });
 }
 
 ///將函數掛載到全域範圍

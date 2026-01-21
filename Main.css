@@ -733,10 +733,10 @@ h3
 					opacity: 0.1;
 				}
 
-				#download_btn
+			/*	#download_btn
 				{
 					display: none;
-				}
+				}*/
 			}
 
 			@media screen and (max-width:900px)/*平板(直向)*/
@@ -813,10 +813,10 @@ h3
 					opacity: 0.6;
 				}
 
-				#download_btn
+			/*	#download_btn
 				{
 					display: none;
-				}
+				}*/
 
 				.logo
 				{
@@ -959,10 +959,10 @@ h3
 		margin-bottom: 18px;
 	}
 
-	#download_btn
+/*	#download_btn
 	{
 		display: none;
-	}
+	}*/
 
 	#item_container
 	{
