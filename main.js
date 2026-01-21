@@ -1950,9 +1950,8 @@ function BtnEventListener()
         
         renderer.render(scene, camera); // 確保擷取的是當前畫面
         renderer.domElement.toBlob((blob) => {
-        const url = URL.createObjectURL(blob); 
-        // 手機端：開新視窗或顯示 Modal 讓使用者長按儲存
-        window.open(url, '_blank');   
+        const url = URL.createObjectURL(blob);
+        showMobilePreview(url);
         }, 'image/png');
       }
     
@@ -1962,6 +1961,14 @@ function BtnEventListener()
       }
 
   });
+}
+
+function showMobilePreview(imgUrl) {
+    // 這裡可以實作一個簡單的彈出視窗
+    // 裡面放一個 <img src="imgUrl" style="width:100%">
+    // 並附註「長按圖片儲存」
+    alert("圖片已產生！請長按圖片選擇『儲存影像』");
+    const previewWindow = window.open(url); 
 }
 
 ///將函數掛載到全域範圍
